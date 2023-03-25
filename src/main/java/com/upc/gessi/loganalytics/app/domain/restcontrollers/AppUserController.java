@@ -1,4 +1,4 @@
-package com.upc.gessi.loganalytics.app.domain.controllers;
+package com.upc.gessi.loganalytics.app.domain.restcontrollers;
 
 import com.upc.gessi.loganalytics.app.domain.models.AppUser;
 import com.upc.gessi.loganalytics.app.domain.repositories.AppUserRepository;

@@ -14,8 +14,9 @@
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS},%msg%n</pattern>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS}, %msg%n</pattern>
         </encoder>
+        <filter class = "com.upc.gessi.loganalytics.app.config.LogFilter" />
     </appender>
 
     <root level="debug">
