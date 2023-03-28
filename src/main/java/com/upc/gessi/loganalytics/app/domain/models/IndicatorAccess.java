@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "FactorAccess")
-public class FactorAccess extends Log {
+@Table(name = "IndicatorAccess")
+public class IndicatorAccess extends Log {
 
     @Column(name = "historic", nullable = false)
     private boolean historic;
@@ -14,22 +14,22 @@ public class FactorAccess extends Log {
     private String viewFormat;
     @ManyToMany
     @JoinTable(
-            name = "factor_access_factor",
+            name = "indicator_access_indicator",
             joinColumns = {
-                    @JoinColumn(name = "factor_access_time"),
-                    @JoinColumn (name = "factor_access_team")
+                    @JoinColumn(name = "indicator_access_time"),
+                    @JoinColumn (name = "indicator_access_team")
             },
-            inverseJoinColumns = @JoinColumn (name = "factor_id")
+            inverseJoinColumns = @JoinColumn (name = "indicator_id")
     )
-    private List<Factor> factors;
+    private List<Indicator> indicators;
 
-    public FactorAccess() { }
+    public IndicatorAccess() { }
 
-    public FactorAccess(long time, String team, String message, String page, boolean historic, String viewFormat, List<Factor> factors) {
+    public IndicatorAccess(long time, String team, String message, String page, boolean historic, String viewFormat, List<Indicator> indicators) {
         super(time, team, message, page);
         this.historic = historic;
         this.viewFormat = viewFormat;
-        this.factors = factors;
+        this.indicators = indicators;
     }
 
     public boolean isHistoric() {
@@ -48,20 +48,20 @@ public class FactorAccess extends Log {
         this.viewFormat = viewFormat;
     }
 
-    public List<Factor> getFactors() {
-        return factors;
+    public List<Indicator> getIndicators() {
+        return indicators;
     }
 
-    public void setFactors(List<Factor> factors) {
-        this.factors = factors;
+    public void setIndicators(List<Indicator> indicators) {
+        this.indicators = indicators;
     }
 
     @Override
     public String toString() {
-        return "FactorAccess{" +
+        return "IndicatorAccess{" +
                 "historic=" + historic +
                 ", viewFormat='" + viewFormat + '\'' +
-                ", factors=" + factors +
+                ", indicators=" + indicators +
                 "} " + super.toString();
     }
 }

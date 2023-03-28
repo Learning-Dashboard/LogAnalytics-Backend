@@ -23,6 +23,8 @@ public class MetricAccess extends Log {
     )
     private List<Metric> metrics;
 
+    public MetricAccess() { }
+
     public MetricAccess(long time, String team, String message, String page, boolean historic, String viewFormat, List<Metric> metrics) {
         super(time, team, message, page);
         this.historic = historic;

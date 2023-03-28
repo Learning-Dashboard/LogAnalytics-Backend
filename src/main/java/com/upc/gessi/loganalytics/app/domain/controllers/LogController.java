@@ -1,9 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.upc.gessi.loganalytics.app.domain.models.*;
 import okhttp3.*;
 import org.slf4j.Logger;
@@ -33,7 +30,7 @@ public class LogController {
             String content = new String(file.getBytes(), StandardCharsets.UTF_8);
             list = Arrays.asList(content.split("\\r?\\n"));
         } catch (IOException e) {
-            logger.info("Error processing the file");
+            logger.error("Error processing the file");
         }
         return list;
     }
@@ -43,7 +40,6 @@ public class LogController {
         for (String originalLog : originalLogs) {
             if (originalLog.contains("login")) continue;
             else if (originalLog.contains("logout")) continue;
-            else if (!originalLog.contains(" GET ")) continue;
 
             String[] splitRequest = originalLog.split(", ");
             long epoch = getTimestamp(splitRequest[0]);
@@ -51,13 +47,13 @@ public class LogController {
                     || originalLog.contains("'s session has timed out")) {
                 String team = splitRequest[1].split(" ")[0];
                 if (team.equals("admin") || team.equals("professor-pes")
-                    || team.equals("professor-asw"))
-                    continue;
+                    || team.equals("professor-asw")) continue;
                 Log newLog = new Log(epoch, team, originalLog);
                 list.add(newLog);
                 continue;
             }
 
+            if (!originalLog.contains(" GET ")) continue;
             String page = getPage(splitRequest[1]);
             HashMap<String,String> params = getParams(splitRequest);
             String team = getTeam(splitRequest[splitRequest.length - 1]);
@@ -65,40 +61,48 @@ public class LogController {
                 || team.equals("professor-asw"))
                 continue;
 
-            if (page.contains("Configuration") || page.contains("Prediction")
-                || page.contains("Simulation")) continue;
+            if (!page.contains("Configuration") && !page.contains("Prediction")
+                && !page.contains("Simulation")) {
 
-            if (page.contains("Metrics") || page.contains("QualityFactors")
-                || page.contains("StrategicIndicators")
-                || page.contains("QualityModel")) {
+                if (page.contains("Metrics") || page.contains("QualityFactors")
+                    || page.contains("StrategicIndicators")
+                    || page.contains("QualityModel")) {
 
-                String viewFormat = getViewFormat(page);
-                if (!page.contains("QualityModel")) {
-                    boolean historic;
-                    historic = !page.contains("Current");
-                    List<String> ids = getIds(page, params, team);
+                    String viewFormat = getViewFormat(page);
+                    if (!page.contains("QualityModel")) {
+                        boolean historic;
+                        historic = !page.contains("Current");
+                        List<String> ids = getIds(page, params, team);
 
-                    if (page.contains("Metrics")) {
-                        List<Metric> metricIds = new ArrayList<>();
-                        for (String id : ids) {
-                            Metric newMetric = new Metric(id);
-                            metricIds.add(newMetric);
+                        if (page.contains("Metrics")) {
+                            List<Metric> metricIds = new ArrayList<>();
+                            for (String id : ids) {
+                                Metric newMetric = new Metric(id);
+                                metricIds.add(newMetric);
+                            }
+                            MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page, historic, viewFormat, metricIds);
+                            list.add(newLog);
+                        } else if (page.contains("QualityFactors")) {
+                            List<Factor> factorIds = new ArrayList<>();
+                            for (String id : ids) {
+                                Factor newFactor = new Factor(id);
+                                factorIds.add(newFactor);
+                            }
+                            FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page, historic, viewFormat, factorIds);
+                            list.add(newLog);
+                        } else {
+                            List<Indicator> indicatorIds = new ArrayList<>();
+                            for (String id : ids) {
+                                Indicator newIndicator = new Indicator(id);
+                                indicatorIds.add(newIndicator);
+                            }
+                            IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page, historic, viewFormat, indicatorIds);
+                            list.add(newLog);
                         }
-                        MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page, historic, viewFormat, metricIds);
+                    } else {
+                        QModelAccess newLog = new QModelAccess(epoch, team, originalLog, page, viewFormat);
+                        list.add(newLog);
                     }
-                    else if (page.contains("Factor")) {
-                        List<Factor> factorIds = new ArrayList<>();
-                        for (String id : ids) {
-                            Factor newFactor = new Factor(id);
-                            factorIds.add(newFactor);
-                        }
-                        FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page, historic, viewFormat, factorIds);
-                    }
-                }
-
-                else {
-                    //Crear objeto y añadir a la lista
-                    //QM
                 }
             }
             else {
@@ -216,6 +220,7 @@ public class LogController {
                         int Id = item.get("id").getAsInt();
                         if (Id == metricId) {
                             String externalId = item.get("externalId").getAsString();
+                            //externalId = metricController.removeUsername(item, externalId);
                             ids.add(externalId);
                         }
                     }
@@ -231,15 +236,13 @@ public class LogController {
         List<String> ids = new ArrayList<>();
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         HttpUrl.Builder urlBuilder = null;
-        if (page.contains("StrategicIndicators")) {
+        if (page.contains("StrategicIndicators"))
             urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/strategicIndicators")).newBuilder();
-        }
-        else if (page.contains("qualityFactors")) {
+        else if (page.contains("QualityFactors"))
             urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors")).newBuilder();
-        }
-        else if (page.contains("Metrics")) {
+        else if (page.contains("Metrics"))
             urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/metrics")).newBuilder();
-        }
+
         if (urlBuilder != null) {
             urlBuilder.addQueryParameter("prj", team);
             Request request = new Request.Builder()
@@ -254,6 +257,7 @@ public class LogController {
                     for (int i = 0; i < jsonElems.size(); ++i) {
                         JsonObject item = jsonElems.get(i).getAsJsonObject();
                         String externalId = item.get("externalId").getAsString();
+                        //externalId = metricController.removeUsername(item, externalId);
                         ids.add(externalId);
                     }
                 }
@@ -320,7 +324,7 @@ public class LogController {
     }
 
     private HashMap<String,String> getParams(String[] splitRequest) {
-        HashMap<String,String> params = new HashMap<String,String>();
+        HashMap<String,String> params = new HashMap<>();
         boolean start = false;
         boolean notFinished = true;
         for (int i = 0; i < splitRequest.length && notFinished; ++i) {

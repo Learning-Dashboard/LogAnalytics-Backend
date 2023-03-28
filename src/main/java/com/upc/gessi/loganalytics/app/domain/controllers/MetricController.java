@@ -1,8 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.upc.gessi.loganalytics.app.domain.models.Metric;
 import com.upc.gessi.loganalytics.app.domain.repositories.MetricRepository;
 import jakarta.annotation.PostConstruct;
@@ -76,6 +74,7 @@ public class MetricController {
                 for (int i = 0; i < jsonMetrics.size(); ++i) {
                     JsonObject item = jsonMetrics.get(i).getAsJsonObject();
                     String externalId = item.get("externalId").getAsString();
+                    //externalId = removeUsername(item, externalId);
                     Metric newMetric = new Metric(externalId);
                     metrics.add(newMetric);
                 }
@@ -84,5 +83,18 @@ public class MetricController {
             logger.error("Error in the Learning Dashboard server");
         }
         return metrics;
+    }
+
+    public String removeUsername(JsonObject item, String externalId) {
+        JsonElement student = item.get("Student");
+        if (student != null && student != JsonNull.INSTANCE) {
+            String usernameG = student.getAsJsonObject().get("githubUsername").getAsString();
+            String usernameT = student.getAsJsonObject().get("taigaUsername").getAsString();
+            if (externalId.contains(usernameG))
+                externalId.replace("_" + usernameG, "");
+            else if (externalId.contains(usernameT))
+                externalId.replace("_" + usernameT, "");
+        }
+        return externalId;
     }
 }

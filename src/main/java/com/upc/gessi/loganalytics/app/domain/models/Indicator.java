@@ -12,11 +12,10 @@ public class Indicator implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private String id;
-    //@ManyToMany(mappedBy = "indicators")
-    //private List<IndicatorAccess> factorAccesses;
+    @ManyToMany(mappedBy = "indicators")
+    private List<IndicatorAccess> factorAccesses;
 
-    public Indicator() {
-    }
+    public Indicator() { }
 
     public Indicator(String id) {
         this.id = id;

@@ -18,6 +18,8 @@ public class Log {
     @Column (name = "page")
     private String page;
 
+    public Log() { }
+
     public Log(long time, String team, String message, String page) {
         this.time = time;
         this.team = team;
