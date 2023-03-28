@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/log")
+@RequestMapping("/api/logs")
 public class LogRestController {
     @Autowired
     private LogRepository logRepository;
