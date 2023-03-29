@@ -105,17 +105,17 @@ public class LogRestController {
         logIterable.forEach(logList::add);
         return logList;
     }
+     */
 
     @GetMapping("/byKeyword")
     @ResponseStatus(HttpStatus.OK)
     public List<Log> findLogsByKeyword(
             @RequestParam (name = "keyword", required = true) String keyword) {
-        Iterable<Log> logIterable = logRepository.findByTeam(team);
+        Iterable<Log> logIterable = logRepository.findByMessageContaining(keyword);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         return logList;
     }
-     */
 
     @PostMapping("/import")
     @ResponseStatus(HttpStatus.CREATED)
@@ -126,8 +126,12 @@ public class LogRestController {
         List<String> originalLogs = logController.getOriginalLogs(file);
         logger.info(String.valueOf(originalLogs.size()));
         List<Log> parsedLogs = logController.parseLogs(originalLogs);
-        for (Log parsedLog : parsedLogs)
-            logRepository.save(parsedLog);
 
+        if (!parsedLogs.isEmpty()) {
+            Log logFile = parsedLogs.get(0);
+            Log logDB = logRepository.findFirstByOrderByTimeDesc();
+            if (logFile.getTime() > logDB.getTime())
+                logRepository.saveAll(parsedLogs);
+        }
     }
 }

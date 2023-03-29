@@ -13,4 +13,6 @@ public interface LogRepository extends CrudRepository<Log, LogPrimaryKey> {
     List<Log> findByTimeLessThanEqual(long epoch);
     List<Log> findByTimeBetween(long epochBefore, long epochAfter);
     List<Log> findByTeam(String team);
+    Log findFirstByOrderByTimeDesc();
+    List<Log> findByMessageContaining(String keyword);
 }
