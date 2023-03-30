@@ -32,6 +32,13 @@ public class IndicatorAccess extends Log {
         this.indicators = indicators;
     }
 
+    public IndicatorAccess(long time, String team, String message, String page, Session session, boolean historic, String viewFormat, List<Indicator> indicators) {
+        super(time, team, message, page, session);
+        this.historic = historic;
+        this.viewFormat = viewFormat;
+        this.indicators = indicators;
+    }
+
     public boolean isHistoric() {
         return historic;
     }

@@ -19,10 +19,8 @@ public class SessionController {
     @Autowired
     TeamController teamController;
 
-    @Autowired
-    LogController logController;
-
     public void createSession(long startTimestamp, String teamId) {
+        //updateSession(startTimestamp, teamId);
         String semester = teamController.getSemester();
         Team team = teamController.getTeam(teamId, semester);
         if (team != null) {
@@ -34,7 +32,7 @@ public class SessionController {
     public void updateSession(long endTimestamp, String teamId) {
         String semester = teamController.getSemester();
         Team team = teamController.getTeam(teamId, semester);
-        Iterable<Session> sessions = sessionRepository.findByTeamIdAndTeamSemester(teamId, semester);
+        Iterable<Session> sessions = sessionRepository.findByTeam(team);
         List<Session> sessionList = new ArrayList<>();
         sessions.forEach(sessionList::add);
         for (Session s : sessionList) {
@@ -45,6 +43,23 @@ public class SessionController {
                 sessionRepository.save(s);
             }
         }
+    }
+
+    public Session getSessionToStoreLog(String teamId) {
+        String semester = teamController.getSemester();
+        Team team = teamController.getTeam(teamId, semester);
+        Iterable<Session> sessions = sessionRepository.findByTeam(team);
+        List<Session> sessionList = new ArrayList<>();
+        sessions.forEach(sessionList::add);
+        System.out.println(sessionList.size());
+        for (Session s : sessionList) {
+            System.out.println(s.toString());
+            if (s.getEndTimestamp() == 0) {
+                System.out.println(s.toString());
+                return s;
+            }
+        }
+        return null;
     }
 
     public void setnInteractions(Session s) {

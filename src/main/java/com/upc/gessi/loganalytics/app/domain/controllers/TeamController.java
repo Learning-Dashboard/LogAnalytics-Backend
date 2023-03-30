@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
-import com.upc.gessi.loganalytics.app.domain.models.Factor;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 
 @Controller

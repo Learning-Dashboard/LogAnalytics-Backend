@@ -32,6 +32,13 @@ public class MetricAccess extends Log {
         this.metrics = metrics;
     }
 
+    public MetricAccess(long time, String team, String message, String page, Session session, boolean historic, String viewFormat, List<Metric> metrics) {
+        super(time, team, message, page, session);
+        this.historic = historic;
+        this.viewFormat = viewFormat;
+        this.metrics = metrics;
+    }
+
     public boolean isHistoric() {
         return historic;
     }

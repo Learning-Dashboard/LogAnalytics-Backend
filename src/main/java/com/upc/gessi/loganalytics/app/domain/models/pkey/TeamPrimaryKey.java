@@ -15,6 +15,8 @@ public class TeamPrimaryKey implements Serializable {
 
     public void setSemester(String semester) { this.semester = semester; }
 
+    public TeamPrimaryKey() { }
+
     public TeamPrimaryKey(String id, String semester) {
         this.id = id;
         this.semester = semester;

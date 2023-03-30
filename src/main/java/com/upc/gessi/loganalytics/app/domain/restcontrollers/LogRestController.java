@@ -2,6 +2,7 @@ package com.upc.gessi.loganalytics.app.domain.restcontrollers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.LogController;
 import com.upc.gessi.loganalytics.app.domain.models.Log;
+import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.repositories.LogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,21 +122,28 @@ public class LogRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public void importLogs(
             @RequestParam (name = "file", required = true) MultipartFile file) {
-        //Get Sessions
-        //Store Sessions
         List<String> originalLogs = logController.getOriginalLogs(file);
         List<Log> parsedLogs = logController.parseLogs(originalLogs);
-
         if (!parsedLogs.isEmpty()) {
             Log logFile = parsedLogs.get(0);
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
             if (logDB != null) {
                 if (logFile.getTime() > logDB.getTime()) {
-                    logRepository.saveAll(parsedLogs);
-                    logController.manageSessions(parsedLogs);
+                    for (Log l : parsedLogs) {
+                        logRepository.save(l);
+                        Session s = logController.manageSessions(l.getTime(), l.getTeam(), l.getMessage());
+                        l.setSession(s);
+                        logRepository.save(l);
+                    }
                 }
             }
-            else logRepository.saveAll(parsedLogs);
+            else for (Log l : parsedLogs) {
+                logRepository.save(l);
+                Session s = logController.manageSessions(l.getTime(), l.getTeam(), l.getMessage());
+                System.out.println(s.toString());
+                l.setSession(s);
+                logRepository.save(l);
+            }
         }
     }
 }

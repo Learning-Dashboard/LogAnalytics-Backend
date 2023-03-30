@@ -18,6 +18,11 @@ public class QModelAccess extends Log {
         this.viewFormat = viewFormat;
     }
 
+    public QModelAccess(long time, String team, String message, String page, Session session, String viewFormat) {
+        super(time, team, message, page, session);
+        this.viewFormat = viewFormat;
+    }
+
     @Override
     public String toString() {
         return "QModelAccess{" +

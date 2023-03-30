@@ -32,6 +32,13 @@ public class FactorAccess extends Log {
         this.factors = factors;
     }
 
+    public FactorAccess(long time, String team, String message, String page, Session session, boolean historic, String viewFormat, List<Factor> factors) {
+        super(time, team, message, page, session);
+        this.historic = historic;
+        this.viewFormat = viewFormat;
+        this.factors = factors;
+    }
+
     public boolean isHistoric() {
         return historic;
     }

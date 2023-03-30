@@ -19,7 +19,11 @@ public class Log {
     private String page;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "teamId"),
+            @JoinColumn(name = "teamSemester"),
+            @JoinColumn(name = "startTimestamp")
+    })
     private Session session;
 
     public Log() { }

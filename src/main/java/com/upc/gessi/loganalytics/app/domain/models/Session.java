@@ -10,7 +10,7 @@ import java.util.List;
 @IdClass(SessionPrimaryKey.class)
 public class Session {
 
-    @Id @ManyToOne(fetch = FetchType.LAZY)
+    @Id @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
             @JoinColumn(name = "teamId", nullable = false),
             @JoinColumn(name = "teamSemester", nullable = false)
