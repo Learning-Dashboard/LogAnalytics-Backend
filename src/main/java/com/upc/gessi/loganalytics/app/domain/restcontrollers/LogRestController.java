@@ -130,8 +130,10 @@ public class LogRestController {
             Log logFile = parsedLogs.get(0);
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
             if (logDB != null) {
-                if (logFile.getTime() > logDB.getTime())
+                if (logFile.getTime() > logDB.getTime()) {
                     logRepository.saveAll(parsedLogs);
+                    logController.manageSessions(parsedLogs);
+                }
             }
             else logRepository.saveAll(parsedLogs);
         }

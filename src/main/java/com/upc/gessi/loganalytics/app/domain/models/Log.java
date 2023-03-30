@@ -18,6 +18,10 @@ public class Log {
     @Column (name = "page")
     private String page;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "session", nullable = false)
+    private Session session;
+
     public Log() { }
 
     public Log(long time, String team, String message, String page) {
@@ -31,6 +35,21 @@ public class Log {
         this.time = time;
         this.team = team;
         this.message = message;
+    }
+
+    public Log(long time, String team, String message, Session session) {
+        this.time = time;
+        this.team = team;
+        this.message = message;
+        this.session = session;
+    }
+
+    public Log(long time, String team, String message, String page, Session session) {
+        this.time = time;
+        this.team = team;
+        this.message = message;
+        this.page = page;
+        this.session = session;
     }
 
     public long getTime() {
@@ -65,6 +84,14 @@ public class Log {
         this.page = page;
     }
 
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
     @Override
     public String toString() {
         return "Log{" +
@@ -72,6 +99,7 @@ public class Log {
                 ", team='" + team + '\'' +
                 ", message='" + message + '\'' +
                 ", page='" + page + '\'' +
+                ", session=" + session +
                 '}';
     }
 }

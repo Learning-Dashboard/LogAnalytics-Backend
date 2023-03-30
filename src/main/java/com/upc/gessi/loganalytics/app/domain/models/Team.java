@@ -4,6 +4,8 @@ import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Team")
 @IdClass(TeamPrimaryKey.class)
@@ -15,10 +17,12 @@ public class Team {
     @Id @Column (name = "semester", nullable = false)
     private String semester;
 
-    @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject", nullable = false)
     private Subject subject;
+
+    @OneToMany (mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Session> sessions;
 
     public Team() { }
 
@@ -31,6 +35,13 @@ public class Team {
         this.id = id;
         this.subject = subject;
         this.semester = semester;
+    }
+
+    public Team(String id, String semester, Subject subject, List<Session> sessions) {
+        this.id = id;
+        this.semester = semester;
+        this.subject = subject;
+        this.sessions = sessions;
     }
 
     public String getId() {
@@ -55,6 +66,14 @@ public class Team {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<Session> sessions) {
+        this.sessions = sessions;
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.util.Objects;
 public class TeamPrimaryKey implements Serializable {
     private String id;
     private String semester;
-    private String subject;
 
     public String getId() { return id; }
 
@@ -16,21 +15,20 @@ public class TeamPrimaryKey implements Serializable {
 
     public void setSemester(String semester) { this.semester = semester; }
 
-    public String getSubject() { return subject; }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public TeamPrimaryKey(String id, String semester) {
+        this.id = id;
+        this.semester = semester;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TeamPrimaryKey that)) return false;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getSemester(), that.getSemester()) && Objects.equals(getSubject(), that.getSubject());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getSemester(), that.getSemester());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getSemester(), getSubject());
+        return Objects.hash(getId(), getSemester());
     }
 }

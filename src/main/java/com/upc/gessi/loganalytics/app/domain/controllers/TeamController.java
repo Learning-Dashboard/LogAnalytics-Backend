@@ -7,6 +7,7 @@ import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
+import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamRepository;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Response;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TeamController {
@@ -86,5 +88,15 @@ public class TeamController {
             logger.error("Error in the Learning Dashboard response");
         }
         return teamSet;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public Team getTeam(String id, String semester) {
+        TeamPrimaryKey pk = new TeamPrimaryKey(id, semester);
+        Optional<Team> team = teamRepository.findById(pk);
+        return team.orElse(null);
     }
 }

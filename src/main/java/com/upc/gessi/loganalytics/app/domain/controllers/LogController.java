@@ -23,7 +23,7 @@ public class LogController {
             LoggerFactory.getLogger("ActionLogger");
 
     @Autowired
-    private MetricController metricController;
+    private SessionController sessionController;
 
     public List<String> getOriginalLogs(MultipartFile file) {
         List<String> list = new ArrayList<>();
@@ -43,12 +43,19 @@ public class LogController {
             else if (originalLog.contains("logout")) continue;
 
             String[] splitRequest = originalLog.split(", ");
+
             long epoch = getTimestamp(splitRequest[0]);
             if (originalLog.contains("enters app") || originalLog.contains("exits app")
                     || originalLog.contains("'s session has timed out")) {
+
                 String team = splitRequest[1].split(" ")[0];
                 if (team.equals("admin") || team.equals("professor-pes")
                     || team.equals("professor-asw")) continue;
+
+                if (originalLog.contains("enters app"))
+                    sessionController.createSession(epoch, team);
+                else sessionController.updateSession(epoch, team);
+
                 Log newLog = new Log(epoch, team, originalLog);
                 list.add(newLog);
                 continue;
@@ -362,5 +369,14 @@ public class LogController {
     private String getTeam(String StringTeam) {
         int startIndex = "Action performed by ".length();
         return StringTeam.substring(startIndex);
+    }
+
+    public void manageSessions(List<Log> parsedLogs) {
+        for (Log l : parsedLogs){
+            if (l.getMessage().contains("exits app")
+                    || l.getMessage().contains("'s session has timed out")) {
+                sessionController.setnInteractions(l.getSession());
+            }
+        }
     }
 }
