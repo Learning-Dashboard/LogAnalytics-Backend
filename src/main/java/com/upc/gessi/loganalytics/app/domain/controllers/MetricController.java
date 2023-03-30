@@ -1,12 +1,10 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
 import com.google.gson.*;
+import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Metric;
 import com.upc.gessi.loganalytics.app.domain.repositories.MetricRepository;
 import jakarta.annotation.PostConstruct;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +32,11 @@ public class MetricController {
     private Set<Metric> getCurrentLDMetrics() {
         Set<Metric> metrics = new HashSet<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/projects")).newBuilder();
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/projects";
+            HashMap<String, String> queryParams = new HashMap<>();
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonProjects = JsonParser.parseString(json).getAsJsonArray();
@@ -52,7 +48,7 @@ public class MetricController {
                 }
             }
         } catch (IOException e) {
-            logger.error("Error in the Learning Dashboard server");
+            logger.error("Error in the Learning Dashboard response");
         }
         return metrics;
     }
@@ -60,14 +56,12 @@ public class MetricController {
     private List<Metric> getMetricsFromProject(String project) {
         List<Metric> metrics = new ArrayList<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/metrics")).newBuilder();
-            urlBuilder.addQueryParameter("prj", project);
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/metrics";
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put("prj", project);
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonMetrics = JsonParser.parseString(json).getAsJsonArray();
@@ -80,7 +74,7 @@ public class MetricController {
                 }
             }
         } catch (IOException e) {
-            logger.error("Error in the Learning Dashboard server");
+            logger.error("Error in the Learning Dashboard response");
         }
         return metrics;
     }
@@ -91,9 +85,9 @@ public class MetricController {
             String usernameG = student.getAsJsonObject().get("githubUsername").getAsString();
             String usernameT = student.getAsJsonObject().get("taigaUsername").getAsString();
             if (externalId.contains(usernameG))
-                externalId.replace("_" + usernameG, "");
+                externalId = externalId.replace("_" + usernameG, "");
             else if (externalId.contains(usernameT))
-                externalId.replace("_" + usernameT, "");
+                externalId = externalId.replace("_" + usernameT, "");
         }
         return externalId;
     }

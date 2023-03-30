@@ -1,8 +1,9 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
 import com.google.gson.*;
+import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.*;
-import okhttp3.*;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,14 +117,12 @@ public class LogController {
     private List<Integer> getQualityFactorsFromSI(String SIName, String team) {
         List<Integer> qualityFactorsIds = new ArrayList<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/strategicIndicators")).newBuilder();
-            urlBuilder.addQueryParameter("prj", team);
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/strategicIndicators";
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put("prj", team);
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonIndicators = JsonParser.parseString(json).getAsJsonArray();
@@ -132,9 +131,8 @@ public class LogController {
                     String externalId = item.get("externalId").getAsString();
                     if (externalId.equals(SIName)) {
                         JsonArray qFactors = item.get("qualityFactors").getAsJsonArray();
-                        for (int j = 0; j < qFactors.size(); ++j) {
+                        for (int j = 0; j < qFactors.size(); ++j)
                             qualityFactorsIds.add(qFactors.get(j).getAsInt());
-                        }
                     }
                 }
             }
@@ -148,14 +146,12 @@ public class LogController {
         List<String> ids = new ArrayList<>();
         try {
             for (Integer qualityFactorsId : qualityFactorsIds) {
-                OkHttpClient client = new OkHttpClient().newBuilder().build();
-                HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors")).newBuilder();
-                urlBuilder.addPathSegments(qualityFactorsId.toString());
-                Request request = new Request.Builder()
-                        .url(urlBuilder.build().toString())
-                        .method("GET", null)
-                        .build();
-                Response response = client.newCall(request).execute();
+                APIClient apiClient = new APIClient();
+                String url = "http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors";
+                HashMap<String, String> queryParams = new HashMap<>();
+                HashSet<String> pathSegments = new HashSet<>();
+                pathSegments.add(qualityFactorsId.toString());
+                Response response = apiClient.get(url, queryParams, pathSegments);
                 if (response.body() != null) {
                     String json = response.body().string();
                     JsonObject jsonFactor = JsonParser.parseString(json).getAsJsonObject();
@@ -172,14 +168,12 @@ public class LogController {
     private List<Integer> getMetricsFromQF(String QFName, String team) {
         List<Integer> metricsIds = new ArrayList<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors")).newBuilder();
-            urlBuilder.addQueryParameter("prj", team);
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors";
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put("prj", team);
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonFactors = JsonParser.parseString(json).getAsJsonArray();
@@ -203,14 +197,12 @@ public class LogController {
     private List<String> getMetricExternalId(List<Integer> metricsIds, String team) {
         List<String> ids = new ArrayList<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/metrics")).newBuilder();
-            urlBuilder.addQueryParameter("prj", team);
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/metrics";
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put("prj", team);
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonMetrics = JsonParser.parseString(json).getAsJsonArray();
@@ -234,23 +226,20 @@ public class LogController {
 
     private List<String> getAllIds(String page, String team) {
         List<String> ids = new ArrayList<>();
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
-        HttpUrl.Builder urlBuilder = null;
+        APIClient apiClient = new APIClient();
+        String url = null;
         if (page.contains("StrategicIndicators"))
-            urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/strategicIndicators")).newBuilder();
+            url = "http://gessi-dashboard.essi.upc.edu:8888/api/strategicIndicators";
         else if (page.contains("QualityFactors"))
-            urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors")).newBuilder();
+            url = "http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors";
         else if (page.contains("Metrics"))
-            urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/metrics")).newBuilder();
-
-        if (urlBuilder != null) {
-            urlBuilder.addQueryParameter("prj", team);
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
+            url = "http://gessi-dashboard.essi.upc.edu:8888/api/metrics";
+        if (url != null) {
+            HashMap<String,String> queryParams = new HashMap<>();
+            queryParams.put("prj", team);
+            HashSet<String> pathSegments = new HashSet<>();
             try {
-                Response response = client.newCall(request).execute();
+                Response response = apiClient.get(url, queryParams, pathSegments);
                 if (response.body() != null) {
                     String json = response.body().string();
                     JsonArray jsonElems = JsonParser.parseString(json).getAsJsonArray();

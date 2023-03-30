@@ -124,14 +124,22 @@ public class LogRestController {
         //Get Sessions
         //Store Sessions
         List<String> originalLogs = logController.getOriginalLogs(file);
-        logger.info(String.valueOf(originalLogs.size()));
         List<Log> parsedLogs = logController.parseLogs(originalLogs);
 
+        System.out.println("Hola0");
         if (!parsedLogs.isEmpty()) {
+            System.out.println("Hola1");
             Log logFile = parsedLogs.get(0);
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
-            if (logFile.getTime() > logDB.getTime())
+            if (logDB != null) {
+                System.out.println("Hola2");
+                if (logFile.getTime() > logDB.getTime())
+                    logRepository.saveAll(parsedLogs);
+            }
+            else {
+                System.out.println("Hola3");
                 logRepository.saveAll(parsedLogs);
+            }
         }
     }
 }

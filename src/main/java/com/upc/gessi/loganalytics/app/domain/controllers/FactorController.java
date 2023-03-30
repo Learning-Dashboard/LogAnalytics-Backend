@@ -3,12 +3,10 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;
 import com.upc.gessi.loganalytics.app.domain.repositories.FactorRepository;
 import jakarta.annotation.PostConstruct;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +32,13 @@ public class FactorController {
     }
 
     private Set<Factor> getCurrentLDFactors() {
-        Set<Factor> factors = new HashSet<Factor>();
+        Set<Factor> factors = new HashSet<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/projects")).newBuilder();
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/projects";
+            HashMap<String, String> queryParams = new HashMap<>();
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonProjects = JsonParser.parseString(json).getAsJsonArray();
@@ -54,22 +50,20 @@ public class FactorController {
                 }
             }
         } catch (IOException e) {
-            logger.error("Error in the Learning Dashboard server");
+            logger.error("Error in the Learning Dashboard response");
         }
         return factors;
     }
 
     private List<Factor> getFactorsFromProject(String project) {
-        List<Factor> factors = new ArrayList<Factor>();
+        List<Factor> factors = new ArrayList<>();
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors")).newBuilder();
-            urlBuilder.addQueryParameter("prj", project);
-            Request request = new Request.Builder()
-                    .url(urlBuilder.build().toString())
-                    .method("GET", null)
-                    .build();
-            Response response = client.newCall(request).execute();
+            APIClient apiClient = new APIClient();
+            String url = "http://gessi-dashboard.essi.upc.edu:8888/api/qualityFactors";
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put("prj", project);
+            HashSet<String> pathSegments = new HashSet<>();
+            Response response = apiClient.get(url, queryParams, pathSegments);
             if (response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonMetrics = JsonParser.parseString(json).getAsJsonArray();
@@ -81,7 +75,7 @@ public class FactorController {
                 }
             }
         } catch (IOException e) {
-            logger.error("Error in the Learning Dashboard server");
+            logger.error("Error in the Learning Dashboard response");
         }
         return factors;
     }
