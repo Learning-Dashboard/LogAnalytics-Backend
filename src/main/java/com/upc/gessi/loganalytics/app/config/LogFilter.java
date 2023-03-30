@@ -10,8 +10,8 @@ public class LogFilter extends Filter<ILoggingEvent> {
 
     @Override
     public FilterReply decide(ILoggingEvent event) {
-        if (Objects.equals(event.getLoggerName(), "ActionLogger"))
+        //if (Objects.equals(event.getLoggerName(), "ActionLogger"))
             return FilterReply.ACCEPT;
-        else return FilterReply.DENY;
+        //else return FilterReply.DENY;
     }
 }

@@ -126,20 +126,14 @@ public class LogRestController {
         List<String> originalLogs = logController.getOriginalLogs(file);
         List<Log> parsedLogs = logController.parseLogs(originalLogs);
 
-        System.out.println("Hola0");
         if (!parsedLogs.isEmpty()) {
-            System.out.println("Hola1");
             Log logFile = parsedLogs.get(0);
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
             if (logDB != null) {
-                System.out.println("Hola2");
                 if (logFile.getTime() > logDB.getTime())
                     logRepository.saveAll(parsedLogs);
             }
-            else {
-                System.out.println("Hola3");
-                logRepository.saveAll(parsedLogs);
-            }
+            else logRepository.saveAll(parsedLogs);
         }
     }
 }

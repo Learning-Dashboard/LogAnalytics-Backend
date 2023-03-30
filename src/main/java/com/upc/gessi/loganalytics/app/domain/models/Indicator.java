@@ -9,8 +9,7 @@ import java.util.List;
 @Table(name = "Indicator")
 public class Indicator implements Serializable {
 
-    @Id
-    @Column(name = "id", nullable = false)
+    @Id @Column(name = "id", nullable = false)
     private String id;
     @ManyToMany(mappedBy = "indicators")
     private List<IndicatorAccess> factorAccesses;

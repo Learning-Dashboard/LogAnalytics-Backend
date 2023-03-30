@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public class LogPrimaryKey implements Serializable {
     private long time;
-
     private String team;
 
     public long getTime() {
@@ -27,8 +26,7 @@ public class LogPrimaryKey implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LogPrimaryKey)) return false;
-        LogPrimaryKey that = (LogPrimaryKey) o;
+        if (!(o instanceof LogPrimaryKey that)) return false;
         return getTime() == that.getTime() && getTeam().equals(that.getTeam());
     }
 

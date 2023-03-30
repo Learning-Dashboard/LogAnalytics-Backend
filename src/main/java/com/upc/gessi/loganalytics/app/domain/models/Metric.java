@@ -9,8 +9,7 @@ import java.util.List;
 @Table(name = "Metric")
 public class Metric implements Serializable {
 
-    @Id
-    @Column (name = "id", nullable = false)
+    @Id @Column (name = "id", nullable = false)
     private String id;
     @ManyToMany (mappedBy = "metrics")
     private List<MetricAccess> metricAccesses;

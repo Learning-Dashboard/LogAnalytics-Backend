@@ -6,6 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class LogAnalyticsApplication extends SpringBootServletInitializer {
@@ -21,8 +25,9 @@ public class LogAnalyticsApplication extends SpringBootServletInitializer {
 		return application.sources(LogAnalyticsApplication.class);
 	}
 
+	static ConfigurableApplicationContext context;
 	public static void main(String[] args) {
-		SpringApplication.run(LogAnalyticsApplication.class, args);
+		context = SpringApplication.run(LogAnalyticsApplication.class, args);
 	}
 
 }
