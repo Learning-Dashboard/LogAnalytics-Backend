@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface SessionRepository extends CrudRepository<Session, SessionPrimaryKey> {
-    List<Session> findByTeam(Team t);
+    List<Session> findByTeam(Team team);
+    List<Session> findByTeamAndStartTimestampLessThanEqual(Team team, long startTimestamp);
 }

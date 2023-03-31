@@ -1,10 +1,10 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
+import com.upc.gessi.loganalytics.app.domain.models.Log;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class SessionController {
     TeamController teamController;
 
     public void createSession(long startTimestamp, String teamId) {
-        //updateSession(startTimestamp, teamId);
+        updateSession(startTimestamp, teamId);
         String semester = teamController.getSemester();
         Team team = teamController.getTeam(teamId, semester);
         if (team != null) {
@@ -45,25 +45,36 @@ public class SessionController {
         }
     }
 
-    public Session getSessionToStoreLog(String teamId) {
+    public Session getSessionToStoreLog(Log log) {
         String semester = teamController.getSemester();
-        Team team = teamController.getTeam(teamId, semester);
-        Iterable<Session> sessions = sessionRepository.findByTeam(team);
+        Team team = teamController.getTeam(log.getTeam(), semester);
+        Iterable<Session> sessions = sessionRepository.findByTeamAndStartTimestampLessThanEqual(team, log.getTime());
         List<Session> sessionList = new ArrayList<>();
         sessions.forEach(sessionList::add);
-        System.out.println(sessionList.size());
         for (Session s : sessionList) {
-            System.out.println(s.toString());
             if (s.getEndTimestamp() == 0) {
-                System.out.println(s.toString());
+                int n = s.getnInteractions() + 1;
+                s.setnInteractions(n);
+                sessionRepository.save(s);
                 return s;
+            }
+            else {
+                if (log.getMessage().contains("enters app")) {
+                    if (s.getEndTimestamp() > log.getTime()) {
+                        int n = s.getnInteractions() + 1;
+                        s.setnInteractions(n);
+                        sessionRepository.save(s);
+                        return s;
+                    }
+                }
+                else if (s.getEndTimestamp() >= log.getTime()) {
+                    int n = s.getnInteractions() + 1;
+                    s.setnInteractions(n);
+                    sessionRepository.save(s);
+                    return s;
+                }
             }
         }
         return null;
-    }
-
-    public void setnInteractions(Session s) {
-        int nInteractions = s.getLogs().size() - 2;
-        s.setnInteractions(nInteractions);
     }
 }

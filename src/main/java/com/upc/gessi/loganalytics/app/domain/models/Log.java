@@ -18,11 +18,11 @@ public class Log {
     @Column (name = "page")
     private String page;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "teamId"),
-            @JoinColumn(name = "teamSemester"),
-            @JoinColumn(name = "startTimestamp")
+            @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
+            @JoinColumn(name = "team_semester", referencedColumnName = "team_semester"),
+            @JoinColumn(name = "start_timestamp", referencedColumnName = "start_timestamp")
     })
     private Session session;
 

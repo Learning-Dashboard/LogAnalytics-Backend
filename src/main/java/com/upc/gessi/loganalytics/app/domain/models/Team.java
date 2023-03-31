@@ -18,7 +18,7 @@ public class Team {
     private String semester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject", nullable = false)
+    @JoinColumn(name = "subject", referencedColumnName = "acronym", nullable = false)
     private Subject subject;
 
     @OneToMany (mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

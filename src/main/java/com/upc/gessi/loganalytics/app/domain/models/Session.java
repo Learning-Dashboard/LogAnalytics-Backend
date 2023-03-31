@@ -12,24 +12,24 @@ public class Session {
 
     @Id @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "teamId", nullable = false),
-            @JoinColumn(name = "teamSemester", nullable = false)
+            @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false),
+            @JoinColumn(name = "team_semester", referencedColumnName = "semester" ,nullable = false)
     })
     private Team team;
 
-    @Id @Column (name = "startTimestamp", nullable = false)
+    @Id @Column (name = "start_timestamp", nullable = false)
     private long startTimestamp;
 
-    @Column (name = "endTimestamp")
+    @Column (name = "end_timestamp")
     private long endTimestamp;
 
     @Column (name = "duration")
     private double duration;
 
-    @Column (name = "nInteractions")
+    @Column (name = "n_interactions")
     private int nInteractions;
 
-    @OneToMany (mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Log> logs;
 
     public Session() { }

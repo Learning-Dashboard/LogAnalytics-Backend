@@ -2,7 +2,6 @@ package com.upc.gessi.loganalytics.app.domain.restcontrollers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.LogController;
 import com.upc.gessi.loganalytics.app.domain.models.Log;
-import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.repositories.LogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,6 @@ public class LogRestController {
     private LogRepository logRepository;
     @Autowired
     private LogController logController;
-
-    private static final Logger logger =
-            LoggerFactory.getLogger("ActionLogger");
 
     @GetMapping
     public List<Log> findAllLogs() {
@@ -96,17 +92,15 @@ public class LogRestController {
         return logList;
     }
 
-    /*
     @GetMapping("/bySubject")
     @ResponseStatus(HttpStatus.OK)
     public List<Log> findLogsBySubject(
             @RequestParam (name = "subject", required = true) String subject) {
-        Iterable<Log> logIterable = logRepository.findByTeam(team);
+        Iterable<Log> logIterable = logRepository.findBySubject(subject);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         return logList;
     }
-     */
 
     @GetMapping("/byKeyword")
     @ResponseStatus(HttpStatus.OK)
@@ -129,20 +123,13 @@ public class LogRestController {
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
             if (logDB != null) {
                 if (logFile.getTime() > logDB.getTime()) {
-                    for (Log l : parsedLogs) {
-                        logRepository.save(l);
-                        Session s = logController.manageSessions(l.getTime(), l.getTeam(), l.getMessage());
-                        l.setSession(s);
-                        logRepository.save(l);
-                    }
+                    logController.manageSessions(parsedLogs);
+                    logRepository.saveAll(parsedLogs);
                 }
             }
-            else for (Log l : parsedLogs) {
-                logRepository.save(l);
-                Session s = logController.manageSessions(l.getTime(), l.getTeam(), l.getMessage());
-                System.out.println(s.toString());
-                l.setSession(s);
-                logRepository.save(l);
+            else {
+                logController.manageSessions(parsedLogs);
+                logRepository.saveAll(parsedLogs);
             }
         }
     }

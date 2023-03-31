@@ -50,9 +50,14 @@ public class LogController {
                     || originalLog.contains("'s session has timed out")) {
 
                 String team = splitRequest[1].split(" ")[0];
+
                 if (team.equals("admin") || team.equals("professor-pes")
                     || team.equals("professor-asw")) continue;
 
+                if (originalLog.contains("enters app")) {
+                    sessionController.createSession(epoch, team);
+                }
+                else sessionController.updateSession(epoch, team);
                 Log newLog = new Log(epoch, team, originalLog);
                 list.add(newLog);
                 continue;
@@ -368,14 +373,10 @@ public class LogController {
         return StringTeam.substring(startIndex);
     }
 
-    public Session manageSessions(long epoch, String teamId, String message) {
-        if (message.contains("enters app")) {
-            sessionController.createSession(epoch, teamId);
+    public void manageSessions(List<Log> parsedLogs) {
+        for (Log log : parsedLogs) {
+            Session s = sessionController.getSessionToStoreLog(log);
+            log.setSession(s);
         }
-        else if (message.contains("exits app") ||
-            message.contains("'s session has timed out")) {
-            sessionController.updateSession(epoch, teamId);
-        }
-        return sessionController.getSessionToStoreLog(teamId);
     }
 }
