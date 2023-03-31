@@ -1,4 +1,4 @@
-package com.upc.gessi.loganalytics.app.domain.restcontrollers;
+package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.FactorController;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;

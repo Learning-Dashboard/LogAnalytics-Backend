@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.SessionPrimaryKey;
 import jakarta.persistence.*;
 
@@ -30,6 +31,7 @@ public class Session {
     private int nInteractions;
 
     @OneToMany (mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Log> logs;
 
     public Session() { }

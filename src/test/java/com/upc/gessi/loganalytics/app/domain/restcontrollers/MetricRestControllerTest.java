@@ -3,6 +3,7 @@ package com.upc.gessi.loganalytics.app.domain.restcontrollers;
 import com.upc.gessi.loganalytics.app.domain.controllers.MetricController;
 import com.upc.gessi.loganalytics.app.domain.models.Metric;
 import com.upc.gessi.loganalytics.app.domain.repositories.MetricRepository;
+import com.upc.gessi.loganalytics.app.rest.Controllers.MetricRestController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -12,7 +12,8 @@ public class Subject implements Serializable {
 
     @Id @Column (name = "acronym", nullable = false)
     private String acronym;
-    @OneToMany (mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Team> teams;
 
     public Subject() { }

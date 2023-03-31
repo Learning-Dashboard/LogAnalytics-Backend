@@ -3,6 +3,7 @@ package com.upc.gessi.loganalytics.app.domain.restcontrollers;
 import com.upc.gessi.loganalytics.app.domain.controllers.FactorController;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;
 import com.upc.gessi.loganalytics.app.domain.repositories.FactorRepository;
+import com.upc.gessi.loganalytics.app.rest.Controllers.FactorRestController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

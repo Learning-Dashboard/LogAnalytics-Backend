@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;
+import com.upc.gessi.loganalytics.app.domain.models.Metric;
+import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.FactorRepository;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Response;
@@ -22,11 +24,22 @@ public class FactorController {
     @Autowired
     private FactorRepository factorRepository;
 
+    @Autowired
+    private TeamController teamController;
+
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
     @PostConstruct
     public void storeAllFactors() {
+        /*
+        List<Team> visibleTeams = teamController.getStoredTeams();
+        for (Team visibleTeam : visibleTeams) {
+            String project = visibleTeam.getId();
+            List<Factor> factors = getFactorsFromProject(project);
+            factorRepository.saveAll(factors);
+        }
+        */
         Set<Factor> factors = getCurrentLDFactors();
         factorRepository.saveAll(factors);
     }

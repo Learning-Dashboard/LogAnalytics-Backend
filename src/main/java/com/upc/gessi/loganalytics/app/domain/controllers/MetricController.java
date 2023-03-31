@@ -3,6 +3,7 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 import com.google.gson.*;
 import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Metric;
+import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.MetricRepository;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Response;
@@ -20,11 +21,22 @@ public class MetricController {
     @Autowired
     private MetricRepository metricRepository;
 
+    @Autowired
+    private TeamController teamController;
+
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
     @PostConstruct
     public void storeAllMetrics() {
+        /*
+        List<Team> visibleTeams = teamController.getStoredTeams();
+        for (Team visibleTeam : visibleTeams) {
+            String project = visibleTeam.getId();
+            List<Metric> metrics = getMetricsFromProject(project);
+            metricRepository.saveAll(metrics);
+        }
+        */
         Set<Metric> metrics = getCurrentLDMetrics();
         metricRepository.saveAll(metrics);
     }

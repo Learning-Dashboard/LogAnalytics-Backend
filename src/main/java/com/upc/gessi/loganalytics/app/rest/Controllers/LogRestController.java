@@ -1,10 +1,8 @@
-package com.upc.gessi.loganalytics.app.domain.restcontrollers;
+package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.LogController;
 import com.upc.gessi.loganalytics.app.domain.models.Log;
 import com.upc.gessi.loganalytics.app.domain.repositories.LogRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +41,9 @@ public class LogRestController {
                     Date dBefore = new SimpleDateFormat("yyyy-MM-dd").parse(dateBefore);
                     Date dAfter = new SimpleDateFormat("yyyy-MM-dd").parse(dateAfter);
                     long epochBefore = dBefore.getTime();
-                    long epochAfter = dAfter.getTime();
+                    long epochAfter = dAfter.getTime() + 86399999;
+                    if (epochBefore > epochAfter)
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                     Iterable<Log> logIterable = logRepository.findByTimeBetween(epochBefore, epochAfter);
                     List<Log> logList = new ArrayList<>();
                     logIterable.forEach(logList::add);

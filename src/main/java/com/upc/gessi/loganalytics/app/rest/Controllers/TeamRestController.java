@@ -1,7 +1,6 @@
-package com.upc.gessi.loganalytics.app.domain.restcontrollers;
+package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.TeamController;
-import com.upc.gessi.loganalytics.app.domain.models.Metric;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;

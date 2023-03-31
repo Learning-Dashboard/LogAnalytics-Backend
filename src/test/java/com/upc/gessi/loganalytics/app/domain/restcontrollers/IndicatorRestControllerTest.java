@@ -2,9 +2,8 @@ package com.upc.gessi.loganalytics.app.domain.restcontrollers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.IndicatorController;
 import com.upc.gessi.loganalytics.app.domain.models.Indicator;
-import com.upc.gessi.loganalytics.app.domain.models.Metric;
 import com.upc.gessi.loganalytics.app.domain.repositories.IndicatorRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.upc.gessi.loganalytics.app.rest.Controllers.IndicatorRestController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

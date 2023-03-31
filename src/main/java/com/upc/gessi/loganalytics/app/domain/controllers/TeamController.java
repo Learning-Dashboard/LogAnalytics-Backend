@@ -17,9 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class TeamController {
@@ -96,5 +94,12 @@ public class TeamController {
         TeamPrimaryKey pk = new TeamPrimaryKey(id, semester);
         Optional<Team> team = teamRepository.findById(pk);
         return team.orElse(null);
+    }
+
+    public List<Team> getStoredTeams() {
+        Iterable<Team> teamIterable = teamRepository.findAll();
+        List<Team> teamList = new ArrayList<>();
+        teamIterable.forEach(teamList::add);
+        return teamList;
     }
 }

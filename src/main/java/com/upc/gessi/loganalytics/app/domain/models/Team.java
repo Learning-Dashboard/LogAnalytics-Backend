@@ -1,7 +1,7 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,11 +17,12 @@ public class Team {
     @Id @Column (name = "semester", nullable = false)
     private String semester;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subject", referencedColumnName = "acronym", nullable = false)
     private Subject subject;
 
-    @OneToMany (mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Session> sessions;
 
     public Team() { }

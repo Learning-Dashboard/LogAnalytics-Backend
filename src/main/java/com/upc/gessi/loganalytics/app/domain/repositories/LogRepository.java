@@ -16,6 +16,8 @@ public interface LogRepository extends CrudRepository<Log, LogPrimaryKey> {
     List<Log> findByTeam(String team);
     Log findFirstByOrderByTimeDesc();
     List<Log> findByMessageContaining(String keyword);
-    @Query("SELECT l FROM Log l JOIN Session s JOIN Team t JOIN Subject sbj WHERE sbj.acronym = subject")
+    @Query("SELECT l FROM Log l " +
+            "JOIN Subject s ON l.session.team.subject.acronym = s.acronym " +
+            "WHERE s.acronym = ?1")
     List<Log> findBySubject(String subject);
 }

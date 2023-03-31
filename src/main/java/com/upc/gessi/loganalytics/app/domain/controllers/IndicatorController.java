@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
+import com.upc.gessi.loganalytics.app.domain.models.Factor;
 import com.upc.gessi.loganalytics.app.domain.models.Indicator;
+import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.IndicatorRepository;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Response;
@@ -22,11 +24,22 @@ public class IndicatorController {
     @Autowired
     private IndicatorRepository indicatorRepository;
 
+    @Autowired
+    private TeamController teamController;
+
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
     @PostConstruct
     public void storeAllIndicators() {
+        /*
+        List<Team> visibleTeams = teamController.getStoredTeams();
+        for (Team visibleTeam : visibleTeams) {
+            String project = visibleTeam.getId();
+            List<Indicator> indicators = getIndicatorsFromProject(project);
+            indicatorRepository.saveAll(indicators);
+        }
+        */
         Set<Indicator> indicators = getCurrentLDIndicators();
         indicatorRepository.saveAll(indicators);
     }
