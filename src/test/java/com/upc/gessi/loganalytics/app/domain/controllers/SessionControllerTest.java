@@ -1,0 +1,77 @@
+package com.upc.gessi.loganalytics.app.domain.controllers;
+
+import com.upc.gessi.loganalytics.app.domain.models.Log;
+import com.upc.gessi.loganalytics.app.domain.models.Session;
+import com.upc.gessi.loganalytics.app.domain.models.Subject;
+import com.upc.gessi.loganalytics.app.domain.models.Team;
+import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+class SessionControllerTest {
+
+    @Mock
+    SessionRepository sessionRepository;
+    @Mock
+    TeamController teamController;
+
+    @InjectMocks
+    SessionController sessionController;
+
+    @Test
+    void createSession() {
+        long startTimestamp = 0;
+        String teamId = "t1";
+        Subject s = new Subject("s");
+        Team team = new Team("t1", "22-23-Q1", s);
+        Mockito.when(teamController.getSemester()).thenReturn("22-23-Q1");
+        Mockito.when(teamController.getTeam(Mockito.eq(teamId), Mockito.eq("22-23-Q1"))).thenReturn(team);
+        sessionController.createSession(startTimestamp, teamId);
+        Mockito.verify(sessionRepository, Mockito.times(1)).save(Mockito.any(Session.class));
+    }
+
+    @Test
+    void updateSession() {
+        long startTimestamp = 0;
+        String teamId = "t1";
+        Subject s = new Subject("s");
+        Team team = new Team("t1", "22-23-Q1", s);
+        Mockito.when(teamController.getSemester()).thenReturn("22-23-Q1");
+        Mockito.when(teamController.getTeam(Mockito.eq(teamId), Mockito.eq("22-23-Q1"))).thenReturn(team);
+        Session session = new Session(team, startTimestamp);
+        List<Session> sessions = List.of(session);
+        Mockito.when(sessionRepository.findByTeam(team)).thenReturn(sessions);
+        sessionController.updateSession(1, teamId);
+        Mockito.verify(sessionRepository, Mockito.times(1)).save(Mockito.any(Session.class));
+    }
+
+    @Test
+    void getSessionToStoreLog() {
+        Log log = new Log(0, "t1", "Hello");
+        String teamId = "t1";
+        Subject s = new Subject("s");
+        Team team = new Team("t1", "22-23-Q1", s);
+        Mockito.when(teamController.getSemester()).thenReturn("22-23-Q1");
+        Mockito.when(teamController.getTeam(Mockito.eq(teamId), Mockito.eq("22-23-Q1"))).thenReturn(team);
+        Session session = new Session(team, 0);
+        session.setEndTimestamp(1);
+        List<Session> sessions = List.of(session);
+        Mockito.when(sessionRepository.findByTeamAndStartTimestampLessThanEqual(team, 0)).thenReturn(sessions);
+        Session result = sessionController.getSessionToStoreLog(log);
+        Mockito.verify(sessionRepository, Mockito.times(1)).save(Mockito.any(Session.class));
+        assertNotNull(result);
+    }
+}

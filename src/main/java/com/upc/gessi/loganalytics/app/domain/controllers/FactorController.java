@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;
-import com.upc.gessi.loganalytics.app.domain.models.Metric;
-import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.FactorRepository;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Response;

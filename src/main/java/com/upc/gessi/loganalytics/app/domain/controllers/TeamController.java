@@ -90,6 +90,10 @@ public class TeamController {
         return semester;
     }
 
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
     public Team getTeam(String id, String semester) {
         TeamPrimaryKey pk = new TeamPrimaryKey(id, semester);
         Optional<Team> team = teamRepository.findById(pk);

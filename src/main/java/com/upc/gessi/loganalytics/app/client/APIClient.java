@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class APIClient {
 
-    private final OkHttpClient client;
+    private OkHttpClient client;
 
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
@@ -25,7 +25,11 @@ public class APIClient {
     }
 
     public OkHttpClient getClient() {
-        return client;
+        return client.newBuilder().build();
+    }
+
+    public void setClient(OkHttpClient client) {
+        this.client = client;
     }
 
     public Response get(String url, HashMap<String,String> queryParams, HashSet<String> pathSegments) {

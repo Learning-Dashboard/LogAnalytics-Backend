@@ -3,7 +3,6 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 import com.google.gson.*;
 import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Metric;
-import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.MetricRepository;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Response;
