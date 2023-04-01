@@ -9,15 +9,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class LogTest {
 
     private Log log;
+    private Session s;
+    private Team t;
+    private Subject sub;
 
     @BeforeEach
     void setUp() {
-        log = new Log(0, "testTeam", "testMessage", "testPage");
+        sub = new Subject("sub");
+        t = new Team("pes11a", "sem", sub);
+        s = new Session(t, 0);
+        log = new Log(0, "testTeam", "testMessage", "testPage", s);
     }
 
     @AfterEach
     void tearDown() {
         log = null;
+        s = null;
+        t = null;
+        sub = null;
     }
 
     @Test
@@ -65,8 +74,23 @@ class LogTest {
     }
 
     @Test
+    void getSession() {
+        assertEquals(s, log.getSession());
+    }
+
+    @Test
+    void setSession() {
+        s = new Session(t, 1);
+        log.setSession(s);
+        assertEquals(s, log.getSession());
+    }
+
+    @Test
     void testToString() {
-        String logString = "Log{time=0, team='testTeam', message='testMessage', page='testPage'}";
+        String logString = "Log{time=0, team='testTeam', message='testMessage', " +
+            "page='testPage', session=Session{team=Team{id='pes11a', semester='sem', " +
+            "subject='Subject{acronym='sub'}'}, startTimestamp=0, " +
+            "endTimestamp=0, duration=0.0, nInteractions=0}}";
         assertEquals(log.toString(), logString);
     }
 }
