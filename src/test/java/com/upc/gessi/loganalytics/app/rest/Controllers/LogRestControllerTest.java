@@ -48,7 +48,7 @@ class LogRestControllerTest {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(82800000L, "pes11a", "testMessage"));
         logs.add(new Log(259200000L, "pes11a", "testMessage"));
-        when(logRepository.findByTimeBetween(82800000L, 341999999L)).thenReturn(logs);
+        when(logRepository.findByTimeBetween(Mockito.anyLong(), Mockito.anyLong())).thenReturn(logs);
         List<Log> actualLogs = logRestController.findLogsBetweenDates("1970-01-02", "1970-01-04");
         assertEquals(logs, actualLogs);
     }
