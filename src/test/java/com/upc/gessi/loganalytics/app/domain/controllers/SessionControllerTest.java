@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +40,7 @@ class SessionControllerTest {
         Team team = new Team("t1", "22-23-Q1", s);
         Mockito.when(teamController.getSemester()).thenReturn("22-23-Q1");
         Mockito.when(teamController.getTeam(Mockito.eq(teamId), Mockito.eq("22-23-Q1"))).thenReturn(team);
-        sessionController.createSession(startTimestamp, teamId);
+        sessionController.createSession("s", startTimestamp, teamId);
         Mockito.verify(sessionRepository, Mockito.times(1)).save(Mockito.any(Session.class));
     }
 
@@ -49,12 +50,9 @@ class SessionControllerTest {
         String teamId = "t1";
         Subject s = new Subject("s");
         Team team = new Team("t1", "22-23-Q1", s);
-        Mockito.when(teamController.getSemester()).thenReturn("22-23-Q1");
-        Mockito.when(teamController.getTeam(Mockito.eq(teamId), Mockito.eq("22-23-Q1"))).thenReturn(team);
-        Session session = new Session(team, startTimestamp);
-        List<Session> sessions = List.of(session);
-        Mockito.when(sessionRepository.findByTeam(team)).thenReturn(sessions);
-        sessionController.updateSession(1, teamId);
+        Session session = new Session("s", team, startTimestamp);
+        Mockito.when(sessionRepository.findById("s")).thenReturn(Optional.of(session));
+        sessionController.updateSession("s", 1);
         Mockito.verify(sessionRepository, Mockito.times(1)).save(Mockito.any(Session.class));
     }
 
@@ -64,13 +62,10 @@ class SessionControllerTest {
         String teamId = "t1";
         Subject s = new Subject("s");
         Team team = new Team("t1", "22-23-Q1", s);
-        Mockito.when(teamController.getSemester()).thenReturn("22-23-Q1");
-        Mockito.when(teamController.getTeam(Mockito.eq(teamId), Mockito.eq("22-23-Q1"))).thenReturn(team);
-        Session session = new Session(team, 0);
+        Session session = new Session("s", team, 0);
         session.setEndTimestamp(1);
-        List<Session> sessions = List.of(session);
-        Mockito.when(sessionRepository.findByTeamAndStartTimestampLessThanEqual(team, 0)).thenReturn(sessions);
-        Session result = sessionController.getSessionToStoreLog(log);
+        Mockito.when(sessionRepository.findById("s")).thenReturn(Optional.of(session));
+        Session result = sessionController.getSessionToStoreLog("s");
         Mockito.verify(sessionRepository, Mockito.times(1)).save(Mockito.any(Session.class));
         assertNotNull(result);
     }

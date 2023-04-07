@@ -39,37 +39,48 @@ public class LogController {
     public List<Log> parseLogs(List<String> originalLogs) {
         List<Log> list = new ArrayList<>();
         for (String originalLog : originalLogs) {
-            if (originalLog.contains("login")) continue;
-            else if (originalLog.contains("logout")) continue;
+            if (originalLog.contains("logout") ||
+                originalLog.contains("No user is logged in yet")) continue;
 
             String[] splitRequest = originalLog.split(", ");
-
             long epoch = getTimestamp(splitRequest[0]);
 
             if (originalLog.contains("enters app") || originalLog.contains("exits app")
-                    || originalLog.contains("'s session has timed out")) {
+                || originalLog.contains("'s session has timed out")) {
 
                 String team = splitRequest[1].split(" ")[0];
+                String[] splitTeam = splitRequest[1].split(" \\(");
+                String sessionId = "";
+                if (splitTeam.length > 1) {
+                    String session = splitTeam[1];
+                    sessionId = session.replaceAll("\\)", "");
+                }
 
                 if (team.equals("admin") || team.equals("professor-pes")
                     || team.equals("professor-asw")) continue;
 
-                if (originalLog.contains("enters app")) {
-                    sessionController.createSession(epoch, team);
+                Session s;
+                if (originalLog.contains("enters app"))
+                    s = sessionController.createSession(sessionId, epoch, team);
+                else s = sessionController.updateSession(sessionId, epoch);
+                if (s != null) {
+                    Log newLog = new Log(epoch, team, originalLog, s);
+                    list.add(newLog);
                 }
-                else sessionController.updateSession(epoch, team);
-                Log newLog = new Log(epoch, team, originalLog);
-                list.add(newLog);
                 continue;
             }
 
             if (!originalLog.contains(" GET ")) continue;
             String page = getPage(splitRequest[1]);
             HashMap<String,String> params = getParams(splitRequest);
+
             String team = getTeam(splitRequest[splitRequest.length - 1]);
+            String sessionId = getSession(splitRequest[splitRequest.length - 1]);
+            Session s = sessionController.getSessionToStoreLog(sessionId);
+            if (s == null) continue;
+
             if (team.equals("admin") || team.equals("professor-pes")
-                || team.equals("professor-asw"))
-                continue;
+                || team.equals("professor-asw")) continue;
 
             if (!page.contains("Configuration") && !page.contains("Prediction")
                 && !page.contains("Simulation")) {
@@ -90,33 +101,38 @@ public class LogController {
                                 Metric newMetric = new Metric(id);
                                 metricIds.add(newMetric);
                             }
-                            MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page, historic, viewFormat, metricIds);
+                            MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page,
+                                s, historic, viewFormat, metricIds);
                             list.add(newLog);
-                        } else if (page.contains("QualityFactors")) {
+                        }
+                        else if (page.contains("QualityFactors")) {
                             List<Factor> factorIds = new ArrayList<>();
                             for (String id : ids) {
                                 Factor newFactor = new Factor(id);
                                 factorIds.add(newFactor);
                             }
-                            FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page, historic, viewFormat, factorIds);
+                            FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page,
+                                s, historic, viewFormat, factorIds);
                             list.add(newLog);
-                        } else {
+                        }
+                        else {
                             List<Indicator> indicatorIds = new ArrayList<>();
                             for (String id : ids) {
                                 Indicator newIndicator = new Indicator(id);
                                 indicatorIds.add(newIndicator);
                             }
-                            IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page, historic, viewFormat, indicatorIds);
+                            IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page,
+                                s, historic, viewFormat, indicatorIds);
                             list.add(newLog);
                         }
                     } else {
-                        QModelAccess newLog = new QModelAccess(epoch, team, originalLog, page, viewFormat);
+                        QModelAccess newLog = new QModelAccess(epoch, team, originalLog, page, s, viewFormat);
                         list.add(newLog);
                     }
                 }
             }
             else {
-                Log newLog = new Log(epoch, team, originalLog, page);
+                Log newLog = new Log(epoch, team, originalLog, page, s);
                 list.add(newLog);
             }
         }
@@ -370,13 +386,16 @@ public class LogController {
 
     private String getTeam(String StringTeam) {
         int startIndex = "Action performed by ".length();
-        return StringTeam.substring(startIndex);
+        String team = StringTeam.split(" \\(")[0];
+        return team.substring(startIndex);
     }
 
-    public void manageSessions(List<Log> parsedLogs) {
-        for (Log log : parsedLogs) {
-            Session s = sessionController.getSessionToStoreLog(log);
-            log.setSession(s);
+    private String getSession(String StringTeam) {
+        String[] splitTeam = StringTeam.split(" \\(");
+        if (splitTeam.length > 1) {
+            String session = StringTeam.split(" \\(")[1];
+            return session.replaceAll("\\)", "");
         }
+        return null;
     }
 }

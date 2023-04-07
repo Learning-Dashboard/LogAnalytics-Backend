@@ -8,6 +8,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +28,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
 class LogControllerTest {
 
     @Mock
@@ -46,14 +52,19 @@ class LogControllerTest {
 
     @Test
     void parseLogs() throws ParseException {
+        Subject subj = new Subject("PES");
+        Team t = new Team("pes11a", "s", subj);
+        Session s = new Session("s", t, 1);
+        when(sessionController.createSession(anyString(), anyLong(), anyString())).thenReturn(s);
+        when(sessionController.updateSession(anyString(), anyLong())).thenReturn(s);
         List<String> originalLogs = Arrays.asList(
-            "2022-03-30 10:30:15.000, pes11a enters app",
-            "2022-03-30 10:30:50.000, pes11a exits app");
+            "2022-03-30 10:30:15.000, pes11a enters app (abc)",
+            "2022-03-30 10:30:50.000, pes11a exits app (abc)");
         Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:15.000");
         Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:50.000");
         List<Log> expectedLogs = List.of(
-                new Log(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, pes11a enters app"),
-                new Log(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, pes11a exits app")
+                new Log(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, pes11a enters app (abc)", s),
+                new Log(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, pes11a exits app (abc)", s)
         );
         List<Log> actualLogs = logController.parseLogs(originalLogs);
         assertEquals(expectedLogs.size(), actualLogs.size());
@@ -61,30 +72,6 @@ class LogControllerTest {
             assertEquals(expectedLogs.get(i).getTime(), actualLogs.get(i).getTime());
             assertEquals(expectedLogs.get(i).getTeam(), actualLogs.get(i).getTeam());
             assertEquals(expectedLogs.get(i).toString(), actualLogs.get(i).toString());
-        }
-    }
-
-    @Test
-    void manageSessions() throws ParseException {
-        List<Log> parsedLogs = new ArrayList<>();
-        Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:15.000");
-        Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:50.000");
-        parsedLogs.add(new Log(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, pes11a enters app"));
-        parsedLogs.add(new Log(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, pes11a exits app"));
-        Subject s = new Subject("s");
-        Team t = new Team("pes11a", "s1", s);
-        when(sessionController.getSessionToStoreLog(any(Log.class)))
-                .thenAnswer((Answer<Session>) invocation -> {
-                    Session session = mock(Session.class);
-                    when(session.getTeam()).thenReturn(t);
-                    when(session.getStartTimestamp()).thenReturn(0L);
-                    return session;
-                });
-        logController.manageSessions(parsedLogs);
-        verify(sessionController, times(parsedLogs.size())).getSessionToStoreLog(any(Log.class));
-        for (Log log : parsedLogs) {
-            assertEquals(log.getSession().getTeam().getId(), log.getTeam());
-            assertEquals(log.getSession().getStartTimestamp(), 0L);
         }
     }
 }

@@ -123,12 +123,10 @@ public class LogRestController {
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
             if (logDB != null) {
                 if (logFile.getTime() > logDB.getTime()) {
-                    logController.manageSessions(parsedLogs);
                     logRepository.saveAll(parsedLogs);
                 }
             }
             else {
-                logController.manageSessions(parsedLogs);
                 logRepository.saveAll(parsedLogs);
             }
         }

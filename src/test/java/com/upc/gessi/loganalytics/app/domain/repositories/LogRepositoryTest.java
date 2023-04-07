@@ -27,8 +27,15 @@ class LogRepositoryTest {
 
     @Test
     void findByTimeGreaterThanEqual() {
-        Log log1 = new Log(0, "pes11a", "testMessage");
-        Log log2 = new Log(10, "pes11a", "testMessage");
+        Subject subj = new Subject("PES");
+        Team team = new Team("pes11a", "sem", subj);
+        Session session = new Session("s", team, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team);
+        entityManager.persistAndFlush(session);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", session);
+        Log log2 = new Log(10, "pes11a", "testMessage", session);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
@@ -40,8 +47,15 @@ class LogRepositoryTest {
 
     @Test
     void findByTimeLessThanEqual() {
-        Log log1 = new Log(0, "pes11a", "testMessage");
-        Log log2 = new Log(10, "pes11a", "testMessage");
+        Subject subj = new Subject("PES");
+        Team team = new Team("pes11a", "sem", subj);
+        Session session = new Session("s", team, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team);
+        entityManager.persistAndFlush(session);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", session);
+        Log log2 = new Log(10, "pes11a", "testMessage", session);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
@@ -53,9 +67,16 @@ class LogRepositoryTest {
 
     @Test
     void findByTimeBetween() {
-        Log log1 = new Log(0, "pes11a", "testMessage");
-        Log log2 = new Log(10, "pes11a", "testMessage");
-        Log log3 = new Log(7, "pes11a", "testMessage");
+        Subject subj = new Subject("PES");
+        Team team = new Team("pes11a", "sem", subj);
+        Session session = new Session("s", team, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team);
+        entityManager.persistAndFlush(session);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", session);
+        Log log2 = new Log(10, "pes11a", "testMessage", session);
+        Log log3 = new Log(7, "pes11a", "testMessage", session);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
         entityManager.persistAndFlush(log3);
@@ -71,8 +92,19 @@ class LogRepositoryTest {
 
     @Test
     void findByTeam() {
-        Log log1 = new Log(0, "pes11a", "testMessage");
-        Log log2 = new Log(0, "pes11b", "testMessage");
+        Subject subj = new Subject("PES");
+        Team team1 = new Team("pes11a", "sem", subj);
+        Team team2 = new Team("pes11b", "sem", subj);
+        Session session1 = new Session("s1", team1, 0);
+        Session session2 = new Session("s2", team2, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team1);
+        entityManager.persistAndFlush(team2);
+        entityManager.persistAndFlush(session1);
+        entityManager.persistAndFlush(session2);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", session1);
+        Log log2 = new Log(0, "pes11b", "testMessage", session2);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
@@ -84,8 +116,19 @@ class LogRepositoryTest {
 
     @Test
     void findFirstByOrderByTimeDesc() {
-        Log log1 = new Log(0, "pes11a", "testMessage");
-        Log log2 = new Log(10, "pes11b", "testMessage");
+        Subject subj = new Subject("PES");
+        Team team1 = new Team("pes11a", "sem", subj);
+        Team team2 = new Team("pes11b", "sem", subj);
+        Session session1 = new Session("s1", team1, 0);
+        Session session2 = new Session("s2", team2, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team1);
+        entityManager.persistAndFlush(team2);
+        entityManager.persistAndFlush(session1);
+        entityManager.persistAndFlush(session2);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", session1);
+        Log log2 = new Log(10, "pes11b", "testMessage", session2);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
@@ -95,8 +138,15 @@ class LogRepositoryTest {
 
     @Test
     void findByMessageContaining() {
-        Log log1 = new Log(0, "pes11a", "testMessage1");
-        Log log2 = new Log(10, "pes11a", "testMessage2");
+        Subject subj = new Subject("PES");
+        Team team = new Team("pes11a", "sem", subj);
+        Session session = new Session("s", team, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team);
+        entityManager.persistAndFlush(session);
+
+        Log log1 = new Log(0, "pes11a", "testMessage1", session);
+        Log log2 = new Log(10, "pes11a", "testMessage2", session);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
@@ -112,8 +162,8 @@ class LogRepositoryTest {
         Subject subject2 = new Subject("ASW");
         Team team1 = new Team("pes11a", "sem", subject1);
         Team team2 = new Team("asw11a", "sem", subject2);
-        Session session1 = new Session(team1, 0);
-        Session session2 = new Session(team2, 0);
+        Session session1 = new Session("s1", team1, 0);
+        Session session2 = new Session("s2", team2, 0);
         Log log1 = new Log(0, "pes11a", "testMessage", session1);
         Log log2 = new Log(0, "asw11a", "testMessage", session2);
 

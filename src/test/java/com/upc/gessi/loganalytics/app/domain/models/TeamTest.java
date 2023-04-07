@@ -68,7 +68,7 @@ class TeamTest {
     @Test
     void setSessions() {
         List<Session> sessions = new ArrayList<>();
-        Session s = new Session(team, 0);
+        Session s = new Session("s", team, 0);
         sessions.add(s);
         team.setSessions(sessions);
         assertEquals(sessions, team.getSessions());

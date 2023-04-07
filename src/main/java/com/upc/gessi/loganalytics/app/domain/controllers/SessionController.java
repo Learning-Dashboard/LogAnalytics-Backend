@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class SessionController {
@@ -19,61 +20,42 @@ public class SessionController {
     @Autowired
     TeamController teamController;
 
-    public void createSession(long startTimestamp, String teamId) {
-        updateSession(startTimestamp, teamId);
+    public Session createSession(String sessionId, long startTimestamp, String teamId) {
+        updateSession(sessionId, startTimestamp);
         String semester = teamController.getSemester();
         Team team = teamController.getTeam(teamId, semester);
         if (team != null) {
-            Session session = new Session(team, startTimestamp);
+            Session session = new Session(sessionId, team,  startTimestamp);
+            session.setnInteractions(1);
             sessionRepository.save(session);
+            return session;
         }
+        return null;
     }
 
-    public void updateSession(long endTimestamp, String teamId) {
-        String semester = teamController.getSemester();
-        Team team = teamController.getTeam(teamId, semester);
-        Iterable<Session> sessions = sessionRepository.findByTeam(team);
-        List<Session> sessionList = new ArrayList<>();
-        sessions.forEach(sessionList::add);
-        for (Session s : sessionList) {
-            if (s.getEndTimestamp() == 0) {
-                s.setEndTimestamp(endTimestamp);
-                long duration = (endTimestamp - s.getStartTimestamp()) / 1000;
-                s.setDuration(duration);
-                sessionRepository.save(s);
-            }
+    public Session updateSession(String sessionId, long endTimestamp) {
+        Optional<Session> sessionOptional = sessionRepository.findById(sessionId);
+        if (sessionOptional.isPresent()) {
+            Session s = sessionOptional.get();
+            s.setEndTimestamp(endTimestamp);
+            long duration = (endTimestamp - s.getStartTimestamp()) / 1000;
+            s.setDuration(duration);
+            int n = s.getnInteractions() + 1;
+            s.setnInteractions(n);
+            sessionRepository.save(s);
+            return s;
         }
+        return null;
     }
 
-    public Session getSessionToStoreLog(Log log) {
-        String semester = teamController.getSemester();
-        Team team = teamController.getTeam(log.getTeam(), semester);
-        Iterable<Session> sessions = sessionRepository.findByTeamAndStartTimestampLessThanEqual(team, log.getTime());
-        List<Session> sessionList = new ArrayList<>();
-        sessions.forEach(sessionList::add);
-        for (Session s : sessionList) {
-            if (s.getEndTimestamp() == 0) {
-                int n = s.getnInteractions() + 1;
-                s.setnInteractions(n);
-                sessionRepository.save(s);
-                return s;
-            }
-            else {
-                if (log.getMessage().contains("enters app")) {
-                    if (s.getEndTimestamp() > log.getTime()) {
-                        int n = s.getnInteractions() + 1;
-                        s.setnInteractions(n);
-                        sessionRepository.save(s);
-                        return s;
-                    }
-                }
-                else if (s.getEndTimestamp() >= log.getTime()) {
-                    int n = s.getnInteractions() + 1;
-                    s.setnInteractions(n);
-                    sessionRepository.save(s);
-                    return s;
-                }
-            }
+    public Session getSessionToStoreLog(String sessionId) {
+        Optional<Session> sessionOptional = sessionRepository.findById(sessionId);
+        if (sessionOptional.isPresent()) {
+            Session s = sessionOptional.get();
+            int n = s.getnInteractions() + 1;
+            s.setnInteractions(n);
+            sessionRepository.save(s);
+            return s;
         }
         return null;
     }

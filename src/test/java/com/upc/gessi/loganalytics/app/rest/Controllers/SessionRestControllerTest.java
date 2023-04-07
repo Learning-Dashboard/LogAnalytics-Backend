@@ -30,8 +30,8 @@ class SessionRestControllerTest {
         List<Session> sessions = new ArrayList<>();
         Subject subject = new Subject("PES");
         Team team = new Team("t1", "sem", subject);
-        sessions.add(new Session(team, 0));
-        sessions.add(new Session(team, 10));
+        sessions.add(new Session("s1", team, 0));
+        sessions.add(new Session("s2", team, 10));
         when(sessionRepository.findAll()).thenReturn(sessions);
         List<Session> actualSessions = sessionRestController.findAllSessions();
         assertEquals(sessions, actualSessions);

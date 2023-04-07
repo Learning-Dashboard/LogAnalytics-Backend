@@ -17,7 +17,7 @@ class LogTest {
     void setUp() {
         sub = new Subject("sub");
         t = new Team("pes11a", "sem", sub);
-        s = new Session(t, 0);
+        s = new Session("s", t, 0);
         log = new Log(0, "testTeam", "testMessage", "testPage", s);
     }
 
@@ -80,7 +80,7 @@ class LogTest {
 
     @Test
     void setSession() {
-        s = new Session(t, 1);
+        s = new Session("s2", t, 1);
         log.setSession(s);
         assertEquals(s, log.getSession());
     }
@@ -88,7 +88,7 @@ class LogTest {
     @Test
     void testToString() {
         String logString = "Log{time=0, team='testTeam', message='testMessage', " +
-            "page='testPage', session=Session{team=Team{id='pes11a', semester='sem', " +
+            "page='testPage', session=Session{id='s', team=Team{id='pes11a', semester='sem', " +
             "subject='Subject{acronym='sub'}'}, startTimestamp=0, " +
             "endTimestamp=0, duration=0.0, nInteractions=0}}";
         assertEquals(log.toString(), logString);

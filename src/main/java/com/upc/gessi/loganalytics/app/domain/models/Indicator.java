@@ -11,7 +11,7 @@ public class Indicator implements Serializable {
 
     @Id @Column(name = "id", nullable = false)
     private String id;
-    @ManyToMany(mappedBy = "indicators")
+    @ManyToMany(mappedBy = "indicators", cascade = CascadeType.ALL)
     private List<IndicatorAccess> factorAccesses;
 
     public Indicator() { }

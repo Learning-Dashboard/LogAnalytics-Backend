@@ -19,7 +19,7 @@ class SessionTest {
     void setUp() {
         s = new Subject("sub");
         t = new Team("pes11a", "sem", s);
-        session = new Session(t, 0, 5, 5, 1);
+        session = new Session("s", t, 0, 5, 5, 1);
     }
 
     @AfterEach
@@ -27,6 +27,17 @@ class SessionTest {
         s = null;
         t = null;
         session = null;
+    }
+
+    @Test
+    void getId() {
+        assertEquals("s", session.getId());
+    }
+
+    @Test
+    void setId() {
+        session.setId("s2");
+        assertEquals("s2", session.getId());
     }
 
     @Test
@@ -100,7 +111,8 @@ class SessionTest {
 
     @Test
     void testToString() {
-        String result = "Session{team=Team{id='pes11a', semester='sem', " +
+        String result = "Session{id='s', " +
+            "team=Team{id='pes11a', semester='sem', " +
             "subject='Subject{acronym='sub'}'}, startTimestamp=0, " +
             "endTimestamp=5, duration=5.0, nInteractions=1}";
         assertEquals(result, session.toString());

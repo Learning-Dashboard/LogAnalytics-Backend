@@ -1,47 +1,44 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.upc.gessi.loganalytics.app.domain.models.pkey.SessionPrimaryKey;
 import jakarta.persistence.*;
 
 import java.util.List;
-
 @Entity
 @Table(name = "Session")
-@IdClass(SessionPrimaryKey.class)
+//@IdClass(SessionPrimaryKey.class)
 public class Session {
 
-    @Id @ManyToOne(fetch = FetchType.EAGER)
+    @Id @Column (name = "id", nullable = false)
+    private String id;
+    @Column (name = "start_timestamp", nullable = false)
+    private long startTimestamp;
+    @Column (name = "end_timestamp")
+    private long endTimestamp;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
             @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "team_semester", referencedColumnName = "semester" ,nullable = false)
     })
     private Team team;
-
-    @Id @Column (name = "start_timestamp", nullable = false)
-    private long startTimestamp;
-
-    @Column (name = "end_timestamp")
-    private long endTimestamp;
-
     @Column (name = "duration")
     private double duration;
-
     @Column (name = "n_interactions")
     private int nInteractions;
-
     @OneToMany (mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Log> logs;
 
     public Session() { }
 
-    public Session(Team team, long startTimestamp) {
+    public Session(String id, Team team, long startTimestamp) {
+        this.id = id;
         this.team = team;
         this.startTimestamp = startTimestamp;
     }
 
-    public Session(Team team, long startTimestamp, long endTimestamp, double duration, int nInteractions) {
+    public Session(String id, Team team, long startTimestamp, long endTimestamp, double duration, int nInteractions) {
+        this.id = id;
         this.team = team;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
@@ -49,13 +46,22 @@ public class Session {
         this.nInteractions = nInteractions;
     }
 
-    public Session(Team team, long startTimestamp, long endTimestamp, double duration, int nInteractions, List<Log> logs) {
+    public Session(String id, Team team, long startTimestamp, long endTimestamp, double duration, int nInteractions, List<Log> logs) {
+        this.id = id;
         this.team = team;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.duration = duration;
         this.nInteractions = nInteractions;
         this.logs = logs;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Team getTeam() {
@@ -109,7 +115,8 @@ public class Session {
     @Override
     public String toString() {
         return "Session{" +
-                "team=" + team +
+                "id='" + id + '\'' +
+                ", team=" + team +
                 ", startTimestamp=" + startTimestamp +
                 ", endTimestamp=" + endTimestamp +
                 ", duration=" + duration +

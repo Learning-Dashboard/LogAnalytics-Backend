@@ -11,20 +11,16 @@ public class Log {
 
     @Id @Column (name = "time", nullable = false)
     private long time;
-    @Id @Column (name = "team", nullable = false)
+    @Id @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "session_id",
+        referencedColumnName = "id", nullable = false)
+    private Session session;
+    @Column (name = "team", nullable = false)
     private String team;
     @Column (name = "message", nullable = false)
     private String message;
     @Column (name = "page")
     private String page;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumns({
-            @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
-            @JoinColumn(name = "team_semester", referencedColumnName = "team_semester"),
-            @JoinColumn(name = "start_timestamp", referencedColumnName = "start_timestamp")
-    })
-    private Session session;
 
     public Log() { }
 
