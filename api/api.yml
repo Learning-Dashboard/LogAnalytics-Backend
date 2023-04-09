@@ -1,0 +1,494 @@
+openapi: 3.0.3
+info:
+  title: Swagger Log Analytics Tool - OpenAPI 3.0
+  description: This is the REST API documentation for the TFG Log Analytics Tool for the Learning Dashboard, 
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /subjects:
+    get:
+      tags:
+        - Subject
+      summary: Finds all of the Subjects
+      description: Retrieves all of the existing Subjects.
+      operationId: getSubjects
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subject'
+  /teams:
+    get:
+      tags:
+        - Team
+      summary: Finds all of the Teams
+      description: Retrieves all of the existing Teams.
+      operationId: getTeams
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+  /teams/import:
+    get:
+      tags:
+        - Team
+      summary: Stores the Teams from the LD.
+      description: Stores all of the Teams present in the current Learning Dashboard configuration, along with their corresponding subject.
+      operationId: importTeams
+      responses:
+        '201':
+          description: created
+  /sessions:
+    get:
+      tags:
+        - Session
+      summary: Finds all of the Sessions
+      description: Retrieves all of the existing Sessions.
+      operationId: getSessions
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+  /logs:
+    get:
+      tags:
+        - Log
+      summary: Finds all of the Logs
+      description: Retrieves all of the existing Logs.
+      operationId: getLogs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+  /logs/byDates:
+    get:
+      tags:
+        - Log
+      summary: Finds Logs by dates
+      description: Retrieves the Logs that happened before or after a certain date, or the ones that happened between two certain dates.
+      operationId: getLogsByDates
+      parameters:
+        - name: dateBefore
+          in: query
+          description: Starting date 
+          required: false
+          schema:
+            type: string
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date
+          required: false
+          schema:
+            type: string
+            example: 2023-06-01
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples: 
+                  example 1: 
+                    value: dateBefore is not previous to dateAfter
+                  example 2: 
+                    value: Date formats are incorrect
+                  example 3:
+                    value: At least one date needs to be provided
+  /logs/byTeam:
+    get:
+      tags:
+        - Log
+      summary: Finds Logs by Team
+      description: Retrieves the Logs that were performed by a certain Team, in the current semester.
+      operationId: getLogsByTeam
+      parameters:
+        - name: team
+          in: query
+          description: Name of the Team, in the current semester, to retrieve the Logs from.
+          required: true
+          schema:
+            type: string
+            example: pes11a
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+  /logs/bySubject:
+    get:
+      tags:
+        - Log
+      summary: Finds Logs by Subject
+      description: Retrieves the Logs that were performed by a certain Team from a certain Subject.
+      operationId: getLogsBySubject
+      parameters:
+        - name: team
+          in: query
+          description: Name of the Subject to retrieve the Logs from.
+          required: true
+          schema:
+            type: string
+            example: PES
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+  /logs/byKeyword:
+    get:
+      tags:
+        - Log
+      summary: Finds Logs by keyword
+      description: Retrieves the Logs that contain a certain keyword in its message.
+      operationId: getLogsByKeyword
+      parameters:
+        - name: keyword
+          in: query
+          description: Keyword which we want the Logs retrieved to contain.
+          required: true
+          schema:
+            type: string
+            example: Strategic
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+  /logs/import:
+    post:
+      tags:
+        - Log
+      summary: Stores the Logs in the Log file
+      description: Stores the Logs present in the Log file, if the data is correct and they have not been stored before.
+      operationId: importLogs
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: created
+  /metricAccesses:
+    get:
+      tags:
+        - Log
+      summary: Finds all of the MetricAccesses
+      description: Retrieves all of the existing Logs which are MetricAccesses.
+      operationId: getMetricAccesses
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetricAccess'
+  /factorAccesses:
+    get:
+      tags:
+        - Log
+      summary: Finds all of the FactorAccesses
+      description: Retrieves all of the existing Logs which are FactorAccesses.
+      operationId: getFactorAccesses
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FactorAccess'
+  /indicatorAccesses:
+    get:
+      tags:
+        - Log
+      summary: Finds all of the IndicatorAccesses
+      description: Retrieves all of the existing Logs which are IndicatorAccesses.
+      operationId: getIndicatorAccesses
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndicatorAccess'
+  /qModelAccesses:
+    get:
+      tags:
+        - Log
+      summary: Finds all of the QModelAccesses
+      description: Retrieves all of the existing Logs which are QModelAccesses.
+      operationId: getQModelAccesses
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QModelAccess'
+  /metrics:
+    get:
+      tags:
+        - Metric
+      summary: Finds all of the Metrics
+      description: Retrieves all of the existing Metrics.
+      operationId: getMetrics
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Metric'
+  /metrics/import:
+    get:
+      tags:
+        - Metric
+      summary: Stores the Metrics from the LD.
+      description: Stores all of the Metrics present in the current Learning Dashboard configuration.
+      operationId: importMetrics
+      responses:
+        '201':
+          description: created
+  /factors:
+    get:
+      tags:
+        - Factor
+      summary: Finds all of the Factors
+      description: Retrieves all of the existing Factors.
+      operationId: getFactors
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Factor'
+  /factors/import:
+    get:
+      tags:
+        - Factor
+      summary: Stores the Factors from the LD.
+      description: Stores all of the Factors present in the current Learning Dashboard configuration.
+      operationId: importFactors
+      responses:
+        '201':
+          description: created
+  /indicators:
+    get:
+      tags:
+        - Indicator
+      summary: Finds all of the Indicators
+      description: Retrieves all of the existing Indicators.
+      operationId: getIndicators
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Indicator'
+  /indicators/import:
+    get:
+      tags:
+        - Indicator
+      summary: Stores the Indicators from the LD.
+      description: Stores all od the Indicators present in the current Learning Dashboard configuration.
+      operationId: importIndicators
+      responses:
+        '201':
+          description: created
+components:
+  schemas:
+    Subject:
+      type: object
+      properties:
+        acronym:
+          type: string
+          example: PES
+    Team:
+      type: object
+      properties:
+        name:
+          type: string
+          example: pes11a
+        semester:
+          type: string
+          example: 22-23-Q1
+        subject:
+          $ref: '#/components/schemas/Subject'
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          example: eyJhbGciOiJIUzUxMiJ9
+        start_timestamp:
+          type: integer
+          format: int64
+          example: 1680979195000
+        end_timestamp:
+          type: integer
+          format: int64
+          example: 1680982795000
+          nullable: true
+        duration:
+          type: number
+          format: double
+          example: 3600
+          nullable: true
+        nInteractions:
+          type: integer
+          example: 25
+          nullable: true
+        team:
+          $ref: '#/components/schemas/Team'
+    Log:
+      type: object
+      properties:
+        time:
+          type: integer
+          format: int64
+          example: 1680979195000
+        message:
+          type: string
+          example: 2023-04-06 18:27:13.967, 
+            pes11a enters app (eyJhbGciOiJIUzUxMiJ9)
+        team:
+          type: string
+          example: pes11a
+        page:
+          type: string
+          example: /Metrics/CurrentChartGauge
+          nullable: true
+        session:
+          $ref: '#/components/schemas/Session'
+    MetricAccess:
+      allOf:
+        - $ref: '#/components/schemas/Log'
+        - type: object
+          properties:
+            historic:
+              type: boolean
+              example: true
+            viewFormat:
+              type: string
+              example: Table
+            metrics:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Metric'
+    FactorAccess:
+      allOf:
+        - $ref: '#/components/schemas/Log'
+        - type: object
+          properties:
+            historic:
+              type: boolean
+              example: true
+            viewFormat:
+              type: string
+              example: Table
+            factors:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Factor'
+    IndicatorAccess:
+      allOf:
+        - $ref: '#/components/schemas/Log'
+        - type: object
+          properties:
+            historic:
+              type: boolean
+              example: true
+            viewFormat:
+              type: string
+              example: Table
+            indicators:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Indicator'
+    QModelAccess:
+      allOf:
+        - $ref: '#/components/schemas/Log'
+        - type: object
+          properties:
+            viewFormat:
+              type: string
+              example: Graph
+    Metric:
+      type: object
+      properties:
+        id:
+          type: string
+          example: commits_anonymous
+    Factor:
+      type: object
+      properties:
+        id:
+          type: string
+          example: commitsmanagement
+    Indicator:
+      type: object
+      properties:
+        id:
+          type: string
+          example: repositorycontribution
