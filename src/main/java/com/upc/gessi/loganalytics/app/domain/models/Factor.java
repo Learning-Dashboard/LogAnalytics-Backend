@@ -12,7 +12,7 @@ public class Factor implements Serializable {
 
     @Id @Column(name = "id", nullable = false)
     private String id;
-    @ManyToMany(mappedBy = "factors", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "factors")
     private List<FactorAccess> factorAccesses;
 
     public Factor() { }

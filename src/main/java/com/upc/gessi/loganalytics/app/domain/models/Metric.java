@@ -12,7 +12,7 @@ public class Metric implements Serializable {
 
     @Id @Column (name = "id", nullable = false)
     private String id;
-    @ManyToMany (mappedBy = "metrics", cascade = CascadeType.ALL)
+    @ManyToMany (mappedBy = "metrics")
     private List<MetricAccess> metricAccesses;
 
     public Metric() { }

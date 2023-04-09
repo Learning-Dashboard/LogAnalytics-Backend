@@ -190,26 +190,11 @@ public class LogRestController {
             Log logFile = parsedLogs.get(0);
             Log logDB = logRepository.findFirstByOrderByTimeDesc();
             if (logDB != null) {
-                if (logFile.getTime() > logDB.getTime()) {
-                    //logRepository.saveAll(parsedLogs);
-                    for (Log l : parsedLogs) {
-                        try {
-                            logRepository.save(l);
-                        }
-                        catch (JpaObjectRetrievalFailureException ignored) {
-                        }
-                    }
-                }
+                if (logFile.getTime() > logDB.getTime())
+                    logRepository.saveAll(parsedLogs);
             }
-            else {
-                //logRepository.saveAll(parsedLogs);
-                for (Log l : parsedLogs) {
-                    try {
-                        logRepository.save(l);
-                    }
-                    catch (JpaObjectRetrievalFailureException ignored) { }
-                }
-            }
+            else
+                logRepository.saveAll(parsedLogs);
         }
     }
 }
