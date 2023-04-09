@@ -42,7 +42,7 @@ class TeamControllerTest {
         Method getCurrentLDTeamsMethod = TeamController.class.getDeclaredMethod("getCurrentLDTeams");
         getCurrentLDTeamsMethod.setAccessible(true);
         teamController.storeAllTeams();
-        Mockito.verify(teamRepository, Mockito.times(1)).saveAll(Mockito.any());
+        Mockito.verify(teamRepository, Mockito.times(1)).findAll();
     }
 
     @Test

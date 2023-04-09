@@ -39,7 +39,13 @@ public class FactorController {
         }
         */
         Set<Factor> factors = getCurrentLDFactors();
-        factorRepository.saveAll(factors);
+        Iterable<Factor> factorIterable = factorRepository.findAll();
+        List<Factor> factorList = new ArrayList<>();
+        factorIterable.forEach(factorList::add);
+        for (Factor f : factors) {
+            if (!factorList.contains(f))
+                factorRepository.save(f);
+        }
     }
 
     private Set<Factor> getCurrentLDFactors() {

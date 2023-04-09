@@ -4,6 +4,7 @@ import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
+import com.upc.gessi.loganalytics.app.rest.DTOs.SessionDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,12 +29,15 @@ class SessionRestControllerTest {
     @Test
     void findAllSessions() {
         List<Session> sessions = new ArrayList<>();
+        List<SessionDTO> sessionDTOS = new ArrayList<>();
         Subject subject = new Subject("PES");
         Team team = new Team("t1", "sem", subject);
+        sessionDTOS.add(new SessionDTO(new Session("s1", team, 0)));
+        sessionDTOS.add(new SessionDTO(new Session("s2", team, 10)));
         sessions.add(new Session("s1", team, 0));
         sessions.add(new Session("s2", team, 10));
         when(sessionRepository.findAll()).thenReturn(sessions);
-        List<Session> actualSessions = sessionRestController.findAllSessions();
-        assertEquals(sessions, actualSessions);
+        List<SessionDTO> actualSessions = sessionRestController.findAllSessions();
+        assertEquals(actualSessions, sessionDTOS);
     }
 }

@@ -4,9 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
+import com.upc.gessi.loganalytics.app.domain.models.AppUser;
 import com.upc.gessi.loganalytics.app.domain.models.Indicator;
 import com.upc.gessi.loganalytics.app.domain.repositories.IndicatorRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +41,13 @@ public class IndicatorController {
         }
         */
         Set<Indicator> indicators = getCurrentLDIndicators();
-        indicatorRepository.saveAll(indicators);
+        Iterable<Indicator> indicatorIterable = indicatorRepository.findAll();
+        List<Indicator> indicatorList = new ArrayList<>();
+        indicatorIterable.forEach(indicatorList::add);
+        for (Indicator i : indicators) {
+            if (!indicatorList.contains(i))
+                indicatorRepository.save(i);
+        }
     }
 
     private Set<Indicator> getCurrentLDIndicators() {

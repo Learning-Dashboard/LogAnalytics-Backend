@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class MetricAccess extends Log {
     private boolean historic;
     @Column (name = "viewFormat", nullable = false)
     private String viewFormat;
-    @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (
         name = "metric_access_metric",
         joinColumns = {
@@ -20,7 +21,7 @@ public class MetricAccess extends Log {
             @JoinColumn (name = "metric_access_team")
         },
         inverseJoinColumns = @JoinColumn (name = "metric_id")
-    )
+    ) @JsonIgnore
     private List<Metric> metrics;
 
     public MetricAccess() { }

@@ -29,6 +29,6 @@ class MetricControllerTest {
         Set<Metric> metricSet = new HashSet<>();
         metricSet.add(m1); metricSet.add(m2);
         metricController.storeAllMetrics();
-        Mockito.verify(metricRepository, Mockito.times(1)).saveAll(Mockito.any());
+        Mockito.verify(metricRepository, Mockito.times(1)).findAll();
     }
 }

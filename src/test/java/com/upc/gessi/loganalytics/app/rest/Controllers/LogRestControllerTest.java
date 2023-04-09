@@ -38,8 +38,8 @@ class LogRestControllerTest {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(0, "pes11a", "testMessage"));
         logs.add(new Log(5, "pes11a", "testMessage"));
-        when(logRepository.findAll()).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findAllLogs();
+        when(logRepository.findAllByOrderByTimeDesc()).thenReturn(logs);
+        List<Log> actualLogs = logRestController.findAllLogs(null, null);
         assertEquals(logs, actualLogs);
     }
 
@@ -48,8 +48,8 @@ class LogRestControllerTest {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(82800000L, "pes11a", "testMessage"));
         logs.add(new Log(259200000L, "pes11a", "testMessage"));
-        when(logRepository.findByTimeBetween(Mockito.anyLong(), Mockito.anyLong())).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsBetweenDates("1970-01-02", "1970-01-04");
+        when(logRepository.findByTimeBetweenOrderByTimeDesc(Mockito.anyLong(), Mockito.anyLong())).thenReturn(logs);
+        List<Log> actualLogs = logRestController.findLogsBetweenDates("1970-01-02", "1970-01-04", null, null);
         assertEquals(logs, actualLogs);
     }
 
@@ -58,8 +58,8 @@ class LogRestControllerTest {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(0, "pes11a", "testMessage"));
         logs.add(new Log(10, "pes11a", "testMessage"));
-        when(logRepository.findByTeam("pes11a")).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsByTeam("pes11a");
+        when(logRepository.findByTeamOrderByTimeDesc("pes11a")).thenReturn(logs);
+        List<Log> actualLogs = logRestController.findLogsByTeam("pes11a", null, null);
         assertEquals(logs, actualLogs);
     }
 
@@ -68,8 +68,8 @@ class LogRestControllerTest {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(0, "pes11a", "testMessage1"));
         logs.add(new Log(10, "pes11a", "testMessage2"));
-        when(logRepository.findBySubject("PES")).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsBySubject("PES");
+        when(logRepository.findBySubjectOrderByTimeDesc("PES")).thenReturn(logs);
+        List<Log> actualLogs = logRestController.findLogsBySubject("PES", null, null);
         assertEquals(logs, actualLogs);
     }
 
@@ -78,8 +78,8 @@ class LogRestControllerTest {
         List<Log> logs = new ArrayList<>();
         logs.add(new Log(0, "pes11a", "testMessage1"));
         logs.add(new Log(10, "pes11a", "testMessage2"));
-        when(logRepository.findByMessageContaining("Message")).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsByKeyword("Message");
+        when(logRepository.findByMessageContainingOrderByTimeDesc("Message")).thenReturn(logs);
+        List<Log> actualLogs = logRestController.findLogsByKeyword("Message", null, null);
         assertEquals(logs, actualLogs);
     }
 

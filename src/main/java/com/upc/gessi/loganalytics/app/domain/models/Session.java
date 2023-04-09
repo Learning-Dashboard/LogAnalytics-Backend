@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.util.List;
 @Entity
 @Table(name = "Session")
-//@IdClass(SessionPrimaryKey.class)
 public class Session {
 
     @Id @Column (name = "id", nullable = false)
@@ -15,7 +14,7 @@ public class Session {
     private long startTimestamp;
     @Column (name = "end_timestamp")
     private long endTimestamp;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER) @JsonIgnore
     @JoinColumns({
             @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "team_semester", referencedColumnName = "semester" ,nullable = false)

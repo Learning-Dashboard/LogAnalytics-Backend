@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Factor")
@@ -26,6 +27,19 @@ public class Factor implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Factor)) return false;
+        Factor factor = (Factor) o;
+        return getId().equals(factor.getId()) && Objects.equals(factorAccesses, factor.factorAccesses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), factorAccesses);
     }
 
     @Override

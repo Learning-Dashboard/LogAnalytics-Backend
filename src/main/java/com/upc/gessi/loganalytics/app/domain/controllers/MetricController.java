@@ -37,7 +37,13 @@ public class MetricController {
         }
         */
         Set<Metric> metrics = getCurrentLDMetrics();
-        metricRepository.saveAll(metrics);
+        Iterable<Metric> metricIterable = metricRepository.findAll();
+        List<Metric> metricList = new ArrayList<>();
+        metricIterable.forEach(metricList::add);
+        for (Metric m : metrics) {
+            if (!metricList.contains(m))
+                metricRepository.save(m);
+        }
     }
 
     private Set<Metric> getCurrentLDMetrics() {

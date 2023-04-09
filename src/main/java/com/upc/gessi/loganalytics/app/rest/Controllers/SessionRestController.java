@@ -2,6 +2,7 @@ package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
+import com.upc.gessi.loganalytics.app.rest.DTOs.SessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +22,12 @@ public class SessionRestController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Session> findAllSessions() {
+    public List<SessionDTO> findAllSessions() {
         Iterable<Session> sessionIterable = sessionRepository.findAll();
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
-        return sessionList;
+        List<SessionDTO> sessionDTOList = new ArrayList<>();
+        for (Session s : sessionList) sessionDTOList.add(new SessionDTO(s));
+        return sessionDTOList;
     }
 }

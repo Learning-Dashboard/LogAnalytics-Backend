@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
+import com.upc.gessi.loganalytics.app.domain.models.Indicator;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
@@ -37,7 +38,13 @@ public class TeamController {
     @PostConstruct
     public void storeAllTeams() {
         HashSet<Team> teamSet = getCurrentLDTeams();
-        teamRepository.saveAll(teamSet);
+        Iterable<Team> teamIterable = teamRepository.findAll();
+        List<Team> teamList = new ArrayList<>();
+        teamIterable.forEach(teamList::add);
+        for (Team t : teamSet) {
+            if (!teamList.contains(t))
+                teamRepository.save(t);
+        }
     }
 
     private HashSet<Team> getCurrentLDTeams() {
@@ -74,8 +81,10 @@ public class TeamController {
                         Integer id = item.get("id").getAsInt();
                         if (teamIdsMap.containsKey(id)) {
                             String name = item.get("externalId").getAsString();
-                            Subject s = new Subject(teamIdsMap.get(id));
-                            teamSet.add(new Team(name, semester, s));
+                            if (teamIdsMap.get(id) != null) {
+                                Subject s = new Subject(teamIdsMap.get(id));
+                                teamSet.add(new Team(name, semester, s));
+                            }
                         }
                     }
                 }

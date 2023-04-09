@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class IndicatorAccess extends Log {
     private boolean historic;
     @Column (name = "viewFormat", nullable = false)
     private String viewFormat;
-    @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "indicator_access_indicator",
             joinColumns = {
@@ -20,7 +21,7 @@ public class IndicatorAccess extends Log {
                     @JoinColumn (name = "indicator_access_team")
             },
             inverseJoinColumns = @JoinColumn (name = "indicator_id")
-    )
+    ) @JsonIgnore
     private List<Indicator> indicators;
 
     public IndicatorAccess() { }

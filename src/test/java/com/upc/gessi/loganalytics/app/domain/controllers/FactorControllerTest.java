@@ -31,6 +31,6 @@ class FactorControllerTest {
         Set<Factor> factorSet = new HashSet<>();
         factorSet.add(f1); factorSet.add(f2);
         factorController.storeAllFactors();
-        Mockito.verify(factorRepository, Mockito.times(1)).saveAll(Mockito.any());
+        Mockito.verify(factorRepository, Mockito.times(1)).findAll();
     }
 }

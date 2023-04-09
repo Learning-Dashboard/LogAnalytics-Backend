@@ -5,6 +5,7 @@ import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Team")
@@ -75,6 +76,19 @@ public class Team {
 
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Team)) return false;
+        Team team = (Team) o;
+        return getId().equals(team.getId()) && getSemester().equals(team.getSemester()) && getSubject().equals(team.getSubject()) && Objects.equals(getSessions(), team.getSessions());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getSemester(), getSubject(), getSessions());
     }
 
     @Override

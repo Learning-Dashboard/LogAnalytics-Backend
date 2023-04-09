@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Metric")
@@ -26,6 +27,19 @@ public class Metric implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Metric)) return false;
+        Metric metric = (Metric) o;
+        return getId().equals(metric.getId()) && Objects.equals(metricAccesses, metric.metricAccesses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), metricAccesses);
     }
 
     @Override

@@ -26,6 +26,26 @@ class LogRepositoryTest {
     private LogRepository logRepository;
 
     @Test
+    void findAllByTimeDesc() {
+        Subject subj = new Subject("PES");
+        Team team = new Team("pes11a", "sem", subj);
+        Session session = new Session("s", team, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team);
+        entityManager.persistAndFlush(session);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", session);
+        Log log2 = new Log(10, "pes11a", "testMessage", session);
+        entityManager.persistAndFlush(log1);
+        entityManager.persistAndFlush(log2);
+
+        Iterable<Log> logIterable = logRepository.findAllByOrderByTimeDesc();
+        List<Log> logList = new ArrayList<>();
+        logIterable.forEach(logList::add);
+        assertEquals(logList.get(0), log2);
+    }
+
+    @Test
     void findByTimeGreaterThanEqual() {
         Subject subj = new Subject("PES");
         Team team = new Team("pes11a", "sem", subj);
@@ -39,7 +59,7 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
-        Iterable<Log> logIterable = logRepository.findByTimeGreaterThanEqual(5);
+        Iterable<Log> logIterable = logRepository.findByTimeGreaterThanEqualOrderByTimeDesc(5);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         assertEquals(logList.get(0), log2);
@@ -59,7 +79,7 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
-        Iterable<Log> logIterable = logRepository.findByTimeLessThanEqual(5);
+        Iterable<Log> logIterable = logRepository.findByTimeLessThanEqualOrderByTimeDesc(5);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         assertEquals(logList.get(0), log1);
@@ -81,7 +101,7 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(log2);
         entityManager.persistAndFlush(log3);
 
-        Iterable<Log> logIterable = logRepository.findByTimeBetween(5, 10);
+        Iterable<Log> logIterable = logRepository.findByTimeBetweenOrderByTimeDesc(5, 10);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         List<Log> actualLogList = new ArrayList<>();
@@ -108,7 +128,7 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
-        Iterable<Log> logIterable = logRepository.findByTeam("pes11a");
+        Iterable<Log> logIterable = logRepository.findByTeamOrderByTimeDesc("pes11a");
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         assertEquals(logList.get(0), log1);
@@ -150,7 +170,7 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
-        Iterable<Log> logIterable = logRepository.findByMessageContaining("testMessage2");
+        Iterable<Log> logIterable = logRepository.findByMessageContainingOrderByTimeDesc("testMessage2");
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         assertEquals(logList.get(0), log2);
@@ -176,7 +196,7 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
 
-        Iterable<Log> logIterable = logRepository.findBySubject("PES");
+        Iterable<Log> logIterable = logRepository.findBySubjectOrderByTimeDesc("PES");
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         assertEquals(logList.get(0), log1);

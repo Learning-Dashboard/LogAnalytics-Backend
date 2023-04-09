@@ -30,6 +30,6 @@ class IndicatorControllerTest {
         Set<Indicator> indicatorSet = new HashSet<>();
         indicatorSet.add(i1); indicatorSet.add(i2);
         indicatorController.storeAllIndicators();
-        Mockito.verify(indicatorRepository, Mockito.times(1)).saveAll(Mockito.any());
+        Mockito.verify(indicatorRepository, Mockito.times(1)).findAll();
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Indicator")
@@ -26,6 +27,19 @@ public class Indicator implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Indicator)) return false;
+        Indicator indicator = (Indicator) o;
+        return getId().equals(indicator.getId()) && Objects.equals(factorAccesses, indicator.factorAccesses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), factorAccesses);
     }
 
     @Override
