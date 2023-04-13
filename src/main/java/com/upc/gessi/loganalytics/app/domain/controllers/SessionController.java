@@ -64,4 +64,18 @@ public class SessionController {
         sessionIterable.forEach(sessionList::add);
         return sessionList;
     }
+
+    public List<Session> getAllByTeam(Team team) {
+        Iterable<Session> sessionIterable = sessionRepository.findByTeam(team);
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        return sessionList;
+    }
+
+    public List<Session> getAllFromLastWeekByTeam(long epoch, Team team) {
+        Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(epoch, team);
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        return sessionList;
+    }
 }

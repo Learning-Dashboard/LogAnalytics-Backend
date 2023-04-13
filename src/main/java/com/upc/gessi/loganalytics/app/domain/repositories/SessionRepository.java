@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SessionRepository extends CrudRepository<Session, String> {
-
+    List<Session> findByTeam(Team team);
+    List<Session> findByStartTimestampGreaterThanEqualAndTeam(long epoch, Team team);
 }
