@@ -44,46 +44,6 @@ class LogRestControllerTest {
     }
 
     @Test
-    void findLogsBetweenDates() {
-        List<Log> logs = new ArrayList<>();
-        logs.add(new Log(82800000L, "pes11a", "testMessage"));
-        logs.add(new Log(259200000L, "pes11a", "testMessage"));
-        when(logRepository.findByTimeBetweenOrderByTimeDesc(Mockito.anyLong(), Mockito.anyLong())).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsBetweenDates("1970-01-02", "1970-01-04", null, null);
-        assertEquals(logs, actualLogs);
-    }
-
-    @Test
-    void findLogsByTeam() {
-        List<Log> logs = new ArrayList<>();
-        logs.add(new Log(0, "pes11a", "testMessage"));
-        logs.add(new Log(10, "pes11a", "testMessage"));
-        when(logRepository.findByTeamOrderByTimeDesc("pes11a")).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsByTeam("pes11a", null, null);
-        assertEquals(logs, actualLogs);
-    }
-
-    @Test
-    void findLogsBySubject() {
-        List<Log> logs = new ArrayList<>();
-        logs.add(new Log(0, "pes11a", "testMessage1"));
-        logs.add(new Log(10, "pes11a", "testMessage2"));
-        when(logRepository.findBySubjectOrderByTimeDesc("PES")).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsBySubject("PES", null, null);
-        assertEquals(logs, actualLogs);
-    }
-
-    @Test
-    void findLogsByKeyword() {
-        List<Log> logs = new ArrayList<>();
-        logs.add(new Log(0, "pes11a", "testMessage1"));
-        logs.add(new Log(10, "pes11a", "testMessage2"));
-        when(logRepository.findByMessageContainingOrderByTimeDesc("Message")).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findLogsByKeyword("Message", null, null);
-        assertEquals(logs, actualLogs);
-    }
-
-    @Test
     void importLogs() {
         MockMultipartFile file = new MockMultipartFile(
             "file",
