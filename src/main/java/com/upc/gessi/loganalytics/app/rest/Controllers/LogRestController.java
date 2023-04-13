@@ -193,8 +193,7 @@ public class LogRestController {
                 if (logFile.getTime() > logDB.getTime())
                     logRepository.saveAll(parsedLogs);
             }
-            else
-                logRepository.saveAll(parsedLogs);
+            else logRepository.saveAll(parsedLogs);
         }
     }
 }

@@ -28,21 +28,10 @@ public class MetricController {
 
     @PostConstruct
     public void storeAllMetrics() {
-        /*
-        List<Team> visibleTeams = teamController.getStoredTeams();
-        for (Team visibleTeam : visibleTeams) {
-            String project = visibleTeam.getId();
-            List<Metric> metrics = getMetricsFromProject(project);
-            metricRepository.saveAll(metrics);
-        }
-        */
         Set<Metric> metrics = getCurrentLDMetrics();
-        Iterable<Metric> metricIterable = metricRepository.findAll();
-        List<Metric> metricList = new ArrayList<>();
-        metricIterable.forEach(metricList::add);
         for (Metric m : metrics) {
-            if (!metricList.contains(m))
-                metricRepository.save(m);
+            Optional<Metric> metricOptional = metricRepository.findById(m.getId());
+            if (metricOptional.isEmpty()) metricRepository.save(m);
         }
     }
 
@@ -54,7 +43,7 @@ public class MetricController {
             HashMap<String, String> queryParams = new HashMap<>();
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonProjects = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonProjects.size(); ++i) {
@@ -79,7 +68,7 @@ public class MetricController {
             queryParams.put("prj", project);
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonMetrics = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonMetrics.size(); ++i) {

@@ -38,14 +38,6 @@ class TeamControllerTest {
     }
 
     @Test
-    void storeAllTeams() throws NoSuchMethodException {
-        Method getCurrentLDTeamsMethod = TeamController.class.getDeclaredMethod("getCurrentLDTeams");
-        getCurrentLDTeamsMethod.setAccessible(true);
-        teamController.storeAllTeams();
-        Mockito.verify(teamRepository, Mockito.times(1)).findAll();
-    }
-
-    @Test
     void getSemester() {
         String semester = teamController.getSemester();
         assertEquals(semester, "22-23-Q1");

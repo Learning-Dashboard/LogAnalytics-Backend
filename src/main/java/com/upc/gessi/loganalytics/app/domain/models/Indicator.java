@@ -12,8 +12,8 @@ public class Indicator implements Serializable {
 
     @Id @Column(name = "id", nullable = false)
     private String id;
-    @ManyToMany(mappedBy = "indicators")
-    private List<IndicatorAccess> factorAccesses;
+    @ManyToMany(mappedBy = "indicators", cascade = CascadeType.ALL)
+    private List<IndicatorAccess> indicatorAccesses;
 
     public Indicator() { }
 
@@ -34,12 +34,12 @@ public class Indicator implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Indicator)) return false;
         Indicator indicator = (Indicator) o;
-        return getId().equals(indicator.getId()) && Objects.equals(factorAccesses, indicator.factorAccesses);
+        return getId().equals(indicator.getId()) && Objects.equals(indicatorAccesses, indicator.indicatorAccesses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), factorAccesses);
+        return Objects.hash(getId(), indicatorAccesses);
     }
 
     @Override

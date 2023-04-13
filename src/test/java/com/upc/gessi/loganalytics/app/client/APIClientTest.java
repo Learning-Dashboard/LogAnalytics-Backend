@@ -51,7 +51,7 @@ class APIClientTest {
 
         // Then
         assertEquals(200, statusCode);
-        if (response.body() != null)
+        if (response != null && response.body() != null)
             assertEquals(response.body().string(), "Hello, World!");
     }
 }

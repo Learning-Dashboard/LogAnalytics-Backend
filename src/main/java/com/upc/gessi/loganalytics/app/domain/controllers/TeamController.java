@@ -10,6 +10,7 @@ import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamPrimaryKey;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +39,10 @@ public class TeamController {
     @PostConstruct
     public void storeAllTeams() {
         HashSet<Team> teamSet = getCurrentLDTeams();
-        Iterable<Team> teamIterable = teamRepository.findAll();
-        List<Team> teamList = new ArrayList<>();
-        teamIterable.forEach(teamList::add);
         for (Team t : teamSet) {
-            if (!teamList.contains(t))
-                teamRepository.save(t);
+            TeamPrimaryKey teamPrimaryKey = new TeamPrimaryKey(t.getId(), t.getSemester());
+            Optional<Team> teamOptional = teamRepository.findById(teamPrimaryKey);
+            if (teamOptional.isEmpty()) teamRepository.save(t);
         }
     }
 
@@ -57,7 +56,7 @@ public class TeamController {
             HashMap<String, String> queryParams = new HashMap<>();
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonIterations = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonIterations.size(); ++i) {
@@ -73,7 +72,7 @@ public class TeamController {
                 apiClient = new APIClient();
                 url = "http://gessi-dashboard.essi.upc.edu:8888/api/projects";
                 response = apiClient.get(url, queryParams, pathSegments);
-                if (response.body() != null) {
+                if (response != null && response.body() != null) {
                     json = response.body().string();
                     JsonArray jsonProjects = JsonParser.parseString(json).getAsJsonArray();
                     for (int i = 0; i < jsonProjects.size(); ++i) {

@@ -63,11 +63,12 @@ public class LogController {
                 if (originalLog.contains("enters app"))
                     s = sessionController.createSession(sessionId, epoch, team);
                 else s = sessionController.updateSession(sessionId, epoch);
-                if (s != null) {
-                    Log newLog = new Log(epoch, team, originalLog, s);
-                    list.add(newLog);
+                if (s == null) {
+                    logger.error("Tried to parse log of nonexistent team " + team);
+                    continue;
                 }
-                continue;
+                Log newLog = new Log(epoch, team, originalLog, s);
+                list.add(newLog);
             }
 
             if (!originalLog.contains(" GET ")) continue;
@@ -77,7 +78,10 @@ public class LogController {
             String team = getTeam(splitRequest[splitRequest.length - 1]);
             String sessionId = getSession(splitRequest[splitRequest.length - 1]);
             Session s = sessionController.getSessionToStoreLog(sessionId);
-            if (s == null) continue;
+            if (s == null) {
+                logger.error("Tried to parse log of nonexistent team " + team);
+                continue;
+            }
 
             if (team.equals("admin") || team.equals("professor-pes")
                 || team.equals("professor-asw")) continue;
@@ -148,7 +152,7 @@ public class LogController {
             queryParams.put("prj", team);
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonIndicators = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonIndicators.size(); ++i) {
@@ -177,7 +181,7 @@ public class LogController {
                 HashSet<String> pathSegments = new HashSet<>();
                 pathSegments.add(qualityFactorsId.toString());
                 Response response = apiClient.get(url, queryParams, pathSegments);
-                if (response.body() != null) {
+                if (response != null && response.body() != null) {
                     String json = response.body().string();
                     JsonObject jsonFactor = JsonParser.parseString(json).getAsJsonObject();
                     String externalId = jsonFactor.get("externalId").getAsString();
@@ -199,7 +203,7 @@ public class LogController {
             queryParams.put("prj", team);
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonFactors = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonFactors.size(); ++i) {
@@ -228,7 +232,7 @@ public class LogController {
             queryParams.put("prj", team);
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonMetrics = JsonParser.parseString(json).getAsJsonArray();
                 for (Integer metricId : metricsIds) {
@@ -265,7 +269,7 @@ public class LogController {
             HashSet<String> pathSegments = new HashSet<>();
             try {
                 Response response = apiClient.get(url, queryParams, pathSegments);
-                if (response.body() != null) {
+                if (response != null && response.body() != null) {
                     String json = response.body().string();
                     JsonArray jsonElems = JsonParser.parseString(json).getAsJsonArray();
                     for (int i = 0; i < jsonElems.size(); ++i) {

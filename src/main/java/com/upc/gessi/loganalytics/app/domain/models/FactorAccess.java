@@ -13,7 +13,7 @@ public class FactorAccess extends Log {
     private boolean historic;
     @Column (name = "viewFormat", nullable = false)
     private String viewFormat;
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "factor_access_factor",
             joinColumns = {

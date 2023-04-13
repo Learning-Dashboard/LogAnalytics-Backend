@@ -32,21 +32,10 @@ public class IndicatorController {
 
     @PostConstruct
     public void storeAllIndicators() {
-        /*
-        List<Team> visibleTeams = teamController.getStoredTeams();
-        for (Team visibleTeam : visibleTeams) {
-            String project = visibleTeam.getId();
-            List<Indicator> indicators = getIndicatorsFromProject(project);
-            indicatorRepository.saveAll(indicators);
-        }
-        */
         Set<Indicator> indicators = getCurrentLDIndicators();
-        Iterable<Indicator> indicatorIterable = indicatorRepository.findAll();
-        List<Indicator> indicatorList = new ArrayList<>();
-        indicatorIterable.forEach(indicatorList::add);
         for (Indicator i : indicators) {
-            if (!indicatorList.contains(i))
-                indicatorRepository.save(i);
+            Optional<Indicator> indicatorOptional = indicatorRepository.findById(i.getId());
+            if (indicatorOptional.isEmpty()) indicatorRepository.save(i);
         }
     }
 
@@ -58,7 +47,7 @@ public class IndicatorController {
             HashMap<String, String> queryParams = new HashMap<>();
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonProjects = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonProjects.size(); ++i) {
@@ -83,7 +72,7 @@ public class IndicatorController {
             queryParams.put("prj", project);
             HashSet<String> pathSegments = new HashSet<>();
             Response response = apiClient.get(url, queryParams, pathSegments);
-            if (response.body() != null) {
+            if (response != null && response.body() != null) {
                 String json = response.body().string();
                 JsonArray jsonMetrics = JsonParser.parseString(json).getAsJsonArray();
                 for (int i = 0; i < jsonMetrics.size(); ++i) {

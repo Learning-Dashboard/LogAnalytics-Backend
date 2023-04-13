@@ -2,6 +2,7 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.repositories.SubjectRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -12,7 +13,6 @@ public class SubjectController {
 
     @Autowired
     SubjectRepository subjectRepository;
-
     public void storeSubjects(HashSet<String> acronyms) {
         HashSet<Subject> subjectSet = new HashSet<>();
         for (String s : acronyms) {

@@ -1,6 +1,5 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
-import com.upc.gessi.loganalytics.app.domain.models.Log;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
@@ -21,7 +20,6 @@ public class SessionController {
     TeamController teamController;
 
     public Session createSession(String sessionId, long startTimestamp, String teamId) {
-        updateSession(sessionId, startTimestamp);
         String semester = teamController.getSemester();
         Team team = teamController.getTeam(teamId, semester);
         if (team != null) {
@@ -58,5 +56,12 @@ public class SessionController {
             return s;
         }
         return null;
+    }
+
+    public List<Session> getAll() {
+        Iterable<Session> sessionIterable = sessionRepository.findAll();
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        return sessionList;
     }
 }
