@@ -59,35 +59,35 @@ class SessionDTOTest {
 
     @Test
     void getTeam() {
-        assertEquals(t, session.getTeam());
+        assertEquals(t, sessionDTO.getTeam());
     }
 
     @Test
     void setTeam() {
         t = new Team("pes11b", "sem", s);
-        session.setTeam(t);
-        assertEquals(t, session.getTeam());
+        sessionDTO.setTeam(t);
+        assertEquals(t, sessionDTO.getTeam());
     }
 
     @Test
     void getDuration() {
-        assertEquals(5, session.getDuration());
+        assertEquals(5, sessionDTO.getDuration());
     }
 
     @Test
     void setDuration() {
-        session.setDuration(10);
-        assertEquals(10, session.getDuration());
+        sessionDTO.setDuration(10);
+        assertEquals(10, sessionDTO.getDuration());
     }
 
     @Test
     void getnInteractions() {
-        assertEquals(1, session.getnInteractions());
+        assertEquals(1, sessionDTO.getnInteractions());
     }
 
     @Test
     void setnInteractions() {
-        session.setnInteractions(20);
-        assertEquals(20, session.getnInteractions());
+        sessionDTO.setnInteractions(20);
+        assertEquals(20, sessionDTO.getnInteractions());
     }
 }

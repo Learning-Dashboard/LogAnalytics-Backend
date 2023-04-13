@@ -39,7 +39,7 @@ class LogRestControllerTest {
         logs.add(new Log(0, "pes11a", "testMessage"));
         logs.add(new Log(5, "pes11a", "testMessage"));
         when(logRepository.findAllByOrderByTimeDesc()).thenReturn(logs);
-        List<Log> actualLogs = logRestController.findAllLogs(null, null);
+        List<Log> actualLogs = logRestController.findAllLogs(null, null, null, null, null, null, null);
         assertEquals(logs, actualLogs);
     }
 
