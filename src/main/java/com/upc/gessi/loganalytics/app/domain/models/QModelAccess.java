@@ -23,6 +23,14 @@ public class QModelAccess extends Log {
         this.viewFormat = viewFormat;
     }
 
+    public String getViewFormat() {
+        return viewFormat;
+    }
+
+    public void setViewFormat(String viewFormat) {
+        this.viewFormat = viewFormat;
+    }
+
     @Override
     public String toString() {
         return "QModelAccess{" +

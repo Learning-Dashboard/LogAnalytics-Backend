@@ -44,6 +44,13 @@ class TeamControllerTest {
     }
 
     @Test
+    void setSemester() {
+        teamController.setSemester("22-23-Q2");
+        String semester = teamController.getSemester();
+        assertEquals(semester, "22-23-Q2");
+    }
+
+    @Test
     void getTeam() {
         Subject s = new Subject("s");
         Team team = new Team("teamId", "22-23-Q1", s);

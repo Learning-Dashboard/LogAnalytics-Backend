@@ -13,6 +13,15 @@ public class SessionDTO {
     private double duration;
     private int nInteractions;
 
+    public SessionDTO(Session session) {
+        this.id = session.getId();
+        this.startTimestamp = session.getStartTimestamp();
+        this.endTimestamp = session.getEndTimestamp();
+        this.team = session.getTeam();
+        this.duration = session.getDuration();
+        this.nInteractions = session.getnInteractions();
+    }
+
     public String getId() {
         return id;
     }
@@ -59,15 +68,6 @@ public class SessionDTO {
 
     public void setnInteractions(int nInteractions) {
         this.nInteractions = nInteractions;
-    }
-
-    public SessionDTO(Session session) {
-        this.id = session.getId();
-        this.startTimestamp = session.getStartTimestamp();
-        this.endTimestamp = session.getEndTimestamp();
-        this.team = session.getTeam();
-        this.duration = session.getDuration();
-        this.nInteractions = session.getnInteractions();
     }
 
     @Override

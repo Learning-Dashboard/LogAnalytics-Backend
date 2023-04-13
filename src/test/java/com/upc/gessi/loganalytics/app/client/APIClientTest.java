@@ -30,15 +30,12 @@ class APIClientTest {
         Map<String, String> params = new HashMap<>();
         params.put("param1", "value1");
         params.put("param2", "value2");
-
         Request request = new Request.Builder()
                 .url(Objects.requireNonNull(HttpUrl.parse(url)).newBuilder()
                         .addQueryParameter("param1", "value1")
                         .addQueryParameter("param2", "value2")
                         .build())
                 .build();
-
-        // When
         ResponseBody responseBody = ResponseBody.create("Hello, World!", MediaType.parse("application/json"));
         Response response = new Response.Builder()
                 .request(request)
@@ -48,10 +45,8 @@ class APIClientTest {
                 .body(responseBody)
                 .build();
         int statusCode = response.code();
-
-        // Then
         assertEquals(200, statusCode);
-        if (response != null && response.body() != null)
+        if (response.body() != null)
             assertEquals(response.body().string(), "Hello, World!");
     }
 }

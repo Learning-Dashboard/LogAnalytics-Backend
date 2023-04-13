@@ -28,6 +28,16 @@ class QModelAccessTest {
     }
 
     @Test
+    void testGetViewFormat() {
+        assertEquals(qModelAccess.getViewFormat(), "testViewFormat");
+    }
+    @Test
+    void testSetViewFormat() {
+        qModelAccess.setViewFormat("testViewFormat2");
+        assertEquals(qModelAccess.getViewFormat(), "testViewFormat2");
+    }
+
+    @Test
     void testToString() {
         String result = "QModelAccess{" +
                 "viewFormat='testViewFormat'} " +
