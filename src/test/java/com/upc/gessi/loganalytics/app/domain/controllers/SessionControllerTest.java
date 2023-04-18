@@ -100,7 +100,6 @@ class SessionControllerTest {
         Session session1 = new Session("s1", team1, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
-        long epoch = 0;
         Mockito.when(sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(0, team1)).thenReturn(sessions);
         List<Session> actualSessions = sessionController.getAllFromLastWeekByTeam(0, team1);
         assertEquals(sessions, actualSessions);

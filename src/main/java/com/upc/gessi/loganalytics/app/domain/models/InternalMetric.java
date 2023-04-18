@@ -17,6 +17,14 @@ public abstract class InternalMetric implements Serializable {
     @JsonIgnore
     private List<Evaluation> evaluations;
 
+    @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<TeamEvaluation> teamEvaluations;
+
+    @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SubjectEvaluation> subjectEvaluations;
+
     public InternalMetric() { }
 
     public InternalMetric(String name) {
@@ -44,6 +52,22 @@ public abstract class InternalMetric implements Serializable {
 
     public void setEvaluations(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
+    }
+
+    public List<TeamEvaluation> getTeamEvaluations() {
+        return teamEvaluations;
+    }
+
+    public void setTeamEvaluations(List<TeamEvaluation> teamEvaluations) {
+        this.teamEvaluations = teamEvaluations;
+    }
+
+    public List<SubjectEvaluation> getSubjectEvaluations() {
+        return subjectEvaluations;
+    }
+
+    public void setSubjectEvaluations(List<SubjectEvaluation> subjectEvaluations) {
+        this.subjectEvaluations = subjectEvaluations;
     }
 
     @Override
