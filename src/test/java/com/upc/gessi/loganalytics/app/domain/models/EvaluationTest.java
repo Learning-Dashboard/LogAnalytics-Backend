@@ -14,12 +14,7 @@ class EvaluationTest {
 
     @BeforeEach
     void setUp() {
-        internalMetric = new InternalMetric("test") {
-            @Override
-            public double evaluate(Team team) {
-                return 0;
-            }
-        };
+        internalMetric = new InternalMetric("test");
         evaluation = new Evaluation("2023-04-18", internalMetric, 0.0);
     }
 
@@ -47,12 +42,7 @@ class EvaluationTest {
 
     @Test
     void setInternalMetric() {
-        InternalMetric internalMetric2 = new InternalMetric("test2") {
-            @Override
-            public double evaluate(Team team) {
-                return 0;
-            }
-        };
+        InternalMetric internalMetric2 = new InternalMetric("test2");
         evaluation.setInternalMetric(internalMetric2);
         assertEquals(evaluation.getInternalMetric(), internalMetric2);
     }

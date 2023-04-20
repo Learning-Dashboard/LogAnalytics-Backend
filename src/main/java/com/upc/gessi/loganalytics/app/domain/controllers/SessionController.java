@@ -1,6 +1,7 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
 import com.upc.gessi.loganalytics.app.domain.models.Session;
+import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,14 @@ public class SessionController {
         return sessionList;
     }
 
-    public List<Session> getAllFromLastWeekByTeam(long epoch, Team team) {
+    public List<Session> getAllBySubject(Subject subject) {
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamSubject(subject);
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        return sessionList;
+    }
+
+    public List<Session> getAllAfterTimestamp(long epoch, Team team) {
         Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(epoch, team);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);

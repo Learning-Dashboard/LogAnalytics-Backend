@@ -94,14 +94,26 @@ class SessionControllerTest {
     }
 
     @Test
-    void getAllFromLastWeekByTeam() {
+    void getAllBySubject() {
+        Subject s = new Subject("s");
+        Team team1 = new Team("t1", "22-23-Q1", s);
+        Session session1 = new Session("s1", team1, 0);
+        List<Session> sessions = new ArrayList<>();
+        sessions.add(session1);
+        Mockito.when(sessionRepository.findByTeamSubject(s)).thenReturn(sessions);
+        List<Session> actualSessions = sessionController.getAllBySubject(s);
+        assertEquals(sessions, actualSessions);
+    }
+
+    @Test
+    void getAllAfterTimestamp() {
         Subject s = new Subject("s");
         Team team1 = new Team("t1", "22-23-Q1", s);
         Session session1 = new Session("s1", team1, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
         Mockito.when(sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(0, team1)).thenReturn(sessions);
-        List<Session> actualSessions = sessionController.getAllFromLastWeekByTeam(0, team1);
+        List<Session> actualSessions = sessionController.getAllAfterTimestamp(0, team1);
         assertEquals(sessions, actualSessions);
     }
 }

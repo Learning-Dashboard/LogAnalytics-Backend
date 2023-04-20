@@ -47,6 +47,27 @@ class SessionRepositoryTest {
     }
 
     @Test
+    void findByTeamSubject() {
+        Subject subj1 = new Subject("PES");
+        Subject subj2 = new Subject("ASW");
+        Team team1 = new Team("pes11a", "sem", subj1);
+        Team team2 = new Team("asw11a", "sem", subj2);
+        Session session1 = new Session("s1", team1, 0);
+        Session session2 = new Session("s2", team2, 0);
+        entityManager.persistAndFlush(subj1);
+        entityManager.persistAndFlush(subj2);
+        entityManager.persistAndFlush(team1);
+        entityManager.persistAndFlush(team2);
+        entityManager.persistAndFlush(session1);
+        entityManager.persistAndFlush(session2);
+
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamSubject(subj1);
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        assertEquals(sessionList.get(0), session1);
+    }
+
+    @Test
     void findByStartTimestampGreaterThanEqualAndTeam() {
         Subject subj1 = new Subject("PES");
         Subject subj2 = new Subject("ASW");

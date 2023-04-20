@@ -1,6 +1,7 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "InternalMetric")
-public abstract class InternalMetric implements Serializable {
+public class InternalMetric implements Serializable {
 
     @Id @Column (name = "name", nullable = false)
     private String name;
@@ -35,8 +36,6 @@ public abstract class InternalMetric implements Serializable {
         this.name = name;
         this.evaluations = evaluations;
     }
-
-    public abstract double evaluate(Team team);
 
     public String getName() {
         return name;

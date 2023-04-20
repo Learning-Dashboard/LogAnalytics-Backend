@@ -1,10 +1,9 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
-import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
+import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.InternalMetricRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -17,15 +16,23 @@ public class InternalMetricController {
     @Autowired
     InternalMetricRepository internalMetricRepository;
 
+    @Autowired
+    SessionController sessionController;
+
     @PostConstruct
     public void storeInternalMetrics() {
 
         List<InternalMetric> internalMetrics = new ArrayList<>();
 
-        /*
         internalMetrics.add(new InternalMetric("interactionsPerSession"));
-        internalMetrics.add(new InternalMetric("weeklyLogins"));
-        internalMetrics.add(new InternalMetric("monthlyLogins"));
+
+        internalMetrics.add(new InternalMetric("7DaysLogins"));
+        internalMetrics.add(new InternalMetric("30DaysLogins"));
+
+        /*
+
+        internalMetrics.add(new InternalMetric("HistoricAccesses"));
+        internalMetrics.add(new InternalMetric("CurrentAccesses"));
 
         internalMetrics.add(new InternalMetric("IChartAccesses"));
         internalMetrics.add(new InternalMetric("ITableAccesses"));

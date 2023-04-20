@@ -15,24 +15,12 @@ class InternalMetricTest {
 
     @BeforeEach
     void setUp() {
-        internalMetric = new InternalMetric("test") {
-            @Override
-            public double evaluate(Team team) {
-                return 0;
-            }
-        };
+        internalMetric = new InternalMetric("test");
     }
 
     @AfterEach
     void tearDown() {
         internalMetric = null;
-    }
-
-    @Test
-    void evaluate() {
-        Subject s = new Subject("subject");
-        Team team = new Team("team", "sem", s);
-        assertEquals(0.0, internalMetric.evaluate(team));
     }
 
     @Test
