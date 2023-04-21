@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -79,7 +80,8 @@ public class LogController {
             }
 
             if (!originalLog.contains(" GET ")) continue;
-            String page = getPage(splitRequest[1]);
+            String pageAndView = getPageAndView(splitRequest[1]);
+            String page = getPage(pageAndView);
             internalMetricController.createPageMetric(page);
             HashMap<String,String> params = getParams(splitRequest);
 
@@ -94,20 +96,20 @@ public class LogController {
             if (team.equals("admin") || team.equals("professor-pes")
                 || team.equals("professor-asw")) continue;
 
-            if (!page.contains("Configuration") && !page.contains("Prediction")
-                && !page.contains("Simulation")) {
+            if (!pageAndView.contains("Configuration") && !pageAndView.contains("Prediction")
+                && !pageAndView.contains("Simulation")) {
 
-                if (page.contains("Metrics") || page.contains("QualityFactors")
-                    || page.contains("StrategicIndicators")
-                    || page.contains("QualityModel")) {
+                if (pageAndView.contains("Metrics") || pageAndView.contains("QualityFactors")
+                    || pageAndView.contains("StrategicIndicators")
+                    || pageAndView.contains("QualityModel")) {
 
-                    String viewFormat = getViewFormat(page);
-                    if (!page.contains("QualityModel")) {
+                    String viewFormat = getViewFormat(pageAndView);
+                    if (!pageAndView.contains("QualityModel")) {
                         boolean historic;
-                        historic = !page.contains("Current");
-                        List<String> ids = getIds(page, params, team);
+                        historic = !pageAndView.contains("Current");
+                        List<String> ids = getIds(pageAndView, params, team);
 
-                        if (page.contains("Metrics")) {
+                        if (pageAndView.contains("Metrics")) {
                             List<Metric> metricIds = new ArrayList<>();
                             for (String id : ids) {
                                 Metric newMetric = new Metric(id);
@@ -118,7 +120,7 @@ public class LogController {
                             internalMetricController.createMetricViewMetric(viewFormat);
                             list.add(newLog);
                         }
-                        else if (page.contains("QualityFactors")) {
+                        else if (pageAndView.contains("QualityFactors")) {
                             List<Factor> factorIds = new ArrayList<>();
                             for (String id : ids) {
                                 Factor newFactor = new Factor(id);
@@ -140,16 +142,17 @@ public class LogController {
                             internalMetricController.createIndicatorViewMetric(viewFormat);
                             list.add(newLog);
                         }
-                    } else {
+                    }
+                    else {
                         QModelAccess newLog = new QModelAccess(epoch, team, originalLog, page, s, viewFormat);
                         internalMetricController.createQModelViewMetric(viewFormat);
                         list.add(newLog);
                     }
                 }
-            }
-            else {
-                Log newLog = new Log(epoch, team, originalLog, page, s);
-                list.add(newLog);
+                else {
+                    Log newLog = new Log(epoch, team, originalLog, page, s);
+                    list.add(newLog);
+                }
             }
         }
         return list;
@@ -402,9 +405,18 @@ public class LogController {
         return 0;
     }
 
-    private String getPage(String StringPage) {
+    private String getPageAndView(String StringPage) {
         String[] splitPage = StringPage.split("\"");
         return splitPage[1];
+    }
+
+    private String getPage(String pageAndView) {
+        int slash = StringUtils.countOccurrencesOf(pageAndView, "/");
+        if (slash == 2) {
+            String[] split = pageAndView.split("/");
+            return split[1];
+        }
+        return pageAndView.replaceAll("/", "");
     }
 
     private String getTeam(String StringTeam) {

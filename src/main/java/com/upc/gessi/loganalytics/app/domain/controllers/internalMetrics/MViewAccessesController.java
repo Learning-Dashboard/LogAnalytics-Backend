@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Controller
+@Controller("mViewAccessesController")
 public class MViewAccessesController implements Strategy {
 
     private String viewFormat;

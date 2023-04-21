@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Controller
+@Controller("fViewAccessesController")
 public class FViewAccessesController implements Strategy {
 
     @Autowired

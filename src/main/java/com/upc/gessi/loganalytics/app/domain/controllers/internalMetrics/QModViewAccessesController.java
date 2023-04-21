@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.controllers.internalMetrics;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.QModelAccessController;
-import com.upc.gessi.loganalytics.app.domain.models.MetricAccess;
 import com.upc.gessi.loganalytics.app.domain.models.QModelAccess;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Controller
+@Controller("qModAccessesController")
 public class QModViewAccessesController implements Strategy {
 
     @Autowired
