@@ -3,6 +3,7 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 import com.google.gson.*;
 import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.*;
+import com.upc.gessi.loganalytics.app.domain.repositories.LogRepository;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,12 @@ public class LogController {
 
     @Autowired
     private SessionController sessionController;
+
+    @Autowired
+    private InternalMetricController internalMetricController;
+
+    @Autowired
+    private LogRepository logRepository;
 
     public List<String> getOriginalLogs(MultipartFile file) {
         List<String> list = new ArrayList<>();
@@ -73,6 +80,7 @@ public class LogController {
 
             if (!originalLog.contains(" GET ")) continue;
             String page = getPage(splitRequest[1]);
+            internalMetricController.createPageMetric(page);
             HashMap<String,String> params = getParams(splitRequest);
 
             String team = getTeam(splitRequest[splitRequest.length - 1]);
@@ -141,6 +149,13 @@ public class LogController {
             }
         }
         return list;
+    }
+
+    public List<Log> getAllByPageAndTeam(String page, String team) {
+        Iterable<Log> logIterable = logRepository.findByPageAndTeam(page, team);
+        List<Log> logList = new ArrayList<>();
+        logIterable.forEach(logList::add);
+        return logList;
     }
 
     private List<Integer> getQualityFactorsFromSI(String SIName, String team) {

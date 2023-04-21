@@ -90,7 +90,8 @@ public class EvaluationController {
         try {
             String packageName = getClass().getPackage().getName();
             String imName = getControllerName(im);
-            String className = packageName + ".internalMetrics." + StringUtils.capitalize(imName) + "Controller";
+            String className = packageName + ".internalMetrics."
+                + StringUtils.capitalize(imName) + "Controller";
             Class<?> clazz = Class.forName(className);
             if (clazz.isAnnotationPresent(Controller.class)) {
                 String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
@@ -127,6 +128,10 @@ public class EvaluationController {
             String metric = name.replaceAll("MetricAccesses", "");
             return new Object[]{metric};
         }
+        else if (name.contains("PageAccesses")) {
+            String metric = name.replaceAll("PageAccesses", "");
+            return new Object[]{metric};
+        }
         return new Object[]{};
     }
 
@@ -140,6 +145,8 @@ public class EvaluationController {
             return "IndicatorAccesses";
         else if (name.contains("MetricAccesses"))
             return "MetricAccesses";
+        else if (name.contains("PageAccesses"))
+            return "PageAccesses";
         return name;
     }
 

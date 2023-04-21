@@ -25,6 +25,9 @@ public class FactorController {
     @Autowired
     private TeamController teamController;
 
+    @Autowired
+    private InternalMetricController internalMetricController;
+
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
@@ -33,7 +36,10 @@ public class FactorController {
         Set<Factor> factors = getCurrentLDFactors();
         for (Factor f : factors) {
             Optional<Factor> factorOptional = factorRepository.findById(f.getId());
-            if (factorOptional.isEmpty()) factorRepository.save(f);
+            if (factorOptional.isEmpty()) {
+                factorRepository.save(f);
+                //internalMetricController.createFactorMetric(f.getId());
+            }
         }
     }
 

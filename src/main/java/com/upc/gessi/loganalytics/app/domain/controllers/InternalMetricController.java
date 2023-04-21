@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class InternalMetricController {
@@ -67,5 +68,41 @@ public class InternalMetricController {
         List<InternalMetric> internalMetricList = new ArrayList<>();
         internalMetricIterable.forEach(internalMetricList::add);
         return internalMetricList;
+    }
+
+    public void createPageMetric(String page) {
+        String name = page + "PageAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+
+    public void createFactorMetric(String factor) {
+        String name = factor + "FactorAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+
+    public void createIndicatorMetric(String indicator) {
+        String name = indicator + "IndicatorAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+
+    public void createMetricMetric(String metric) {
+        String name = metric + "MetricAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
     }
 }

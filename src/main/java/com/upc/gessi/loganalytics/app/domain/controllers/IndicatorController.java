@@ -27,6 +27,9 @@ public class IndicatorController {
     @Autowired
     private TeamController teamController;
 
+    @Autowired
+    private InternalMetricController internalMetricController;
+
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
@@ -35,7 +38,10 @@ public class IndicatorController {
         Set<Indicator> indicators = getCurrentLDIndicators();
         for (Indicator i : indicators) {
             Optional<Indicator> indicatorOptional = indicatorRepository.findById(i.getId());
-            if (indicatorOptional.isEmpty()) indicatorRepository.save(i);
+            if (indicatorOptional.isEmpty()) {
+                indicatorRepository.save(i);
+                internalMetricController.createIndicatorMetric(i.getId());
+            }
         }
     }
 

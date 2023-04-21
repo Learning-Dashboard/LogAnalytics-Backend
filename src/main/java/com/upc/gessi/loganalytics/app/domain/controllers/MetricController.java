@@ -23,6 +23,9 @@ public class MetricController {
     @Autowired
     private TeamController teamController;
 
+    @Autowired
+    private InternalMetricController internalMetricController;
+
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
@@ -31,7 +34,10 @@ public class MetricController {
         Set<Metric> metrics = getCurrentLDMetrics();
         for (Metric m : metrics) {
             Optional<Metric> metricOptional = metricRepository.findById(m.getId());
-            if (metricOptional.isEmpty()) metricRepository.save(m);
+            if (metricOptional.isEmpty()) {
+                metricRepository.save(m);
+                //internalMetricController.createMetricMetric(m.getId());
+            }
         }
     }
 
