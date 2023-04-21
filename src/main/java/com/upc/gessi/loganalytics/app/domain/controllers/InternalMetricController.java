@@ -33,6 +33,11 @@ public class InternalMetricController {
         internalMetrics.add(new InternalMetric("HistoricAccesses"));
         internalMetrics.add(new InternalMetric("CurrentAccesses"));
 
+        //internalMetrics.add(new InternalMetric("IViewAccesses"));
+        //internalMetrics.add(new InternalMetric("FViewAccesses"));
+        //internalMetrics.add(new InternalMetric("MViewAccesses"));
+        //internalMetrics.add(new InternalMetric("QModViewAccesses"));
+
         /*
 
         internalMetrics.add(new InternalMetric("IChartAccesses"));
