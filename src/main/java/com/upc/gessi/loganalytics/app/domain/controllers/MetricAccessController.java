@@ -22,4 +22,12 @@ public class MetricAccessController {
         metricAccessIterable.forEach(metricAccesses::add);
         return metricAccesses;
     }
+
+    public List<MetricAccess> getAllByHistoricAndTeam(boolean historic, Team team) {
+        Iterable<MetricAccess> metricAccessIterable =
+                metricAccessRepository.findByHistoricAndTeam(historic, team.getId());
+        List<MetricAccess> metricAccesses = new ArrayList<>();
+        metricAccessIterable.forEach(metricAccesses::add);
+        return metricAccesses;
+    }
 }

@@ -22,4 +22,12 @@ public class FactorAccessController {
         factorAccessIterable.forEach(factorAccesses::add);
         return factorAccesses;
     }
+
+    public List<FactorAccess> getAllByHistoricAndTeam(boolean historic, Team team) {
+        Iterable<FactorAccess> factorAccessIterable =
+                factorAccessRepository.findByHistoricAndTeam(historic, team.getId());
+        List<FactorAccess> factorAccesses = new ArrayList<>();
+        factorAccessIterable.forEach(factorAccesses::add);
+        return factorAccesses;
+    }
 }

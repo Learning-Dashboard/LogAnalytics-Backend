@@ -36,7 +36,7 @@ public class MetricController {
             Optional<Metric> metricOptional = metricRepository.findById(m.getId());
             if (metricOptional.isEmpty()) {
                 metricRepository.save(m);
-                internalMetricController.createMetricMetric(m.getId());
+                //internalMetricController.createMetricMetric(m.getId());
             }
         }
     }

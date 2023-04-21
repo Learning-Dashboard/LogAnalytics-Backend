@@ -30,10 +30,10 @@ public class InternalMetricController {
         internalMetrics.add(new InternalMetric("7DaysLogins"));
         internalMetrics.add(new InternalMetric("30DaysLogins"));
 
-        /*
-
         internalMetrics.add(new InternalMetric("HistoricAccesses"));
         internalMetrics.add(new InternalMetric("CurrentAccesses"));
+
+        /*
 
         internalMetrics.add(new InternalMetric("IChartAccesses"));
         internalMetrics.add(new InternalMetric("ITableAccesses"));

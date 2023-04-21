@@ -132,6 +132,14 @@ public class EvaluationController {
             String metric = name.replaceAll("PageAccesses", "");
             return new Object[]{metric};
         }
+        else if (name.contains("HistoricAccesses")) {
+            String historic = "true";
+            return new Object[]{historic};
+        }
+        else if (name.contains("CurrentAccesses")) {
+            String historic = "false";
+            return new Object[]{historic};
+        }
         return new Object[]{};
     }
 
@@ -147,6 +155,10 @@ public class EvaluationController {
             return "MetricAccesses";
         else if (name.contains("PageAccesses"))
             return "PageAccesses";
+        else if (name.contains("HistoricAccesses"))
+            return "HistoricAccesses";
+        else if (name.contains("CurrentAccesses"))
+            return "HistoricAccesses";
         return name;
     }
 
