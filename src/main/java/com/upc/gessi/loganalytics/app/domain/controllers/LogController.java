@@ -115,6 +115,7 @@ public class LogController {
                             }
                             MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page,
                                 s, historic, viewFormat, metricIds);
+                            internalMetricController.createMetricViewMetric(viewFormat);
                             list.add(newLog);
                         }
                         else if (page.contains("QualityFactors")) {
@@ -125,6 +126,7 @@ public class LogController {
                             }
                             FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page,
                                 s, historic, viewFormat, factorIds);
+                            internalMetricController.createFactorViewMetric(viewFormat);
                             list.add(newLog);
                         }
                         else {
@@ -135,10 +137,12 @@ public class LogController {
                             }
                             IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page,
                                 s, historic, viewFormat, indicatorIds);
+                            internalMetricController.createIndicatorViewMetric(viewFormat);
                             list.add(newLog);
                         }
                     } else {
                         QModelAccess newLog = new QModelAccess(epoch, team, originalLog, page, s, viewFormat);
+                        internalMetricController.createQModelViewMetric(viewFormat);
                         list.add(newLog);
                     }
                 }

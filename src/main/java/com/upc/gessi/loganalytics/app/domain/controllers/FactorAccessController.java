@@ -22,6 +22,13 @@ public class FactorAccessController {
         factorAccessIterable.forEach(factorAccesses::add);
         return factorAccesses;
     }
+    public List<FactorAccess> getAllByTeamAndViewFormat(Team team, String viewFormat) {
+        Iterable<FactorAccess> factorAccessIterable =
+            factorAccessRepository.findByTeamAndViewFormat(team.getId(), viewFormat);
+        List<FactorAccess> factorAccesses = new ArrayList<>();
+        factorAccessIterable.forEach(factorAccesses::add);
+        return factorAccesses;
+    }
 
     public List<FactorAccess> getAllByHistoricAndTeam(boolean historic, Team team) {
         Iterable<FactorAccess> factorAccessIterable =

@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface IndicatorAccessRepository extends CrudRepository<IndicatorAccess, LogPrimaryKey> {
     List<IndicatorAccess> findByTeamAndIndicatorsId(String team, String indicator);
+    List<IndicatorAccess> findByTeamAndViewFormat(String team, String viewFormat);
     List<IndicatorAccess> findByHistoricAndTeam(boolean historic, String team);
 }

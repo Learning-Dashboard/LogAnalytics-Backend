@@ -22,48 +22,13 @@ public class InternalMetricController {
 
     @PostConstruct
     public void storeInternalMetrics() {
-
         List<InternalMetric> internalMetrics = new ArrayList<>();
 
         internalMetrics.add(new InternalMetric("interactionsPerSession"));
-
         internalMetrics.add(new InternalMetric("7DaysLogins"));
         internalMetrics.add(new InternalMetric("30DaysLogins"));
-
         internalMetrics.add(new InternalMetric("HistoricAccesses"));
         internalMetrics.add(new InternalMetric("CurrentAccesses"));
-
-        //internalMetrics.add(new InternalMetric("IViewAccesses"));
-        //internalMetrics.add(new InternalMetric("FViewAccesses"));
-        //internalMetrics.add(new InternalMetric("MViewAccesses"));
-        //internalMetrics.add(new InternalMetric("QModViewAccesses"));
-
-        /*
-
-        internalMetrics.add(new InternalMetric("IChartAccesses"));
-        internalMetrics.add(new InternalMetric("ITableAccesses"));
-        internalMetrics.add(new InternalMetric("DIChartRadarAccesses"));
-        internalMetrics.add(new InternalMetric("DIChartStackedAccesses"));
-        internalMetrics.add(new InternalMetric("DIChartPolarAccesses"));
-        internalMetrics.add(new InternalMetric("DITableAccesses"));
-
-        internalMetrics.add(new InternalMetric("FChartAccesses"));
-        internalMetrics.add(new InternalMetric("FTableAccesses"));
-        internalMetrics.add(new InternalMetric("DFChartRadarAccesses"));
-        internalMetrics.add(new InternalMetric("DFChartStackedAccesses"));
-        internalMetrics.add(new InternalMetric("DFChartPolarAccesses"));
-        internalMetrics.add(new InternalMetric("DFTableAccesses"));
-
-        internalMetrics.add(new InternalMetric("MTableAccesses"));
-        internalMetrics.add(new InternalMetric("MSliderAccesses"));
-        internalMetrics.add(new InternalMetric("MGaugeChartAccesses"));
-
-        internalMetrics.add(new InternalMetric("QMGraphAccesses"));
-        internalMetrics.add(new InternalMetric("QMSunburstAccesses"));
-
-        internalMetrics.add(new InternalMetric("HistoricAccesses"));
-        internalMetrics.add(new InternalMetric("CurrentAccesses"));
-         */
 
         internalMetricRepository.saveAll(internalMetrics);
     }
@@ -104,6 +69,39 @@ public class InternalMetricController {
 
     public void createMetricMetric(String metric) {
         String name = metric + "MetricAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+
+    public void createIndicatorViewMetric(String view) {
+        String name = view + "IViewAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+    public void createFactorViewMetric(String view) {
+        String name = view + "FViewAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+    public void createMetricViewMetric(String view) {
+        String name = view + "MViewAccesses";
+        Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
+        if (internalMetricOptional.isEmpty()) {
+            InternalMetric im = new InternalMetric(name);
+            internalMetricRepository.save(im);
+        }
+    }
+    public void createQModelViewMetric(String view) {
+        String name = view + "QModViewAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(name);
         if (internalMetricOptional.isEmpty()) {
             InternalMetric im = new InternalMetric(name);

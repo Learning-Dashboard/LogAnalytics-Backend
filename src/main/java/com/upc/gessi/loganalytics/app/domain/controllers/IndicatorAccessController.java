@@ -23,6 +23,14 @@ public class IndicatorAccessController {
         return indicatorAccesses;
     }
 
+    public List<IndicatorAccess> getAllByTeamAndViewFormat(Team team, String viewFormat) {
+        Iterable<IndicatorAccess> indicatorAccessIterable =
+                indicatorAccessRepository.findByTeamAndViewFormat(team.getId(), viewFormat);
+        List<IndicatorAccess> indicatorAccesses = new ArrayList<>();
+        indicatorAccessIterable.forEach(indicatorAccesses::add);
+        return indicatorAccesses;
+    }
+
     public List<IndicatorAccess> getAllByHistoricAndTeam(boolean historic, Team team) {
         Iterable<IndicatorAccess> indicatorAccessIterable =
                 indicatorAccessRepository.findByHistoricAndTeam(historic, team.getId());

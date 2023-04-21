@@ -22,6 +22,13 @@ public class MetricAccessController {
         metricAccessIterable.forEach(metricAccesses::add);
         return metricAccesses;
     }
+    public List<MetricAccess> getAllByTeamAndViewFormat(Team team, String viewFormat) {
+        Iterable<MetricAccess> metricAccessIterable =
+            metricAccessRepository.findByTeamAndViewFormat(team.getId(), viewFormat);
+        List<MetricAccess> metricAccesses = new ArrayList<>();
+        metricAccessIterable.forEach(metricAccesses::add);
+        return metricAccesses;
+    }
 
     public List<MetricAccess> getAllByHistoricAndTeam(boolean historic, Team team) {
         Iterable<MetricAccess> metricAccessIterable =

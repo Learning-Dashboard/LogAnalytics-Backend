@@ -11,5 +11,6 @@ import java.util.List;
 public interface MetricAccessRepository extends CrudRepository<MetricAccess, LogPrimaryKey> {
 
     List<MetricAccess> findByTeamAndMetricsId(String team, String metric);
+    List<MetricAccess> findByTeamAndViewFormat(String team, String viewFormat);
     List<MetricAccess> findByHistoricAndTeam(boolean historic, String team);
 }

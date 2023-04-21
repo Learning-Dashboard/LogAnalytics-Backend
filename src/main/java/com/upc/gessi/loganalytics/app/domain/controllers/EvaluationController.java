@@ -140,6 +140,22 @@ public class EvaluationController {
             String historic = "false";
             return new Object[]{historic};
         }
+        else if (name.contains("IViewAccesses")) {
+            String view = name.replaceAll("IViewAccesses", "");
+            return new Object[]{view};
+        }
+        else if (name.contains("FViewAccesses")) {
+            String view = name.replaceAll("FViewAccesses", "");
+            return new Object[]{view};
+        }
+        else if (name.contains("MViewAccesses")) {
+            String view = name.replaceAll("MViewAccesses", "");
+            return new Object[]{view};
+        }
+        else if (name.contains("QModViewAccesses")) {
+            String view = name.replaceAll("QModViewAccesses", "");
+            return new Object[]{view};
+        }
         return new Object[]{};
     }
 
@@ -159,6 +175,14 @@ public class EvaluationController {
             return "HistoricAccesses";
         else if (name.contains("CurrentAccesses"))
             return "HistoricAccesses";
+        else if (name.contains("IViewAccesses"))
+            return "IViewAccesses";
+        else if (name.contains("FViewAccesses"))
+            return "FViewAccesses";
+        else if (name.contains("MViewAccesses"))
+            return "MViewAccesses";
+        else if (name.contains("QModViewAccesses"))
+            return "QModViewAccesses";
         return name;
     }
 
