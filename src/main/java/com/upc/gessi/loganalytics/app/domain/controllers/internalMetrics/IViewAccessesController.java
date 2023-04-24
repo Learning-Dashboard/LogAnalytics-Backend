@@ -35,9 +35,6 @@ public class IViewAccessesController implements Strategy {
     }
 
     @Override
-    public void setParams(Integer days) { }
-
-    @Override
     public void setParams(String entity) {
         viewFormat = entity;
     }

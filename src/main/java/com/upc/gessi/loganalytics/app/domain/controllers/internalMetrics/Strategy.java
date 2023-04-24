@@ -10,7 +10,5 @@ public interface Strategy {
 
     public double evaluate();
 
-    public void setParams(Integer days);
-
     public void setParams(String entity);
 }

@@ -71,7 +71,8 @@ class TeamEvaluationTest {
     @Test
     void testToString() {
         String result = "TeamEvaluation{date='2023-04-18', " +
-                "internalMetric=InternalMetric{name='test'}, team='pes', value=0.0}";
+            "internalMetric=InternalMetric{name='test', " +
+            "param='null', controller='null'}, team='pes', value=0.0}";
         assertEquals(result, evaluation.toString());
     }
 }

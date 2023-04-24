@@ -60,7 +60,8 @@ class EvaluationTest {
 
     @Test
     void testToString() {
-        String result = "Evaluation{date=2023-04-18, internalMetric=InternalMetric{name='test'}, value=0.0}";
+        String result = "Evaluation{date=2023-04-18, " +
+            "internalMetric=InternalMetric{name='test', param='null', controller='null'}, value=0.0}";
         assertEquals(result, evaluation.toString());
     }
 }

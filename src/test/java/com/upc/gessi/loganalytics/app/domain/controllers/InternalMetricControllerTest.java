@@ -41,7 +41,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createPageMetric(page);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(page) &&
+            internalMetric.getController().equals("PageAccesses")));
     }
 
     @Test
@@ -51,7 +53,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createFactorMetric(factor);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(factor) &&
+            internalMetric.getController().equals("FactorAccesses")));
     }
 
     @Test
@@ -61,7 +65,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createIndicatorMetric(indicator);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(indicator) &&
+            internalMetric.getController().equals("IndicatorAccesses")));
     }
 
     @Test
@@ -71,7 +77,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createMetricMetric(metric);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(metric) &&
+            internalMetric.getController().equals("MetricAccesses")));
     }
 
     @Test
@@ -81,7 +89,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createIndicatorViewMetric(indicator);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(indicator) &&
+            internalMetric.getController().equals("IViewAccesses")));
     }
 
     @Test
@@ -91,7 +101,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createFactorViewMetric(factor);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(factor) &&
+            internalMetric.getController().equals("FViewAccesses")));
     }
 
     @Test
@@ -101,7 +113,9 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createMetricViewMetric(metric);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(metric) &&
+            internalMetric.getController().equals("MViewAccesses")));
     }
 
     @Test
@@ -111,6 +125,8 @@ class InternalMetricControllerTest {
         Mockito.when(internalMetricRepository.findById(name)).thenReturn(Optional.empty());
         internalMetricController.createQModelViewMetric(qModel);
         Mockito.verify(internalMetricRepository, Mockito.times(1))
-            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name)));
+            .save(Mockito.argThat(internalMetric -> internalMetric.getName().equals(name) &&
+            internalMetric.getParam().equals(qModel) &&
+            internalMetric.getController().equals("QModViewAccesses")));
     }
 }

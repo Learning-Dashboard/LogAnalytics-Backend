@@ -32,10 +32,7 @@ public class DaysLoginsController implements Strategy {
     public double evaluate() { return -1.0; }
 
     @Override
-    public void setParams(Integer days) {
-        this.days = days;
+    public void setParams(String entity) {
+        this.days = Integer.parseInt(entity);
     }
-
-    @Override
-    public void setParams(String entity) { }
 }

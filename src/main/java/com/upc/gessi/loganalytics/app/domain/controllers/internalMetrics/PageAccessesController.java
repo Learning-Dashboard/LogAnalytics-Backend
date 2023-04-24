@@ -34,9 +34,6 @@ public class PageAccessesController implements Strategy {
     }
 
     @Override
-    public void setParams(Integer days) { }
-
-    @Override
     public void setParams(String entity) {
         this.page = entity;
     }

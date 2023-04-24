@@ -94,11 +94,8 @@ public class EvaluationController {
             if (clazz.isAnnotationPresent(Controller.class)) {
                 String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
                 this.strategy = (Strategy) applicationContext.getBean(beanName);
-                if (constructorArgs.length != 0) {
-                    if (constructorArgs[0] instanceof Integer)
-                        this.strategy.setParams((Integer) constructorArgs[0]);
-                    else this.strategy.setParams((String) constructorArgs[0]);
-                }
+                if (constructorArgs.length != 0)
+                    this.strategy.setParams((String) constructorArgs[0]);
             } else {
                 throw new IllegalArgumentException("Class is not a @Controller");
             }
@@ -108,6 +105,10 @@ public class EvaluationController {
     }
 
     private Object[] createConstructorArgs(InternalMetric im) {
+        String paramName = im.getParam();
+        if (paramName == null) return new Object[]{};
+        else return new Object[]{paramName};
+        /*
         String name = im.getName();
         if (name.contains("DaysLogins")) {
             String daysString = name.replaceAll("DaysLogins", "");
@@ -155,9 +156,14 @@ public class EvaluationController {
             return new Object[]{view};
         }
         return new Object[]{};
+         */
     }
 
     private String getControllerName(InternalMetric im) {
+        String controllerName = im.getController();
+        if (controllerName == null) return im.getName();
+        else return controllerName;
+        /*
         String name = im.getName();
         if (name.contains("DaysLogins"))
             return "DaysLogins";
@@ -182,6 +188,7 @@ public class EvaluationController {
         else if (name.contains("QModViewAccesses"))
             return "QModViewAccesses";
         return name;
+         */
     }
 
     private Class<?>[] getConstructorParameterTypes(Object... constructorArgs) {

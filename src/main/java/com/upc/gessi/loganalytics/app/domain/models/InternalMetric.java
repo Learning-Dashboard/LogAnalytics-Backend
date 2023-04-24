@@ -13,6 +13,10 @@ public class InternalMetric implements Serializable {
 
     @Id @Column (name = "name", nullable = false)
     private String name;
+    @Column (name = "param", nullable = true)
+    private String param;
+    @Column (name = "controller", nullable = true)
+    private String controller;
 
     @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -32,6 +36,12 @@ public class InternalMetric implements Serializable {
         this.name = name;
     }
 
+    public InternalMetric(String name, String param, String controller) {
+        this.name = name;
+        this.param = param;
+        this.controller = controller;
+    }
+
     public InternalMetric(String name, List<Evaluation> evaluations) {
         this.name = name;
         this.evaluations = evaluations;
@@ -43,6 +53,22 @@ public class InternalMetric implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
     }
 
     public List<Evaluation> getEvaluations() {
@@ -73,6 +99,8 @@ public class InternalMetric implements Serializable {
     public String toString() {
         return "InternalMetric{" +
                 "name='" + name + '\'' +
+                ", param='" + param + '\'' +
+                ", controller='" + controller + '\'' +
                 '}';
     }
 }

@@ -35,9 +35,6 @@ public class IndicatorAccessesController implements Strategy {
     }
 
     @Override
-    public void setParams(Integer days) { }
-
-    @Override
     public void setParams(String entity) {
         indicator = entity;
     }

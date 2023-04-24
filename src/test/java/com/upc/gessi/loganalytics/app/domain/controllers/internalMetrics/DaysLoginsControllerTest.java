@@ -27,7 +27,7 @@ class DaysLoginsControllerTest {
 
     @Test
     void evaluate() {
-        daysLoginsController.setParams(7);
+        daysLoginsController.setParams("7");
         Subject s = new Subject("s");
         Team team1 = new Team("t1", "22-23-Q1", s);
         Team team2 = new Team("t2", "22-23-Q1", s);
