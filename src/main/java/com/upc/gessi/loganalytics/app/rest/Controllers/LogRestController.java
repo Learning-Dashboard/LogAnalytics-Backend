@@ -52,8 +52,10 @@ public class LogRestController {
             if (dateBefore != null) {
                 if (dateAfter != null) {
                     try {
-                        Date dBefore = new SimpleDateFormat("yyyy-MM-dd").parse(dateBefore);
-                        Date dAfter = new SimpleDateFormat("yyyy-MM-dd").parse(dateAfter);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        formatter.setLenient(false);
+                        Date dBefore = formatter.parse(dateBefore);
+                        Date dAfter = formatter.parse(dateAfter);
                         long epochBefore = dBefore.getTime();
                         long epochAfter = dAfter.getTime() + 86399999;
                         if (epochBefore > epochAfter)
@@ -101,7 +103,9 @@ public class LogRestController {
                 }
                 else {
                     try {
-                        Date dBefore = new SimpleDateFormat("yyyy-MM-dd").parse(dateBefore);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        formatter.setLenient(false);
+                        Date dBefore = formatter.parse(dateBefore);
                         long epoch = dBefore.getTime();
                         if (team != null) {
                             Iterable<Log> logIterable;
@@ -146,7 +150,9 @@ public class LogRestController {
             }
             else if (dateAfter != null) {
                 try {
-                    Date dAfter = new SimpleDateFormat("yyyy-MM-dd").parse(dateAfter);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    formatter.setLenient(false);
+                    Date dAfter = formatter.parse(dateAfter);
                     long epoch = dAfter.getTime() + 86399999;
 
                     if (team != null) {
