@@ -28,8 +28,7 @@ public class EvaluationPrimaryKey implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EvaluationPrimaryKey)) return false;
-        EvaluationPrimaryKey that = (EvaluationPrimaryKey) o;
+        if (!(o instanceof EvaluationPrimaryKey that)) return false;
         return getDate().equals(that.getDate()) && getInternalMetric().equals(that.getInternalMetric());
     }
 

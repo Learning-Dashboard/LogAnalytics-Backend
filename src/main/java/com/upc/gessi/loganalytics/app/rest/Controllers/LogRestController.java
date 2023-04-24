@@ -190,32 +190,28 @@ public class LogRestController {
                 }
             }
             else if (team != null) {
+                Iterable<Log> logIterable;
+                List<Log> logList = new ArrayList<>();
                 if (keyword != null) {
-                    Iterable<Log> logIterable = logRepository.findByTeamAndMessageContainingOrderByTimeDesc(team, keyword);
-                    List<Log> logList = new ArrayList<>();
-                    logIterable.forEach(logList::add);
-                    return logList;
+                    logIterable = logRepository.findByTeamAndMessageContainingOrderByTimeDesc(team, keyword);
                 }
                 else {
-                    Iterable<Log> logIterable = logRepository.findByTeamOrderByTimeDesc(team);
-                    List<Log> logList = new ArrayList<>();
-                    logIterable.forEach(logList::add);
-                    return logList;
+                    logIterable = logRepository.findByTeamOrderByTimeDesc(team);
                 }
+                logIterable.forEach(logList::add);
+                return logList;
             }
             else if (subject != null) {
+                Iterable<Log> logIterable;
+                List<Log> logList = new ArrayList<>();
                 if (keyword != null) {
-                    Iterable<Log> logIterable = logRepository.findBySubjectAndMessageContainingOrderByTimeDesc(subject, keyword);
-                    List<Log> logList = new ArrayList<>();
-                    logIterable.forEach(logList::add);
-                    return logList;
+                    logIterable = logRepository.findBySubjectAndMessageContainingOrderByTimeDesc(subject, keyword);
                 }
                 else  {
-                    Iterable<Log> logIterable = logRepository.findBySubjectOrderByTimeDesc(subject);
-                    List<Log> logList = new ArrayList<>();
-                    logIterable.forEach(logList::add);
-                    return logList;
+                    logIterable = logRepository.findBySubjectOrderByTimeDesc(subject);
                 }
+                logIterable.forEach(logList::add);
+                return logList;
             }
             else if (keyword != null) {
                 Iterable<Log> logIterable = logRepository.findByMessageContainingOrderByTimeDesc(keyword);

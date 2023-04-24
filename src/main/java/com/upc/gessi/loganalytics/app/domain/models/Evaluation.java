@@ -15,10 +15,10 @@ public class Evaluation {
     @Id @Column (name = "date", nullable = false)
     private String date;
     @Id @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn (name = "internalMetric", referencedColumnName = "name", nullable = false)
+    @JoinColumn (name = "internalMetric",
+        referencedColumnName = "name", nullable = false)
     private InternalMetric internalMetric;
-
-    @Column (name = "value", nullable = false)
+    @Column (name = "evaluationValue", nullable = false)
     private double value;
 
     public Evaluation() { }

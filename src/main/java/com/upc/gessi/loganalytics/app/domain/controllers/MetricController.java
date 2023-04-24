@@ -92,7 +92,7 @@ public class MetricController {
     }
 
     public String removeUsername(JsonObject item, String externalId) {
-        JsonElement student = item.get("Student");
+        JsonElement student = item.get("student");
         if (student != null && student != JsonNull.INSTANCE) {
             String usernameG = student.getAsJsonObject().get("githubUsername").getAsString();
             String usernameT = student.getAsJsonObject().get("taigaUsername").getAsString();

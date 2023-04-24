@@ -16,7 +16,7 @@ public class SubjectEvaluation {
     @Id @Column (name = "subject", nullable = false)
     private String subject;
 
-    @Column (name = "value", nullable = false)
+    @Column (name = "evaluationValue", nullable = false)
     private double value;
 
     public SubjectEvaluation() {

@@ -26,6 +26,27 @@ class LogRepositoryTest {
     private LogRepository logRepository;
 
     @Test
+    void findByPageAndTeam() {
+        Subject subj = new Subject("PES");
+        Team team = new Team("pes11a", "sem", subj);
+        Session session = new Session("s", team, 0);
+        entityManager.persistAndFlush(subj);
+        entityManager.persistAndFlush(team);
+        entityManager.persistAndFlush(session);
+
+        Log log1 = new Log(0, "pes11a", "testMessage", "testPage", session);
+        Log log2 = new Log(10, "pes11a", "testMessage", "testPage2", session);
+        entityManager.persistAndFlush(log1);
+        entityManager.persistAndFlush(log2);
+
+        Iterable<Log> logIterable = logRepository.findByPageAndTeam("testPage", "pes11a");
+        List<Log> logList = new ArrayList<>();
+        logIterable.forEach(logList::add);
+        assertEquals(logList.get(0), log1);
+        assertEquals(logList.size(), 1);
+    }
+
+    @Test
     void findAll() {
         Subject subj = new Subject("PES");
         Team team = new Team("pes11a", "sem", subj);

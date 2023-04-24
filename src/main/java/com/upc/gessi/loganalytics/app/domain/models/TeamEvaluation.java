@@ -16,7 +16,7 @@ public class TeamEvaluation {
     @Id @Column(name = "team", nullable = false)
     private String team;
 
-    @Column (name = "value", nullable = false)
+    @Column (name = "evaluationValue", nullable = false)
     private double value;
 
     public TeamEvaluation() {

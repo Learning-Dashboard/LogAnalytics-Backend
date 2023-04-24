@@ -1,6 +1,7 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
 import com.upc.gessi.loganalytics.app.domain.models.*;
+import com.upc.gessi.loganalytics.app.domain.repositories.LogRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,6 +35,8 @@ class LogControllerTest {
 
     @Mock
     SessionController sessionController;
+    @Mock
+    LogRepository logRepository;
 
     @InjectMocks
     LogController logController;
@@ -73,5 +76,24 @@ class LogControllerTest {
             assertEquals(expectedLogs.get(i).getTeam(), actualLogs.get(i).getTeam());
             assertEquals(expectedLogs.get(i).toString(), actualLogs.get(i).toString());
         }
+    }
+
+    @Test
+    void getAllByPageAndTeam() throws ParseException {
+        Subject subj = new Subject("PES");
+        Team t = new Team("pes11a", "s", subj);
+        Session s = new Session("s", t, 1);
+        List<String> originalLogs = Arrays.asList(
+                "2022-03-30 10:30:15.000, pes11a enters app (abc)",
+                "2022-03-30 10:30:50.000, pes11a exits app (abc)");
+        Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:15.000");
+        Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:50.000");
+        List<Log> expectedLogs = List.of(
+                new Log(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, pes11a enters app (abc)", s),
+                new Log(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, pes11a exits app (abc)", s)
+        );
+        Mockito.when(logRepository.findByPageAndTeam(Mockito.anyString(), Mockito.anyString())).thenReturn(expectedLogs);
+        List<Log> actualLogs = logController.getAllByPageAndTeam("page", "pes11a");
+        assertEquals(expectedLogs, actualLogs);
     }
 }
