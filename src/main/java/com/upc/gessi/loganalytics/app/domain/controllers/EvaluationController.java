@@ -96,9 +96,8 @@ public class EvaluationController {
                 this.strategy = (Strategy) applicationContext.getBean(beanName);
                 if (constructorArgs.length != 0)
                     this.strategy.setParams((String) constructorArgs[0]);
-            } else {
-                throw new IllegalArgumentException("Class is not a @Controller");
             }
+            else throw new IllegalArgumentException("Class is not a @Controller");
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
         }
@@ -108,87 +107,12 @@ public class EvaluationController {
         String paramName = im.getParam();
         if (paramName == null) return new Object[]{};
         else return new Object[]{paramName};
-        /*
-        String name = im.getName();
-        if (name.contains("DaysLogins")) {
-            String daysString = name.replaceAll("DaysLogins", "");
-            int days = Integer.parseInt(daysString);
-            return new Object[]{days};
-        }
-        else if (name.contains("FactorAccesses")) {
-            String factor = name.replaceAll("FactorAccesses", "");
-            return new Object[]{factor};
-        }
-        else if (name.contains("IndicatorAccesses")) {
-            String indicator = name.replaceAll("IndicatorAccesses", "");
-            return new Object[]{indicator};
-        }
-        else if (name.contains("MetricAccesses")) {
-            String metric = name.replaceAll("MetricAccesses", "");
-            return new Object[]{metric};
-        }
-        else if (name.contains("PageAccesses")) {
-            String metric = name.replaceAll("PageAccesses", "");
-            return new Object[]{metric};
-        }
-        else if (name.contains("HistoricAccesses")) {
-            String historic = "true";
-            return new Object[]{historic};
-        }
-        else if (name.contains("CurrentAccesses")) {
-            String historic = "false";
-            return new Object[]{historic};
-        }
-        else if (name.contains("IViewAccesses")) {
-            String view = name.replaceAll("IViewAccesses", "");
-            return new Object[]{view};
-        }
-        else if (name.contains("FViewAccesses")) {
-            String view = name.replaceAll("FViewAccesses", "");
-            return new Object[]{view};
-        }
-        else if (name.contains("MViewAccesses")) {
-            String view = name.replaceAll("MViewAccesses", "");
-            return new Object[]{view};
-        }
-        else if (name.contains("QModViewAccesses")) {
-            String view = name.replaceAll("QModViewAccesses", "");
-            return new Object[]{view};
-        }
-        return new Object[]{};
-         */
     }
 
     private String getControllerName(InternalMetric im) {
         String controllerName = im.getController();
         if (controllerName == null) return im.getName();
         else return controllerName;
-        /*
-        String name = im.getName();
-        if (name.contains("DaysLogins"))
-            return "DaysLogins";
-        else if (name.contains("FactorAccesses"))
-            return "FactorAccesses";
-        else if (name.contains("IndicatorAccesses"))
-            return "IndicatorAccesses";
-        else if (name.contains("MetricAccesses"))
-            return "MetricAccesses";
-        else if (name.contains("PageAccesses"))
-            return "PageAccesses";
-        else if (name.contains("HistoricAccesses"))
-            return "HistoricAccesses";
-        else if (name.contains("CurrentAccesses"))
-            return "HistoricAccesses";
-        else if (name.contains("IViewAccesses"))
-            return "IViewAccesses";
-        else if (name.contains("FViewAccesses"))
-            return "FViewAccesses";
-        else if (name.contains("MViewAccesses"))
-            return "MViewAccesses";
-        else if (name.contains("QModViewAccesses"))
-            return "QModViewAccesses";
-        return name;
-         */
     }
 
     private Class<?>[] getConstructorParameterTypes(Object... constructorArgs) {

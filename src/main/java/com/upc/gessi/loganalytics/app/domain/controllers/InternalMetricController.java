@@ -24,7 +24,7 @@ public class InternalMetricController {
     public void storeInternalMetrics() {
         List<InternalMetric> internalMetrics = new ArrayList<>();
 
-        internalMetrics.add(new InternalMetric("interactionsPerSession"));
+        internalMetrics.add(new InternalMetric("InteractionsPerSession"));
         internalMetrics.add(new InternalMetric("7DaysLogins", "7", "DaysLogins"));
         internalMetrics.add(new InternalMetric("30DaysLogins", "30", "DaysLogins"));
         internalMetrics.add(new InternalMetric("HistoricAccesses", "true", "HistoricAccesses"));
