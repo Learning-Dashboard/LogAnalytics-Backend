@@ -19,9 +19,6 @@ import java.util.List;
 public class InternalMetricRestController {
 
     @Autowired
-    InternalMetricRepository internalMetricRepository;
-
-    @Autowired
     InternalMetricController internalMetricController;
 
     @GetMapping
