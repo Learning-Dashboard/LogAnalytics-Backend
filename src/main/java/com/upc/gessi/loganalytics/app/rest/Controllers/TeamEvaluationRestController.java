@@ -1,8 +1,7 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
-import com.upc.gessi.loganalytics.app.domain.controllers.EvaluationController;
-import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
-import com.upc.gessi.loganalytics.app.domain.repositories.EvaluationRepository;
+import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
+import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,32 +13,25 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/evaluations")
-public class EvaluationRestController {
+@RequestMapping("/api/teamEvaluations")
+public class TeamEvaluationRestController {
 
     @Autowired
-    EvaluationController evaluationController;
-
-    @Autowired
-    EvaluationRepository evaluationRepository;
-
-    @GetMapping("/update")
-    @ResponseStatus(HttpStatus.OK)
-    public void evaluateInternalMetrics() {
-        evaluationController.evaluateMetrics();
-    }
+    TeamEvaluationRepository teamEvaluationRepository;
 
     @GetMapping("/current")
     @ResponseStatus(HttpStatus.OK)
-    public List<Evaluation> getCurrentEvaluations() {
-        Evaluation latestEvaluation = evaluationRepository.findFirstByOrderByDateDesc();
+    public List<TeamEvaluation> getCurrentEvaluations(
+        @RequestParam(name = "team") String team) {
+        TeamEvaluation latestEvaluation = teamEvaluationRepository.findFirstByTeamOrderByDateDesc(team);
         String latestDate = latestEvaluation.getDate();
-        return evaluationRepository.findByDate(latestDate);
+        return teamEvaluationRepository.findByDateAndTeam(latestDate, team);
     }
 
     @GetMapping("/historical")
     @ResponseStatus(HttpStatus.OK)
-    public List<Evaluation> getHistoricalEvaluations(
+    public List<TeamEvaluation> getHistoricalEvaluations(
+        @RequestParam(name = "team") String team,
         @RequestParam(name = "dateBefore") String dateBefore,
         @RequestParam (name = "dateAfter") String dateAfter) {
         try {
@@ -49,9 +41,9 @@ public class EvaluationRestController {
             Date dAfter = formatter.parse(dateAfter);
             if (dateBefore.compareTo(dateAfter) > 0)
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "dateBefore is not previous to dateAfter");
-            return evaluationRepository.
-                findByDateBetweenOrderByInternalMetricAsc(dateBefore, dateAfter);
+                        "dateBefore is not previous to dateAfter");
+            return teamEvaluationRepository.
+                    findByDateBetweenAndTeamOrderByInternalMetricAsc(dateBefore, dateAfter, team);
         } catch (ParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date formats are incorrect");
         }
