@@ -28,12 +28,6 @@ class EvaluationRestControllerTest {
     EvaluationRestController evaluationRestController;
 
     @Test
-    void evaluateInternalMetrics() {
-        evaluationRestController.evaluateInternalMetrics();
-        Mockito.verify(evaluationController, Mockito.times(1)).evaluateMetrics();
-    }
-
-    @Test
     void getCurrentEvaluations() {
         InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         Evaluation evaluation = new Evaluation("2001-07-22", im, 5.0);

@@ -59,9 +59,9 @@ public class EvaluationController {
             HashMap<Subject, Double> subjectHashMap = new HashMap<>();
             for (Subject s : subjects) subjectHashMap.put(s, 0.0);
             double globalValue = 0.0;
+            setStrategy(im);
             for (Team t : teams) {
                 if (im.getTeams() == null || im.getTeams().contains(t.getId())) {
-                    setStrategy(im);
                     double value = strategy.evaluate(t);
                     globalValue += value;
                     Subject s = t.getSubject();
@@ -74,7 +74,7 @@ public class EvaluationController {
             for (Subject s : subjects) {
                 List<Team> teamList = s.getTeams();
                 boolean containsTeam = false;
-                if (im.getTeams() != null) {
+                if (im.getTeams() != null && teamList != null) {
                     for (Team t : teamList) {
                         if (im.getTeams().contains(t.getId())) {
                             containsTeam = true;
