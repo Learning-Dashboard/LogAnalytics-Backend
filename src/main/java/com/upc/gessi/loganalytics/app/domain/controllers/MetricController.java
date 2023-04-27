@@ -108,9 +108,8 @@ public class MetricController {
 
     private String getMetricTeam(JsonObject item) {
         JsonElement student = item.get("student");
-        if (student != null && student != JsonNull.INSTANCE) {
+        if (student != null && student != JsonNull.INSTANCE)
             return item.get("project").getAsJsonObject().get("externalId").getAsString();
-        }
         return null;
     }
 

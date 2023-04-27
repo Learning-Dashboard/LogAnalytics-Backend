@@ -34,7 +34,7 @@ public class EvaluationController {
     SubjectController subjectController;
 
     @Autowired
-    private ApplicationContext applicationContext;
+    ApplicationContext applicationContext;
 
     private Strategy strategy;
 
@@ -49,8 +49,7 @@ public class EvaluationController {
         Iterable<Evaluation> currentEvaluations = evaluationRepository.findByDate(date);
         List<Evaluation> evaluationList = new ArrayList<>();
         currentEvaluations.forEach(evaluationList::add);
-        if (evaluationList.size() > 0)
-            evaluationRepository.deleteAll(currentEvaluations);
+        if (evaluationList.size() > 0) evaluationRepository.deleteAll(currentEvaluations);
 
         List<InternalMetric> internalMetrics = internalMetricController.getAll();
         List<Team> teams = teamController.getStoredTeams();

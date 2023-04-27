@@ -31,7 +31,7 @@ public class IndicatorController {
     private static final Logger logger =
             LoggerFactory.getLogger("ActionLogger");
 
-    //@PostConstruct
+    @PostConstruct
     public void storeAllIndicators() {
         Set<Indicator> indicators = getCurrentLDIndicators();
         for (Indicator i : indicators) {

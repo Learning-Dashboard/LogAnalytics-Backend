@@ -54,15 +54,11 @@ public class LogController {
     public List<Log> parseLogs(List<String> originalLogs) {
         List<Log> list = new ArrayList<>();
         for (String originalLog : originalLogs) {
-            if (originalLog.contains("logout") ||
-                originalLog.contains("No user is logged in yet")) continue;
-
+            if (originalLog.contains("logout") || originalLog.contains("No user is logged in yet")) continue;
             String[] splitRequest = originalLog.split(", ");
             long epoch = getTimestamp(splitRequest[0]);
 
-            if (originalLog.contains("enters app") || originalLog.contains("exits app")
-                || originalLog.contains("'s session has timed out")) {
-
+            if (originalLog.contains("enters app") || originalLog.contains("exits app") || originalLog.contains("'s session has timed out")) {
                 String team = splitRequest[1].split(" ")[0];
                 String[] splitTeam = splitRequest[1].split(" \\(");
                 String sessionId = "";
@@ -70,20 +66,16 @@ public class LogController {
                     String session = splitTeam[1];
                     sessionId = session.replaceAll("\\)", "");
                 }
-
-                if (team.equals("admin") || team.equals("professor-pes")
-                    || team.equals("professor-asw")) continue;
-
+                if (team.equals("admin") || team.equals("professor-pes") || team.equals("professor-asw")) continue;
                 Session s;
-                if (originalLog.contains("enters app"))
-                    s = sessionController.createSession(sessionId, epoch, team);
+                if (originalLog.contains("enters app")) s = sessionController.createSession(sessionId, epoch, team);
                 else s = sessionController.updateSession(sessionId, epoch);
-                if (s == null) {
-                    logger.error("Tried to parse log of nonexistent team " + team);
-                    continue;
+                if (s == null) logger.error("Tried to parse log of nonexistent team " + team);
+                else {
+                    Log newLog = new Log(epoch, team, originalLog, s);
+                    list.add(newLog);
                 }
-                Log newLog = new Log(epoch, team, originalLog, s);
-                list.add(newLog);
+                continue;
             }
 
             if (!originalLog.contains(" GET ")) continue;
@@ -91,7 +83,6 @@ public class LogController {
             String page = getPage(pageAndView);
             internalMetricController.createPageMetric(page);
             HashMap<String,String> params = getParams(splitRequest);
-
             String team = getTeam(splitRequest[splitRequest.length - 1]);
             String sessionId = getSession(splitRequest[splitRequest.length - 1]);
             Session s = sessionController.getSessionToStoreLog(sessionId);
@@ -99,17 +90,9 @@ public class LogController {
                 logger.error("Tried to parse log of nonexistent team " + team);
                 continue;
             }
-
-            if (team.equals("admin") || team.equals("professor-pes")
-                || team.equals("professor-asw")) continue;
-
-            if (!pageAndView.contains("Configuration") && !pageAndView.contains("Prediction")
-                && !pageAndView.contains("Simulation")) {
-
-                if (pageAndView.contains("Metrics") || pageAndView.contains("QualityFactors")
-                    || pageAndView.contains("StrategicIndicators")
-                    || pageAndView.contains("QualityModel")) {
-
+            if (team.equals("admin") || team.equals("professor-pes") || team.equals("professor-asw")) continue;
+            if (!pageAndView.contains("Configuration") && !pageAndView.contains("Prediction") && !pageAndView.contains("Simulation")) {
+                if (pageAndView.contains("Metrics") || pageAndView.contains("QualityFactors") || pageAndView.contains("StrategicIndicators") || pageAndView.contains("QualityModel")) {
                     String viewFormat = getViewFormat(pageAndView);
                     if (!pageAndView.contains("QualityModel")) {
                         boolean historic;
@@ -128,8 +111,7 @@ public class LogController {
                                 else metricIds.add(newMetric);
                             }
                             if (store) {
-                                MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page,
-                                        s, historic, viewFormat, metricIds);
+                                MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page, s, historic, viewFormat, metricIds);
                                 internalMetricController.createMetricViewMetric(viewFormat);
                                 list.add(newLog);
                             }
@@ -146,8 +128,7 @@ public class LogController {
                                 else factorIds.add(newFactor);
                             }
                             if (store) {
-                                FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page,
-                                    s, historic, viewFormat, factorIds);
+                                FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page, s, historic, viewFormat, factorIds);
                                 internalMetricController.createFactorViewMetric(viewFormat);
                                 list.add(newLog);
                             }
@@ -164,8 +145,7 @@ public class LogController {
                                 else indicatorIds.add(newIndicator);
                             }
                             if (store) {
-                                IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page,
-                                        s, historic, viewFormat, indicatorIds);
+                                IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page, s, historic, viewFormat, indicatorIds);
                                 internalMetricController.createIndicatorViewMetric(viewFormat);
                                 list.add(newLog);
                             }
