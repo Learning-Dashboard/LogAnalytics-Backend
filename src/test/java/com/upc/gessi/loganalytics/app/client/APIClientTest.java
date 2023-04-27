@@ -27,9 +27,6 @@ class APIClientTest {
         apiClient.setClient(httpClient);
 
         String url = "http://example.com/";
-        Map<String, String> params = new HashMap<>();
-        params.put("param1", "value1");
-        params.put("param2", "value2");
         Request request = new Request.Builder()
                 .url(Objects.requireNonNull(HttpUrl.parse(url)).newBuilder()
                         .addQueryParameter("param1", "value1")

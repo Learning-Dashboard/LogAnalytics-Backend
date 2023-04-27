@@ -32,8 +32,7 @@ public class Metric implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Metric)) return false;
-        Metric metric = (Metric) o;
+        if (!(o instanceof Metric metric)) return false;
         return getId().equals(metric.getId()) && Objects.equals(metricAccesses, metric.metricAccesses);
     }
 

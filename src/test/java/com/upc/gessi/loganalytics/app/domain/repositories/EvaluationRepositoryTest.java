@@ -22,7 +22,7 @@ class EvaluationRepositoryTest {
 
     @Test
     void findByDate() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         Evaluation e1 = new Evaluation("2001-07-22", im, 5.0);
         Evaluation e2 = new Evaluation("2001-10-20", im, 2.5);
         entityManager.persistAndFlush(im);
@@ -33,7 +33,7 @@ class EvaluationRepositoryTest {
 
     @Test
     void findFirstByOrderByDateDesc() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         Evaluation e1 = new Evaluation("2001-07-22", im, 5.0);
         Evaluation e2 = new Evaluation("2001-10-20", im, 2.5);
         Evaluation e3 = new Evaluation("2000-10-20", im, 2.5);
@@ -44,8 +44,8 @@ class EvaluationRepositoryTest {
 
     @Test
     void findByDateBetweenOrderByInternalMetricAsc() {
-        InternalMetric im1 = new InternalMetric("testInternalMetric");
-        InternalMetric im2 = new InternalMetric("testInternalMetric2");
+        InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric");
+        InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric 2");
         Evaluation e1 = new Evaluation("2001-07-22", im1, 5.0);
         Evaluation e2 = new Evaluation("2001-08-22", im2, 2.5);
         Evaluation e3 = new Evaluation("2001-09-22", im1, 2.5);

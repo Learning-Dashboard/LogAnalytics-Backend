@@ -27,7 +27,6 @@ class QModViewAccessesControllerTest {
     void evaluate() {
         Subject subject = new Subject("subject");
         Team team = new Team("team", "sem", subject);
-        Metric metric = new Metric("m1");
         qModViewAccessesController.setParams("Graph");
         List<QModelAccess> qModelAccessList = new ArrayList<>();
         QModelAccess qModelAccess = new QModelAccess();

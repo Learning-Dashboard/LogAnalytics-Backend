@@ -1,6 +1,5 @@
 package com.upc.gessi.loganalytics.app.domain.repositories;
 
-import com.upc.gessi.loganalytics.app.domain.models.Log;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;

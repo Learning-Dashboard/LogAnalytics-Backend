@@ -41,7 +41,7 @@ class EvaluationControllerTest {
 
     @Test
     void evaluateMetrics() {
-        InternalMetric internalMetric = new InternalMetric("testInternalMetric");
+        InternalMetric internalMetric = new InternalMetric("testInternalMetric", "Test internal metric");
         List<InternalMetric> internalMetrics = List.of(internalMetric);
         Mockito.when(internalMetricController.getAll()).thenReturn(internalMetrics);
 

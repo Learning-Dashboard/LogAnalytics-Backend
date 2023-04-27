@@ -31,6 +31,13 @@ public class LogController {
     private InternalMetricController internalMetricController;
 
     @Autowired
+    private MetricController metricController;
+    @Autowired
+    private FactorController factorController;
+    @Autowired
+    private IndicatorController indicatorController;
+
+    @Autowired
     private LogRepository logRepository;
 
     public List<String> getOriginalLogs(MultipartFile file) {
@@ -111,36 +118,57 @@ public class LogController {
 
                         if (pageAndView.contains("Metrics")) {
                             List<Metric> metricIds = new ArrayList<>();
+                            boolean store = true;
                             for (String id : ids) {
                                 Metric newMetric = new Metric(id);
-                                metricIds.add(newMetric);
+                                if (!metricController.checkExistence(newMetric)) {
+                                    store = false;
+                                    logger.error("Tried to parse log with accesses to nonexistent metric " + id);
+                                }
+                                else metricIds.add(newMetric);
                             }
-                            MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page,
-                                s, historic, viewFormat, metricIds);
-                            internalMetricController.createMetricViewMetric(viewFormat);
-                            list.add(newLog);
+                            if (store) {
+                                MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page,
+                                        s, historic, viewFormat, metricIds);
+                                internalMetricController.createMetricViewMetric(viewFormat);
+                                list.add(newLog);
+                            }
                         }
                         else if (pageAndView.contains("QualityFactors")) {
                             List<Factor> factorIds = new ArrayList<>();
+                            boolean store = true;
                             for (String id : ids) {
                                 Factor newFactor = new Factor(id);
-                                factorIds.add(newFactor);
+                                if (!factorController.checkExistence(newFactor)) {
+                                    logger.error("Tried to parse log with accesses to nonexistent factor " + id);
+                                    store = false;
+                                }
+                                else factorIds.add(newFactor);
                             }
-                            FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page,
-                                s, historic, viewFormat, factorIds);
-                            internalMetricController.createFactorViewMetric(viewFormat);
-                            list.add(newLog);
+                            if (store) {
+                                FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page,
+                                    s, historic, viewFormat, factorIds);
+                                internalMetricController.createFactorViewMetric(viewFormat);
+                                list.add(newLog);
+                            }
                         }
                         else {
                             List<Indicator> indicatorIds = new ArrayList<>();
+                            boolean store = true;
                             for (String id : ids) {
                                 Indicator newIndicator = new Indicator(id);
-                                indicatorIds.add(newIndicator);
+                                if (!indicatorController.checkExistence(newIndicator)) {
+                                    logger.error("Tried to parse log with accesses to nonexistent indicator " + id);
+                                    store = false;
+                                }
+                                else indicatorIds.add(newIndicator);
                             }
-                            IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page,
-                                s, historic, viewFormat, indicatorIds);
-                            internalMetricController.createIndicatorViewMetric(viewFormat);
-                            list.add(newLog);
+                            if (store) {
+                                IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page,
+                                        s, historic, viewFormat, indicatorIds);
+                                internalMetricController.createIndicatorViewMetric(viewFormat);
+                                list.add(newLog);
+                            }
                         }
                     }
                     else {

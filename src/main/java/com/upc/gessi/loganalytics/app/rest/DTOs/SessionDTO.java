@@ -73,8 +73,7 @@ public class SessionDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SessionDTO)) return false;
-        SessionDTO that = (SessionDTO) o;
+        if (!(o instanceof SessionDTO that)) return false;
         return getStartTimestamp() == that.getStartTimestamp() && getEndTimestamp() == that.getEndTimestamp() && Double.compare(that.getDuration(), getDuration()) == 0 && getnInteractions() == that.getnInteractions() && getId().equals(that.getId()) && getTeam().equals(that.getTeam());
     }
 

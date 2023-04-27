@@ -32,8 +32,7 @@ public class Indicator implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Indicator)) return false;
-        Indicator indicator = (Indicator) o;
+        if (!(o instanceof Indicator indicator)) return false;
         return getId().equals(indicator.getId()) && Objects.equals(indicatorAccesses, indicator.indicatorAccesses);
     }
 

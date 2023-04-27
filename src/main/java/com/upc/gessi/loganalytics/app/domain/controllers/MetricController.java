@@ -31,18 +31,19 @@ public class MetricController {
 
     @PostConstruct
     public void storeAllMetrics() {
-        Set<Metric> metrics = getCurrentLDMetrics();
-        for (Metric m : metrics) {
+        Map<Metric,String> metrics = getCurrentLDMetrics();
+        for (Map.Entry<Metric,String> entry : metrics.entrySet()) {
+            Metric m = entry.getKey();
             Optional<Metric> metricOptional = metricRepository.findById(m.getId());
             if (metricOptional.isEmpty()) {
                 metricRepository.save(m);
-                //internalMetricController.createMetricMetric(m.getId());
+                internalMetricController.createMetricMetric(m.getId(), entry.getValue());
             }
         }
     }
 
-    private Set<Metric> getCurrentLDMetrics() {
-        Set<Metric> metrics = new HashSet<>();
+    private Map<Metric,String> getCurrentLDMetrics() {
+        Map<Metric,String> metrics = new HashMap<>();
         try {
             APIClient apiClient = new APIClient();
             String url = "http://gessi-dashboard.essi.upc.edu:8888/api/projects";
@@ -55,8 +56,8 @@ public class MetricController {
                 for (int i = 0; i < jsonProjects.size(); ++i) {
                     JsonObject item = jsonProjects.get(i).getAsJsonObject();
                     String externalId = item.get("externalId").getAsString();
-                    List<Metric> metricFromProject = getMetricsFromProject(externalId);
-                    metrics.addAll(metricFromProject);
+                    Map<Metric,String> metricFromProject = getMetricsFromProject(externalId);
+                    metrics.putAll(metricFromProject);
                 }
             }
         } catch (IOException e) {
@@ -65,8 +66,8 @@ public class MetricController {
         return metrics;
     }
 
-    private List<Metric> getMetricsFromProject(String project) {
-        List<Metric> metrics = new ArrayList<>();
+    private Map<Metric,String> getMetricsFromProject(String project) {
+        Map<Metric,String> metrics = new HashMap<>();
         try {
             APIClient apiClient = new APIClient();
             String url = "http://gessi-dashboard.essi.upc.edu:8888/api/metrics";
@@ -81,8 +82,9 @@ public class MetricController {
                     JsonObject item = jsonMetrics.get(i).getAsJsonObject();
                     String externalId = item.get("externalId").getAsString();
                     //externalId = removeUsername(item, externalId);
+                    String team = getMetricTeam(item);
                     Metric newMetric = new Metric(externalId);
-                    metrics.add(newMetric);
+                    metrics.put(newMetric, team);
                 }
             }
         } catch (IOException e) {
@@ -102,5 +104,18 @@ public class MetricController {
                 externalId = externalId.replace("_" + usernameT, "");
         }
         return externalId;
+    }
+
+    private String getMetricTeam(JsonObject item) {
+        JsonElement student = item.get("student");
+        if (student != null && student != JsonNull.INSTANCE) {
+            return item.get("project").getAsJsonObject().get("externalId").getAsString();
+        }
+        return null;
+    }
+
+    public boolean checkExistence(Metric m) {
+        Optional<Metric> metricOptional = metricRepository.findById(m.getId());
+        return metricOptional.isPresent();
     }
 }

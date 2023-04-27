@@ -61,14 +61,17 @@ public class EvaluationController {
             for (Subject s : subjects) subjectHashMap.put(s, 0.0);
             double globalValue = 0.0;
             for (Team t : teams) {
-                setStrategy(im);
-                double value = strategy.evaluate(t);
-                globalValue += value;
-                Subject s = t.getSubject();
-                double valueSubject = subjectHashMap.get(s);
-                subjectHashMap.put(s, valueSubject + value);
-                TeamEvaluation teamEvaluation = new TeamEvaluation(date, im, t.getId(), value);
-                teamEvaluationRepository.save(teamEvaluation);
+                if (im.getTeam() == null || im.getTeam().equals(t.getId())) {
+                    System.out.println(im.getId() + " " + t.getId());
+                    setStrategy(im);
+                    double value = strategy.evaluate(t);
+                    globalValue += value;
+                    Subject s = t.getSubject();
+                    double valueSubject = subjectHashMap.get(s);
+                    subjectHashMap.put(s, valueSubject + value);
+                    TeamEvaluation teamEvaluation = new TeamEvaluation(date, im, t.getId(), value);
+                    teamEvaluationRepository.save(teamEvaluation);
+                }
             }
             for (Subject s : subjects) {
                 double value = strategy.evaluate(s);
@@ -111,7 +114,7 @@ public class EvaluationController {
 
     private String getControllerName(InternalMetric im) {
         String controllerName = im.getController();
-        if (controllerName == null) return im.getName();
+        if (controllerName == null) return im.getId();
         else return controllerName;
     }
 

@@ -3,9 +3,6 @@ package com.upc.gessi.loganalytics.app.domain.models;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.EvaluationPrimaryKey;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-import java.util.Date;
-
 @Entity
 @Table(name = "Evaluation")
 @IdClass(EvaluationPrimaryKey.class)
@@ -15,8 +12,7 @@ public class Evaluation {
     @Id @Column (name = "date", nullable = false)
     private String date;
     @Id @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn (name = "internalMetric",
-        referencedColumnName = "name", nullable = false)
+    @JoinColumn (name = "internalMetric", referencedColumnName = "id", nullable = false)
     private InternalMetric internalMetric;
     @Column (name = "evaluationValue", nullable = false)
     private double value;

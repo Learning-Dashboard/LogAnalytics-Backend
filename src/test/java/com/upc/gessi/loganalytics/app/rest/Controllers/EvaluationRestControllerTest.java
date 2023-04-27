@@ -35,7 +35,7 @@ class EvaluationRestControllerTest {
 
     @Test
     void getCurrentEvaluations() {
-        InternalMetric im = new InternalMetric("internalMetric");
+        InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         Evaluation evaluation = new Evaluation("2001-07-22", im, 5.0);
         Mockito.when(evaluationRepository.findFirstByOrderByDateDesc()).thenReturn(evaluation);
         List<Evaluation> evaluationList = evaluationRestController.getCurrentEvaluations();

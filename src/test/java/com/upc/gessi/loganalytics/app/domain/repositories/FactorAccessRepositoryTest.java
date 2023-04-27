@@ -50,6 +50,8 @@ class FactorAccessRepositoryTest {
         FactorAccess factorAccess2 = new FactorAccess(5, "team1", "testMessage", "testPage", session1, true, "testView", factors2);
         FactorAccess factorAccess3 = new FactorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", factors);
         FactorAccess factorAccess4 = new FactorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView", factors2);
+        entityManager.persistAndFlush(new Factor("f1"));
+        entityManager.persistAndFlush(new Factor("f2"));
         entityManager.persistAndFlush(factorAccess1);
         entityManager.persistAndFlush(factorAccess2);
         entityManager.persistAndFlush(factorAccess3);
@@ -66,6 +68,7 @@ class FactorAccessRepositoryTest {
         FactorAccess factorAccess2 = new FactorAccess(5, "team1", "testMessage", "testPage", session1, true, "testView2", factors);
         FactorAccess factorAccess3 = new FactorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", factors);
         FactorAccess factorAccess4 = new FactorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView2", factors);
+        entityManager.persistAndFlush(new Factor("f1"));
         entityManager.persistAndFlush(factorAccess1);
         entityManager.persistAndFlush(factorAccess2);
         entityManager.persistAndFlush(factorAccess3);
@@ -82,6 +85,7 @@ class FactorAccessRepositoryTest {
         FactorAccess factorAccess2 = new FactorAccess(5, "team1", "testMessage", "testPage", session1, false, "testView", factors);
         FactorAccess factorAccess3 = new FactorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", factors);
         FactorAccess factorAccess4 = new FactorAccess(5, "team2", "testMessage", "testPage", session2, false, "testView", factors);
+        entityManager.persistAndFlush(new Factor("f1"));
         entityManager.persistAndFlush(factorAccess1);
         entityManager.persistAndFlush(factorAccess2);
         entityManager.persistAndFlush(factorAccess3);

@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.models.pkey;
 
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
-import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -38,8 +37,7 @@ public class TeamEvaluationPrimaryKey implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TeamEvaluationPrimaryKey)) return false;
-        TeamEvaluationPrimaryKey that = (TeamEvaluationPrimaryKey) o;
+        if (!(o instanceof TeamEvaluationPrimaryKey that)) return false;
         return getDate().equals(that.getDate()) && getInternalMetric().equals(that.getInternalMetric()) && getTeam().equals(that.getTeam());
     }
 

@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
-import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
 import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class TeamEvaluationRestControllerTest {
 
     @Test
     void getCurrentEvaluations() {
-        InternalMetric im = new InternalMetric("internalMetric");
+        InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         TeamEvaluation e1 = new TeamEvaluation("2001-07-22", im, "PES", 5.0);
         Mockito.when(teamEvaluationRepository.findFirstByTeamOrderByDateDesc("PES")).thenReturn(e1);
         List<TeamEvaluation> evaluationList = teamEvaluationRestController.getCurrentEvaluations("PES");

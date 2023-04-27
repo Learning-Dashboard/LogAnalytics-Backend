@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.InternalMetricController;
-import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class InternalMetricRestControllerTest {

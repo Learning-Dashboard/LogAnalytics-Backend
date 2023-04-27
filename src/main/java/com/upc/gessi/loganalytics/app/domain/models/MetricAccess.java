@@ -13,7 +13,7 @@ public class MetricAccess extends Log {
     private boolean historic;
     @Column (name = "viewFormat", nullable = false)
     private String viewFormat;
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (
         name = "metric_access_metric",
         joinColumns = {

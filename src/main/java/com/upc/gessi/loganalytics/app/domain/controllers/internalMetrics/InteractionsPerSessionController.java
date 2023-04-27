@@ -1,12 +1,9 @@
 package com.upc.gessi.loganalytics.app.domain.controllers.internalMetrics;
 
-import com.upc.gessi.loganalytics.app.domain.controllers.InternalMetricController;
 import com.upc.gessi.loganalytics.app.domain.controllers.SessionController;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
-import com.upc.gessi.loganalytics.app.domain.repositories.SubjectEvaluationRepository;
-import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

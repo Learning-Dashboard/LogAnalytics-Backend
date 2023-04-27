@@ -26,7 +26,7 @@ class SubjectEvaluationRestControllerTest {
 
     @Test
     void getCurrentEvaluations() {
-        InternalMetric im = new InternalMetric("internalMetric");
+        InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im, "PES", 5.0);
         Mockito.when(subjectEvaluationRepository.findFirstBySubjectOrderByDateDesc("PES")).thenReturn(e1);
         List<SubjectEvaluation> evaluationList = subjectEvaluationRestController.getCurrentEvaluations("PES");

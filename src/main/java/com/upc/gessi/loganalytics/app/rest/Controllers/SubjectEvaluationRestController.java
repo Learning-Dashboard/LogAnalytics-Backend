@@ -1,6 +1,5 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
-import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
 import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
 import com.upc.gessi.loganalytics.app.domain.repositories.SubjectEvaluationRepository;
 import org.springframework.beans.factory.annotation.Autowired;

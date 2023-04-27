@@ -1,11 +1,8 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
-import com.upc.gessi.loganalytics.app.domain.controllers.MetricController;
 import com.upc.gessi.loganalytics.app.domain.controllers.TeamController;
-import com.upc.gessi.loganalytics.app.domain.models.Metric;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
-import com.upc.gessi.loganalytics.app.domain.repositories.MetricRepository;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

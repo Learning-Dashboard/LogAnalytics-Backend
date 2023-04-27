@@ -1,6 +1,5 @@
 package com.upc.gessi.loganalytics.app.domain.repositories;
 
-import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
 import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ class SubjectEvaluationRepositoryTest {
 
     @Test
     void findByDateAndSubject() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im, "PES", 5.0);
         SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im, "ASW", 5.0);
@@ -39,7 +38,7 @@ class SubjectEvaluationRepositoryTest {
 
     @Test
     void findFirstBySubjectOrderByDateDesc() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im, "PES", 5.0);
         SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im, "ASW", 5.0);
@@ -53,7 +52,7 @@ class SubjectEvaluationRepositoryTest {
 
     @Test
     void findByDateBetweenAndSubjectOrderByInternalMetricAsc() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im, "PES", 5.0);
         SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im, "ASW", 5.0);

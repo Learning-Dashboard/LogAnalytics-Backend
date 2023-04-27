@@ -4,11 +4,11 @@ import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 
 public interface Strategy {
-    public double evaluate(Team team);
+    double evaluate(Team team);
 
-    public double evaluate(Subject subject);
+    double evaluate(Subject subject);
 
-    public double evaluate();
+    double evaluate();
 
-    public void setParams(String entity);
+    void setParams(String entity);
 }

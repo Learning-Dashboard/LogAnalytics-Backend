@@ -50,6 +50,8 @@ class MetricAccessRepositoryTest {
         MetricAccess metricAccess2 = new MetricAccess(5, "team1", "testMessage", "testPage", session1, true, "testView", metrics2);
         MetricAccess metricAccess3 = new MetricAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", metrics);
         MetricAccess metricAccess4 = new MetricAccess(5, "team2", "testMessage", "testPage", session2, true, "testView", metrics2);
+        entityManager.persistAndFlush(new Metric("m1"));
+        entityManager.persistAndFlush(new Metric("m2"));
         entityManager.persistAndFlush(metricAccess1);
         entityManager.persistAndFlush(metricAccess2);
         entityManager.persistAndFlush(metricAccess3);
@@ -66,6 +68,7 @@ class MetricAccessRepositoryTest {
         MetricAccess metricAccess2 = new MetricAccess(5, "team1", "testMessage", "testPage", session1, true, "testView2", metrics);
         MetricAccess metricAccess3 = new MetricAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", metrics);
         MetricAccess metricAccess4 = new MetricAccess(5, "team2", "testMessage", "testPage", session2, true, "testView2", metrics);
+        entityManager.persistAndFlush(new Metric("m1"));
         entityManager.persistAndFlush(metricAccess1);
         entityManager.persistAndFlush(metricAccess2);
         entityManager.persistAndFlush(metricAccess3);
@@ -82,6 +85,7 @@ class MetricAccessRepositoryTest {
         MetricAccess metricAccess2 = new MetricAccess(5, "team1", "testMessage", "testPage", session1, false, "testView", metrics);
         MetricAccess metricAccess3 = new MetricAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", metrics);
         MetricAccess metricAccess4 = new MetricAccess(5, "team2", "testMessage", "testPage", session2, false, "testView", metrics);
+        entityManager.persistAndFlush(new Metric("m1"));
         entityManager.persistAndFlush(metricAccess1);
         entityManager.persistAndFlush(metricAccess2);
         entityManager.persistAndFlush(metricAccess3);

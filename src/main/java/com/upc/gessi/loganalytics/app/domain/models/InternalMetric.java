@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -11,12 +10,16 @@ import java.util.List;
 @Table(name = "InternalMetric")
 public class InternalMetric implements Serializable {
 
-    @Id @Column (name = "name", nullable = false)
+    @Id @Column (name = "id", nullable = false)
+    private String id;
+    @Column (name = "name", nullable = false)
     private String name;
-    @Column (name = "param", nullable = true)
+    @Column (name = "param")
     private String param;
-    @Column (name = "controller", nullable = true)
+    @Column (name = "controller")
     private String controller;
+    @Column (name = "team")
+    private String team;
 
     @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -32,19 +35,32 @@ public class InternalMetric implements Serializable {
 
     public InternalMetric() { }
 
-    public InternalMetric(String name) {
+    public InternalMetric(String id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public InternalMetric(String name, String param, String controller) {
+    public InternalMetric(String id, String name, String param, String controller) {
+        this.id = id;
         this.name = name;
         this.param = param;
         this.controller = controller;
     }
 
-    public InternalMetric(String name, List<Evaluation> evaluations) {
+    public InternalMetric(String id, String name, String param, String controller, String team) {
+        this.id = id;
         this.name = name;
-        this.evaluations = evaluations;
+        this.param = param;
+        this.controller = controller;
+        this.team = team;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -69,6 +85,14 @@ public class InternalMetric implements Serializable {
 
     public void setController(String controller) {
         this.controller = controller;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
     }
 
     public List<Evaluation> getEvaluations() {
@@ -98,9 +122,11 @@ public class InternalMetric implements Serializable {
     @Override
     public String toString() {
         return "InternalMetric{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", param='" + param + '\'' +
                 ", controller='" + controller + '\'' +
+                ", team='" + team + '\'' +
                 '}';
     }
 }

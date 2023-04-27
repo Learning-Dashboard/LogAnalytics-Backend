@@ -13,7 +13,7 @@ class TeamEvaluationTest {
 
     @BeforeEach
     void setUp() {
-        internalMetric = new InternalMetric("test");
+        internalMetric = new InternalMetric("test", "Test");
         evaluation = new TeamEvaluation("2023-04-18", internalMetric, "pes", 0.0);
     }
 
@@ -52,7 +52,7 @@ class TeamEvaluationTest {
 
     @Test
     void setInternalMetric() {
-        InternalMetric internalMetric2 = new InternalMetric("test2");
+        InternalMetric internalMetric2 = new InternalMetric("test2", "Test 2");
         evaluation.setInternalMetric(internalMetric2);
         assertEquals(evaluation.getInternalMetric(), internalMetric2);
     }
@@ -70,9 +70,9 @@ class TeamEvaluationTest {
 
     @Test
     void testToString() {
-        String result = "TeamEvaluation{date='2023-04-18', " +
-            "internalMetric=InternalMetric{name='test', " +
-            "param='null', controller='null'}, team='pes', value=0.0}";
+        String result = "TeamEvaluation{date='2023-04-18', internalMetric=InternalMetric{id='test', " +
+            "name='Test', param='null', controller='null', " +
+            "team='null'}, team='pes', value=0.0}";
         assertEquals(result, evaluation.toString());
     }
 }

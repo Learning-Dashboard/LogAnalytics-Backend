@@ -50,6 +50,8 @@ class IndicatorAccessRepositoryTest {
         IndicatorAccess indicatorAccess2 = new IndicatorAccess(5, "team1", "testMessage", "testPage", session1, true, "testView", indicators2);
         IndicatorAccess indicatorAccess3 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
         IndicatorAccess indicatorAccess4 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView", indicators2);
+        entityManager.persistAndFlush(new Indicator("i1"));
+        entityManager.persistAndFlush(new Indicator("i2"));
         entityManager.persistAndFlush(indicatorAccess1);
         entityManager.persistAndFlush(indicatorAccess2);
         entityManager.persistAndFlush(indicatorAccess3);
@@ -66,6 +68,7 @@ class IndicatorAccessRepositoryTest {
         IndicatorAccess indicatorAccess2 = new IndicatorAccess(5, "team1", "testMessage", "testPage", session1, true, "testView2", indicators);
         IndicatorAccess indicatorAccess3 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
         IndicatorAccess indicatorAccess4 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView2", indicators);
+        entityManager.persistAndFlush(new Indicator("i1"));
         entityManager.persistAndFlush(indicatorAccess1);
         entityManager.persistAndFlush(indicatorAccess2);
         entityManager.persistAndFlush(indicatorAccess3);
@@ -82,6 +85,7 @@ class IndicatorAccessRepositoryTest {
         IndicatorAccess indicatorAccess2 = new IndicatorAccess(5, "team1", "testMessage", "testPage", session1, false, "testView", indicators);
         IndicatorAccess indicatorAccess3 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
         IndicatorAccess indicatorAccess4 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, false, "testView", indicators);
+        entityManager.persistAndFlush(new Indicator("i1"));
         entityManager.persistAndFlush(indicatorAccess1);
         entityManager.persistAndFlush(indicatorAccess2);
         entityManager.persistAndFlush(indicatorAccess3);

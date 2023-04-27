@@ -81,8 +81,7 @@ public class Team {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Team)) return false;
-        Team team = (Team) o;
+        if (!(o instanceof Team team)) return false;
         return getId().equals(team.getId()) && getSemester().equals(team.getSemester()) && getSubject().equals(team.getSubject()) && Objects.equals(getSessions(), team.getSessions());
     }
 

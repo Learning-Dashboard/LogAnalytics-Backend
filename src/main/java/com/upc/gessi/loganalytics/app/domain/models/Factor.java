@@ -32,8 +32,7 @@ public class Factor implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Factor)) return false;
-        Factor factor = (Factor) o;
+        if (!(o instanceof Factor factor)) return false;
         return getId().equals(factor.getId()) && Objects.equals(factorAccesses, factor.factorAccesses);
     }
 

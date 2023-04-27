@@ -1,8 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
-import com.upc.gessi.loganalytics.app.domain.models.MetricAccess;
 import com.upc.gessi.loganalytics.app.domain.models.QModelAccess;
-import com.upc.gessi.loganalytics.app.domain.repositories.MetricAccessRepository;
 import com.upc.gessi.loganalytics.app.domain.repositories.QModelAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

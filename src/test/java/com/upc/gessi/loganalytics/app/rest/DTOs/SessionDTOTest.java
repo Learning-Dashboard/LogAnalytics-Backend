@@ -3,7 +3,6 @@ package com.upc.gessi.loganalytics.app.rest.DTOs;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +12,13 @@ class SessionDTOTest {
 
     private Subject s;
     private Team t;
-    private Session session;
     private SessionDTO sessionDTO;
 
     @BeforeEach
     void setUp() {
         s = new Subject("sub");
         t = new Team("pes11a", "sem", s);
-        session = new Session("s", t, 0, 5, 5, 1);
+        Session session = new Session("s", t, 0, 5, 5, 1);
         sessionDTO = new SessionDTO(session);
     }
 

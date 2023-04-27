@@ -11,7 +11,7 @@ public class SubjectEvaluation {
     @Id @Column (name = "date", nullable = false)
     private String date;
     @Id @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn (name = "internalMetric", referencedColumnName = "name", nullable = false)
+    @JoinColumn (name = "internalMetric", referencedColumnName = "id", nullable = false)
     private InternalMetric internalMetric;
     @Id @Column (name = "subject", nullable = false)
     private String subject;

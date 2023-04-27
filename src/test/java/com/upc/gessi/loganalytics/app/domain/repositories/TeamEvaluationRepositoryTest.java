@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.repositories;
 
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
-import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
 import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ class TeamEvaluationRepositoryTest {
 
     @Test
     void findByDateAndTeam() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         TeamEvaluation e1 = new TeamEvaluation("2001-07-22", im, "PES", 5.0);
         TeamEvaluation e2 = new TeamEvaluation("2001-10-20", im, "PES", 5.0);
         TeamEvaluation e3 = new TeamEvaluation("2001-07-22", im, "ASW", 5.0);
@@ -39,7 +38,7 @@ class TeamEvaluationRepositoryTest {
 
     @Test
     void findFirstByTeamOrderByDateDesc() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         TeamEvaluation e1 = new TeamEvaluation("2001-07-22", im, "PES", 5.0);
         TeamEvaluation e2 = new TeamEvaluation("2001-10-20", im, "PES", 5.0);
         TeamEvaluation e3 = new TeamEvaluation("2001-07-22", im, "ASW", 5.0);
@@ -53,7 +52,7 @@ class TeamEvaluationRepositoryTest {
 
     @Test
     void findByDateBetweenAndTeamOrderByInternalMetricAsc() {
-        InternalMetric im = new InternalMetric("testInternalMetric");
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         TeamEvaluation e1 = new TeamEvaluation("2001-07-22", im, "PES", 5.0);
         TeamEvaluation e2 = new TeamEvaluation("2001-10-20", im, "PES", 5.0);
         TeamEvaluation e3 = new TeamEvaluation("2001-07-22", im, "ASW", 5.0);

@@ -91,4 +91,9 @@ public class FactorController {
         }
         return factors;
     }
+
+    public boolean checkExistence(Factor f) {
+        Optional<Factor> factorOptional = factorRepository.findById(f.getId());
+        return factorOptional.isPresent();
+    }
 }
