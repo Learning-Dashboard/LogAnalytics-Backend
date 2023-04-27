@@ -17,8 +17,8 @@ public class FactorAccess extends Log {
     @JoinTable(
             name = "factor_access_factor",
             joinColumns = {
-                    @JoinColumn(name = "factor_access_time"),
-                    @JoinColumn (name = "factor_access_team")
+                    @JoinColumn(name = "factor_access_time", referencedColumnName = "time"),
+                    @JoinColumn (name = "factor_access_session", referencedColumnName = "session_id")
             },
             inverseJoinColumns = @JoinColumn (name = "factor_id")
     ) @JsonIgnore

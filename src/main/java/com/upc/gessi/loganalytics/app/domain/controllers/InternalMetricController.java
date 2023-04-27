@@ -74,8 +74,27 @@ public class InternalMetricController {
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
             String name = metric + " metric accesses";
-            InternalMetric im = new InternalMetric(id, name, metric, "MetricAccesses", team);
+            InternalMetric im;
+            if (team != null) {
+                List<String> teams = new ArrayList<>();
+                teams.add(team);
+                im = new InternalMetric(id, name, metric, "MetricAccesses", teams);
+            }
+            else {
+                im = new InternalMetric(id, name, metric, "MetricAccesses");
+            }
             internalMetricRepository.save(im);
+        }
+        else {
+            InternalMetric im = internalMetricOptional.get();
+            if (team != null) {
+                List<String> imTeams = im.getTeams();
+                if (!imTeams.contains(team)) {
+                    imTeams.add(team);
+                    im.setTeams(imTeams);
+                    internalMetricRepository.save(im);
+                }
+            }
         }
     }
 

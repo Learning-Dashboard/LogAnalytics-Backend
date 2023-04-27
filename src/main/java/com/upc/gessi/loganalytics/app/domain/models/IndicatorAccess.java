@@ -17,8 +17,8 @@ public class IndicatorAccess extends Log {
     @JoinTable(
             name = "indicator_access_indicator",
             joinColumns = {
-                    @JoinColumn(name = "indicator_access_time"),
-                    @JoinColumn (name = "indicator_access_team")
+                    @JoinColumn(name = "indicator_access_time", referencedColumnName = "time"),
+                    @JoinColumn (name = "indicator_access_session", referencedColumnName = "session_id")
             },
             inverseJoinColumns = @JoinColumn (name = "indicator_id")
     ) @JsonIgnore

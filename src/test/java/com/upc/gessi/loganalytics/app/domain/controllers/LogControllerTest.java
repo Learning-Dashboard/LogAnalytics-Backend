@@ -60,8 +60,8 @@ class LogControllerTest {
         Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:15.000");
         Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:50.000");
         List<Log> expectedLogs = List.of(
-                new Log(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, pes11a enters app (abc)", s),
-                new Log(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, pes11a exits app (abc)", s)
+                new Log(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, pes11a enters app", s),
+                new Log(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, pes11a exits app", s)
         );
         List<Log> actualLogs = logController.parseLogs(originalLogs);
         assertEquals(expectedLogs.size(), actualLogs.size());

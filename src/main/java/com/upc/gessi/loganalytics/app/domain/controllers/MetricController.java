@@ -31,19 +31,18 @@ public class MetricController {
 
     @PostConstruct
     public void storeAllMetrics() {
-        Map<Metric,String> metrics = getCurrentLDMetrics();
-        for (Map.Entry<Metric,String> entry : metrics.entrySet()) {
+        Map<Metric,Set<String>> metrics = getCurrentLDMetrics();
+        for (Map.Entry<Metric,Set<String>> entry : metrics.entrySet()) {
             Metric m = entry.getKey();
+            for (String team : entry.getValue())
+                internalMetricController.createMetricMetric(m.getId(), team);
             Optional<Metric> metricOptional = metricRepository.findById(m.getId());
-            if (metricOptional.isEmpty()) {
-                metricRepository.save(m);
-                internalMetricController.createMetricMetric(m.getId(), entry.getValue());
-            }
+            if (metricOptional.isEmpty()) metricRepository.save(m);
         }
     }
 
-    private Map<Metric,String> getCurrentLDMetrics() {
-        Map<Metric,String> metrics = new HashMap<>();
+    private Map<Metric,Set<String>> getCurrentLDMetrics() {
+        Map<Metric,Set<String>> metrics = new HashMap<>();
         try {
             APIClient apiClient = new APIClient();
             String url = "http://gessi-dashboard.essi.upc.edu:8888/api/projects";
@@ -57,7 +56,21 @@ public class MetricController {
                     JsonObject item = jsonProjects.get(i).getAsJsonObject();
                     String externalId = item.get("externalId").getAsString();
                     Map<Metric,String> metricFromProject = getMetricsFromProject(externalId);
-                    metrics.putAll(metricFromProject);
+                    //metrics.putAll(metricFromProject);
+                    for (Map.Entry<Metric,String> entry : metricFromProject.entrySet()) {
+                        Metric m = entry.getKey();
+                        String project = entry.getValue();
+                        if (metrics.containsKey(entry.getKey())) {
+                            Set<String> teams = metrics.get(m);
+                            teams.add(project);
+                            metrics.replace(m, teams);
+                        }
+                        else {
+                            Set<String> teams = new HashSet<>();
+                            teams.add(project);
+                            metrics.put(m, teams);
+                        }
+                    }
                 }
             }
         } catch (IOException e) {

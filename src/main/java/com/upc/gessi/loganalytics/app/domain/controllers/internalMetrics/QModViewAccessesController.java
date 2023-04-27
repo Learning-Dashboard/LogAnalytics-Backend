@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Controller("qModAccessesController")
+@Controller("qModViewAccessesController")
 public class QModViewAccessesController implements Strategy {
 
     @Autowired

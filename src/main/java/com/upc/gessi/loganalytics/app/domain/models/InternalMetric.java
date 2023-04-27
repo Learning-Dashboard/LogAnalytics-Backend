@@ -19,7 +19,7 @@ public class InternalMetric implements Serializable {
     @Column (name = "controller")
     private String controller;
     @Column (name = "team")
-    private String team;
+    private List<String> teams;
 
     @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -47,12 +47,12 @@ public class InternalMetric implements Serializable {
         this.controller = controller;
     }
 
-    public InternalMetric(String id, String name, String param, String controller, String team) {
+    public InternalMetric(String id, String name, String param, String controller, List<String> teams) {
         this.id = id;
         this.name = name;
         this.param = param;
         this.controller = controller;
-        this.team = team;
+        this.teams = teams;
     }
 
     public String getId() {
@@ -87,12 +87,12 @@ public class InternalMetric implements Serializable {
         this.controller = controller;
     }
 
-    public String getTeam() {
-        return team;
+    public List<String> getTeams() {
+        return teams;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setTeams(List<String> teams) {
+        this.teams = teams;
     }
 
     public List<Evaluation> getEvaluations() {
@@ -126,7 +126,7 @@ public class InternalMetric implements Serializable {
                 ", name='" + name + '\'' +
                 ", param='" + param + '\'' +
                 ", controller='" + controller + '\'' +
-                ", team='" + team + '\'' +
+                ", teams='" + teams + '\'' +
                 '}';
     }
 }

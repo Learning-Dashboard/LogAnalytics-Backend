@@ -61,18 +61,19 @@ public class LogController {
             if (originalLog.contains("enters app") || originalLog.contains("exits app") || originalLog.contains("'s session has timed out")) {
                 String team = splitRequest[1].split(" ")[0];
                 String[] splitTeam = splitRequest[1].split(" \\(");
-                String sessionId = "";
-                if (splitTeam.length > 1) {
-                    String session = splitTeam[1];
-                    sessionId = session.replaceAll("\\)", "");
-                }
+
+                String session = splitTeam[1];
+                String sessionId = session.replaceAll("\\)", "");
+                String sessionString = " \\(" + sessionId + "\\)";
+                String message = originalLog.replaceAll(sessionString, "");
+
                 if (team.equals("admin") || team.equals("professor-pes") || team.equals("professor-asw")) continue;
                 Session s;
                 if (originalLog.contains("enters app")) s = sessionController.createSession(sessionId, epoch, team);
                 else s = sessionController.updateSession(sessionId, epoch);
                 if (s == null) logger.error("Tried to parse log of nonexistent team " + team);
                 else {
-                    Log newLog = new Log(epoch, team, originalLog, s);
+                    Log newLog = new Log(epoch, team, message, s);
                     list.add(newLog);
                 }
                 continue;
@@ -90,77 +91,77 @@ public class LogController {
                 logger.error("Tried to parse log of nonexistent team " + team);
                 continue;
             }
+            String sessionString = " \\(" + sessionId + "\\)";
+            String message = originalLog.replaceAll(sessionString, "");
             if (team.equals("admin") || team.equals("professor-pes") || team.equals("professor-asw")) continue;
-            if (!pageAndView.contains("Configuration") && !pageAndView.contains("Prediction") && !pageAndView.contains("Simulation")) {
-                if (pageAndView.contains("Metrics") || pageAndView.contains("QualityFactors") || pageAndView.contains("StrategicIndicators") || pageAndView.contains("QualityModel")) {
-                    String viewFormat = getViewFormat(pageAndView);
-                    if (!pageAndView.contains("QualityModel")) {
-                        boolean historic;
-                        historic = !pageAndView.contains("Current");
-                        List<String> ids = getIds(pageAndView, params, team);
+            if (pageAndView.contains("Metrics") || pageAndView.contains("QualityFactors") || pageAndView.contains("StrategicIndicators") || pageAndView.contains("QualityModel")) {
+                String viewFormat = getViewFormat(pageAndView);
+                if (!pageAndView.contains("QualityModel")) {
+                    boolean historic;
+                    historic = !pageAndView.contains("Current");
+                    List<String> ids = getIds(pageAndView, params, team);
 
-                        if (pageAndView.contains("Metrics")) {
-                            List<Metric> metricIds = new ArrayList<>();
-                            boolean store = true;
-                            for (String id : ids) {
-                                Metric newMetric = new Metric(id);
-                                if (!metricController.checkExistence(newMetric)) {
-                                    store = false;
-                                    logger.error("Tried to parse log with accesses to nonexistent metric " + id);
-                                }
-                                else metricIds.add(newMetric);
+                    if (pageAndView.contains("Metrics")) {
+                        List<Metric> metricIds = new ArrayList<>();
+                        boolean store = true;
+                        for (String id : ids) {
+                            Metric newMetric = new Metric(id);
+                            if (!metricController.checkExistence(newMetric)) {
+                                store = false;
+                                logger.error("Tried to parse log with accesses to nonexistent metric " + id);
                             }
-                            if (store) {
-                                MetricAccess newLog = new MetricAccess(epoch, team, originalLog, page, s, historic, viewFormat, metricIds);
-                                internalMetricController.createMetricViewMetric(viewFormat);
-                                list.add(newLog);
-                            }
+                            else metricIds.add(newMetric);
                         }
-                        else if (pageAndView.contains("QualityFactors")) {
-                            List<Factor> factorIds = new ArrayList<>();
-                            boolean store = true;
-                            for (String id : ids) {
-                                Factor newFactor = new Factor(id);
-                                if (!factorController.checkExistence(newFactor)) {
-                                    logger.error("Tried to parse log with accesses to nonexistent factor " + id);
-                                    store = false;
-                                }
-                                else factorIds.add(newFactor);
-                            }
-                            if (store) {
-                                FactorAccess newLog = new FactorAccess(epoch, team, originalLog, page, s, historic, viewFormat, factorIds);
-                                internalMetricController.createFactorViewMetric(viewFormat);
-                                list.add(newLog);
-                            }
+                        if (store) {
+                            MetricAccess newLog = new MetricAccess(epoch, team, message, page, s, historic, viewFormat, metricIds);
+                            internalMetricController.createMetricViewMetric(viewFormat);
+                            list.add(newLog);
                         }
-                        else {
-                            List<Indicator> indicatorIds = new ArrayList<>();
-                            boolean store = true;
-                            for (String id : ids) {
-                                Indicator newIndicator = new Indicator(id);
-                                if (!indicatorController.checkExistence(newIndicator)) {
-                                    logger.error("Tried to parse log with accesses to nonexistent indicator " + id);
-                                    store = false;
-                                }
-                                else indicatorIds.add(newIndicator);
+                    }
+                    else if (pageAndView.contains("QualityFactors")) {
+                        List<Factor> factorIds = new ArrayList<>();
+                        boolean store = true;
+                        for (String id : ids) {
+                            Factor newFactor = new Factor(id);
+                            if (!factorController.checkExistence(newFactor)) {
+                                logger.error("Tried to parse log with accesses to nonexistent factor " + id);
+                                store = false;
                             }
-                            if (store) {
-                                IndicatorAccess newLog = new IndicatorAccess(epoch, team, originalLog, page, s, historic, viewFormat, indicatorIds);
-                                internalMetricController.createIndicatorViewMetric(viewFormat);
-                                list.add(newLog);
-                            }
+                            else factorIds.add(newFactor);
+                        }
+                        if (store) {
+                            FactorAccess newLog = new FactorAccess(epoch, team, message, page, s, historic, viewFormat, factorIds);
+                            internalMetricController.createFactorViewMetric(viewFormat);
+                            list.add(newLog);
                         }
                     }
                     else {
-                        QModelAccess newLog = new QModelAccess(epoch, team, originalLog, page, s, viewFormat);
-                        internalMetricController.createQModelViewMetric(viewFormat);
-                        list.add(newLog);
+                        List<Indicator> indicatorIds = new ArrayList<>();
+                        boolean store = true;
+                        for (String id : ids) {
+                            Indicator newIndicator = new Indicator(id);
+                            if (!indicatorController.checkExistence(newIndicator)) {
+                                logger.error("Tried to parse log with accesses to nonexistent indicator " + id);
+                                store = false;
+                            }
+                            else indicatorIds.add(newIndicator);
+                        }
+                        if (store) {
+                            IndicatorAccess newLog = new IndicatorAccess(epoch, team, message, page, s, historic, viewFormat, indicatorIds);
+                            internalMetricController.createIndicatorViewMetric(viewFormat);
+                            list.add(newLog);
+                        }
                     }
                 }
                 else {
-                    Log newLog = new Log(epoch, team, originalLog, page, s);
+                    QModelAccess newLog = new QModelAccess(epoch, team, message, page, s, viewFormat);
+                    internalMetricController.createQModelViewMetric(viewFormat);
                     list.add(newLog);
                 }
+            }
+            else {
+                Log newLog = new Log(epoch, team, message, page, s);
+                list.add(newLog);
             }
         }
         return list;

@@ -60,8 +60,7 @@ public class EvaluationController {
             for (Subject s : subjects) subjectHashMap.put(s, 0.0);
             double globalValue = 0.0;
             for (Team t : teams) {
-                if (im.getTeam() == null || im.getTeam().equals(t.getId())) {
-                    System.out.println(im.getId() + " " + t.getId());
+                if (im.getTeams() == null || im.getTeams().contains(t.getId())) {
                     setStrategy(im);
                     double value = strategy.evaluate(t);
                     globalValue += value;
@@ -73,10 +72,22 @@ public class EvaluationController {
                 }
             }
             for (Subject s : subjects) {
-                double value = strategy.evaluate(s);
-                if (value == -1.0) value = subjectHashMap.get(s);
-                SubjectEvaluation subjectEvaluation = new SubjectEvaluation(date, im, s.getAcronym(), value);
-                subjectEvaluationRepository.save(subjectEvaluation);
+                List<Team> teamList = s.getTeams();
+                boolean containsTeam = false;
+                if (im.getTeams() != null) {
+                    for (Team t : teamList) {
+                        if (im.getTeams().contains(t.getId())) {
+                            containsTeam = true;
+                            break;
+                        }
+                    }
+                }
+                if (im.getTeams() == null || containsTeam) {
+                    double value = strategy.evaluate(s);
+                    if (value == -1.0) value = subjectHashMap.get(s);
+                    SubjectEvaluation subjectEvaluation = new SubjectEvaluation(date, im, s.getAcronym(), value);
+                    subjectEvaluationRepository.save(subjectEvaluation);
+                }
             }
             double value = strategy.evaluate();
             if (value != -1) globalValue = value;

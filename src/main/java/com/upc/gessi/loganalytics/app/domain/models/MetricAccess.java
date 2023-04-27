@@ -17,8 +17,8 @@ public class MetricAccess extends Log {
     @JoinTable (
         name = "metric_access_metric",
         joinColumns = {
-            @JoinColumn (name = "metric_access_time"),
-            @JoinColumn (name = "metric_access_team")
+            @JoinColumn (name = "metric_access_time", referencedColumnName = "time"),
+            @JoinColumn (name = "metric_access_session", referencedColumnName = "session_id")
         },
         inverseJoinColumns = @JoinColumn (name = "metric_id")
     ) @JsonIgnore

@@ -15,7 +15,9 @@ class InternalMetricTest {
 
     @BeforeEach
     void setUp() {
-        internalMetric = new InternalMetric("test", "testName", "testParam", "testController", "testTeam");
+        List<String> teams = new ArrayList<>();
+        teams.add("testTeam");
+        internalMetric = new InternalMetric("test", "testName", "testParam", "testController", teams);
     }
 
     @AfterEach
@@ -68,14 +70,18 @@ class InternalMetricTest {
     }
 
     @Test
-    void getTeam() {
-        assertEquals("testTeam", internalMetric.getTeam());
+    void getTeams() {
+        assertEquals("testTeam", internalMetric.getTeams().get(0));
+        assertEquals(1, internalMetric.getTeams().size());
     }
 
     @Test
-    void setTeam() {
-        internalMetric.setTeam("testTeam2");
-        assertEquals("testTeam2", internalMetric.getTeam());
+    void setTeams() {
+        List<String> teams = new ArrayList<>();
+        teams.add("testTeam2");
+        internalMetric.setTeams(teams);
+        assertEquals("testTeam2", internalMetric.getTeams().get(0));
+        assertEquals(1, internalMetric.getTeams().size());
     }
 
     @Test
@@ -122,8 +128,9 @@ class InternalMetricTest {
 
     @Test
     void testToString() {
-        String result = "InternalMetric{id='test', name='testName', " +
-            "param='testParam', controller='testController', team='testTeam'}";
+        String result = "InternalMetric{id='test', " +
+            "name='testName', param='testParam', " +
+            "controller='testController', teams='[testTeam]'}";
         assertEquals(result, internalMetric.toString());
     }
 }

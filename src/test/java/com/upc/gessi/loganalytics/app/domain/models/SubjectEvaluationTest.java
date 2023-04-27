@@ -73,7 +73,7 @@ class SubjectEvaluationTest {
         String result = "SubjectEvaluation{date='2023-04-18', " +
             "internalMetric=InternalMetric{id='test', " +
             "name='test', param='null', controller='null', " +
-            "team='null'}, subject='pes', value=0.0}";
+            "teams='null'}, subject='pes', value=0.0}";
         assertEquals(result, evaluation.toString());
     }
 }
