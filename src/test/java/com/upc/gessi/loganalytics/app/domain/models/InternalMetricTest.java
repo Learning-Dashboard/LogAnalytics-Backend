@@ -15,7 +15,7 @@ class InternalMetricTest {
 
     @BeforeEach
     void setUp() {
-        internalMetric = new InternalMetric("test", "testName", "testParam", "testController");
+        internalMetric = new InternalMetric("test", "testName", "testParam", "testController", "testTeam");
     }
 
     @AfterEach
@@ -68,6 +68,17 @@ class InternalMetricTest {
     }
 
     @Test
+    void getTeam() {
+        assertEquals("testTeam", internalMetric.getTeam());
+    }
+
+    @Test
+    void setTeam() {
+        internalMetric.setTeam("testTeam2");
+        assertEquals("testTeam2", internalMetric.getTeam());
+    }
+
+    @Test
     void getEvaluations() {
         assertNull(internalMetric.getEvaluations());
     }
@@ -112,7 +123,7 @@ class InternalMetricTest {
     @Test
     void testToString() {
         String result = "InternalMetric{id='test', name='testName', " +
-            "param='testParam', controller='testController', team='null'}";
+            "param='testParam', controller='testController', team='testTeam'}";
         assertEquals(result, internalMetric.toString());
     }
 }

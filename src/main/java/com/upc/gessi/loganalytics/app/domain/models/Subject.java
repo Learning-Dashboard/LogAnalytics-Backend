@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Subject")
-public class  Subject implements Serializable {
+public class Subject implements Serializable {
 
     @Id @Column (name = "acronym", nullable = false)
     private String acronym;
