@@ -432,6 +432,9 @@ public class LogRestController {
     public void importLogs(
         @RequestParam (name = "file") MultipartFile file) {
 
+        if (file.getSize() > 20 * 1024 * 1024)
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "The file is bigger than 20MB");
+
         List<String> originalLogs = logController.getOriginalLogs(file);
         List<Log> parsedLogs = logController.parseLogs(originalLogs);
         if (!parsedLogs.isEmpty()) {
