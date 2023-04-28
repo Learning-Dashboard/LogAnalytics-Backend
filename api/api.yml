@@ -1,10 +1,11 @@
 openapi: 3.0.3
 info:
   title: Swagger Log Analytics Tool - OpenAPI 3.0
-  description: This is the REST API documentation for the TFG Log Analytics Tool for the Learning Dashboard, 
+  description: This is the REST API documentation for the TFG Log Analytics Tool for the Learning Dashboard, by Laura Cazorla.
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api
+  - url: http://localhost:8888/api
 paths:
   /subjects:
     get:
@@ -63,7 +64,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Session'
+                  $ref: '#/components/schemas/SessionDTO'
   /logs:
     get:
       tags:
@@ -78,6 +79,8 @@ paths:
           description: Page number of the Logs to be retrieved.
           schema:
             type: integer
+            minimum: 1
+            example: 1
             format: int32
         - name: size
           in: query
@@ -85,6 +88,8 @@ paths:
           description: Size of the page.
           schema:
             type: integer
+            minimum: 1
+            example: 15
             format: int32
         - name: dateBefore
           in: query
@@ -92,6 +97,7 @@ paths:
           required: false
           schema:
             type: string
+            format: date
             example: 2023-01-01
         - name: dateAfter
           in: query
@@ -99,10 +105,11 @@ paths:
           required: false
           schema:
             type: string
+            format: date
             example: 2023-06-01
         - name: team
           in: query
-          description: Name of the Team, in the current semester, to retrieve the Logs from.
+          description: Name of the Team to retrieve the Logs from.
           required: false
           schema:
             type: string
@@ -145,12 +152,16 @@ paths:
                     value: dateBefore is not previous to dateAfter
                   example 5:
                     value: Date formats are incorrect
+                  example 6:
+                    value: Page value must be greater than 0
+                  example 7:
+                    value: Size value must be greater than 0
   /logs/import:
     post:
       tags:
         - Log
       summary: Stores the Logs in the Log file
-      description: Stores the Logs present in the Log file, if the data is correct and they have not been stored before.
+      description: Stores the Logs present in the Log file, if the data is correct and they have not been stored before, and creates the corresponding Internal Metrics if necessary.
       operationId: importLogs
       requestBody:
         required: true
@@ -250,7 +261,7 @@ paths:
       tags:
         - Metric
       summary: Stores the Metrics from the LD.
-      description: Stores all of the Metrics present in the current Learning Dashboard configuration.
+      description: Stores all of the Metrics present in the current Learning Dashboard configuration, and creates the corresponding Internal Metrics if necessary.
       operationId: importMetrics
       responses:
         '201':
@@ -276,7 +287,7 @@ paths:
       tags:
         - Factor
       summary: Stores the Factors from the LD.
-      description: Stores all of the Factors present in the current Learning Dashboard configuration.
+      description: Stores all of the Factors present in the current Learning Dashboard configuration, and creates the corresponding Internal Metrics if necessary.
       operationId: importFactors
       responses:
         '201':
@@ -302,11 +313,247 @@ paths:
       tags:
         - Indicator
       summary: Stores the Indicators from the LD.
-      description: Stores all od the Indicators present in the current Learning Dashboard configuration.
+      description: Stores all od the Indicators present in the current Learning Dashboard configuration, and creates the corresponding Internal Metrics if necessary.
       operationId: importIndicators
       responses:
         '201':
           description: created
+  /internalMetrics:
+    get:
+      tags:
+        - InternalMetric
+      summary: Finds all of the Internal Metrics
+      description: Retrieves all of the existing Internal Metrics.
+      operationId: getInternalMetrics
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InternalMetric'
+  /evaluations/current:
+    get:
+      tags:
+        - Evaluation
+      summary: Finds the current Evaluations
+      description: Retrieves all of the Evaluations from the last evaluation date.
+      operationId: getCurrentEvaluations
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evaluation'
+  /evaluations/historical:
+    get:
+      tags:
+        - Evaluation
+      summary: Finds historical Evaluations
+      description: Retrieves all of the Evaluations that are included in a certain time range.
+      operationId: getHistoricalEvaluations
+      parameters:
+        - name: dateBefore
+          in: query
+          description: Starting date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-06-01
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evaluation'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples:
+                  example 1:
+                    value: dateBefore is not previous to dateAfter
+                  example 2:
+                    value: Date formats are incorrect
+  /evaluations/update:
+    get:
+      tags:
+        - Evaluation
+      summary: Updates the Evaluations
+      description: Performs and stores the Evaluations for all of the Internal Metrics using the current data. It stores evaluations using Team, Subject and general granularity.
+      operationId: updateEvaluations
+      responses:
+        '201':
+          description: created
+  /teamEvaluations/current:
+    get:
+      tags:
+        - Evaluation
+      summary: Finds the current Team Evaluations
+      description: Retrieves all of the Team Evaluations from the last evaluation date for a certain Team.
+      operationId: getCurrentTeamEvaluations
+      parameters:
+        - name: team
+          in: query
+          description: Name of the Team.
+          required: true
+          schema:
+            type: string
+            example: pes11a
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamEvaluation'
+  /teamEvaluations/historical:
+    get:
+      tags:
+        - Evaluation
+      summary: Finds historical Team Evaluations
+      description: Retrieves all of the Team Evaluations that are included in a certain time range for the provided Team.
+      operationId: getHistoricalTeamEvaluations
+      parameters:
+        - name: team
+          in: query
+          description: Name of the team.
+          required: true
+          schema:
+            type: string
+            example: pes11a
+        - name: dateBefore
+          in: query
+          description: Starting date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-06-01
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamEvaluation'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples:
+                  example 1:
+                    value: dateBefore is not previous to dateAfter
+                  example 2:
+                    value: Date formats are incorrect
+  /subjectEvaluations/current:
+    get:
+      tags:
+        - Evaluation
+      summary: Finds the current Subject Evaluations
+      description: Retrieves all of the Subject Evaluations from the last evaluation date for a certain Subject.
+      operationId: getCurrentSubjectEvaluations
+      parameters:
+        - name: subject
+          in: query
+          description: Name of the subject.
+          required: true
+          schema:
+            type: string
+            example: PES
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubjectEvaluation'
+  /subjectEvaluations/historical:
+    get:
+      tags:
+        - Evaluation
+      summary: Finds historical Subject Evaluations
+      description: Retrieves all of the Subject Evaluations that are included in a certain time range for the provided Subject.
+      operationId: getHistoricalSubjectEvaluations
+      parameters:
+        - name: subject
+          in: query
+          description: Name of the subject.
+          required: true
+          schema:
+            type: string
+            example: PES
+        - name: dateBefore
+          in: query
+          description: Starting date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-06-01
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubjectEvaluation'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples:
+                  example 1:
+                    value: dateBefore is not previous to dateAfter
+                  example 2:
+                    value: Date formats are incorrect
 components:
   schemas:
     Subject:
@@ -318,7 +565,7 @@ components:
     Team:
       type: object
       properties:
-        name:
+        id:
           type: string
           example: pes11a
         semester:
@@ -326,7 +573,7 @@ components:
           example: 22-23-Q1
         subject:
           $ref: '#/components/schemas/Subject'
-    Session:
+    SessionDTO:
       type: object
       properties:
         id:
@@ -350,6 +597,32 @@ components:
           nullable: true
         nInteractions:
           type: integer
+          format: int32
+          example: 25
+          nullable: true
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          example: eyJhbGciOiJIUzUxMiJ9
+        start_timestamp:
+          type: integer
+          format: int64
+          example: 1680979195000
+        end_timestamp:
+          type: integer
+          format: int64
+          example: 1680982795000
+          nullable: true
+        duration:
+          type: number
+          format: double
+          example: 3600
+          nullable: true
+        nInteractions:
+          type: integer
+          format: int32
           example: 25
           nullable: true
     Log:
@@ -367,10 +640,10 @@ components:
         message:
           type: string
           example: 2023-04-06 18:27:13.967, 
-            pes11a enters app (eyJhbGciOiJIUzUxMiJ9)
+            pes11a enters app
         page:
           type: string
-          example: /Metrics/CurrentChartGauge
+          example: Metrics
           nullable: true
     MetricAccess:
       allOf:
@@ -431,3 +704,53 @@ components:
         id:
           type: string
           example: repositorycontribution
+    InternalMetric:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 7DaysLogins
+        param:
+          type: string
+          example: 7
+          nullable: true
+        controller:
+          type: string
+          example: DaysLogins
+          nullable: true
+        teams:
+          type: array
+          items:
+            type: string
+            example: pes11a, asw11b
+          nullable: true
+    Evaluation:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: 2022-05-14
+        internalMetric:
+          $ref: '#/components/schemas/InternalMetric'
+        value:
+          type: number
+          format: double
+          example: 5.0
+    SubjectEvaluation:
+      allOf:
+        - $ref: '#/components/schemas/Evaluation'
+        - type: object
+          properties:
+            subject:
+              type: string
+              example: pes11a
+    TeamEvaluation:
+      allOf:
+        - $ref: '#/components/schemas/Evaluation'
+        - type: object
+          properties:
+            team:
+              type: string
+              example: pes11a
+      
