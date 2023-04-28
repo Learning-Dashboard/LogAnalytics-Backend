@@ -30,7 +30,7 @@ public class EvaluationRestController {
     }
 
     @GetMapping("/current")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public List<Evaluation> getCurrentEvaluations() {
         Evaluation latestEvaluation = evaluationRepository.findFirstByOrderByDateDesc();
         String latestDate = latestEvaluation.getDate();

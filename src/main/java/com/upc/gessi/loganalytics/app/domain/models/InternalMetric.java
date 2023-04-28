@@ -18,7 +18,7 @@ public class InternalMetric implements Serializable {
     private String param;
     @Column (name = "controller")
     private String controller;
-    @Column (name = "team")
+    @Column (name = "teams")
     private List<String> teams;
 
     @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

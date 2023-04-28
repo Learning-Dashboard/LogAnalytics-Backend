@@ -48,6 +48,16 @@ public class LogRestController {
                     "Page needed for pagination");
         }
 
+        if (page != null && page < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Page value must be greater than 0");
+        }
+
+        if (size != null && size < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Size value must be greater than 0");
+        }
+
         if (page == null) {
             if (dateBefore != null) {
                 if (dateAfter != null) {
