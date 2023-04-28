@@ -16,6 +16,13 @@ war {
 	webXml = file('src/main/resources/web.xml')
 }
 
+bootWar {
+	from 'README.md'
+	archiveFileName = 'loganalytics-1.0.war'
+	enabled = true
+	webXml = file('src/main/resources/web.xml')
+}
+
 repositories {
 	mavenCentral()
 }
