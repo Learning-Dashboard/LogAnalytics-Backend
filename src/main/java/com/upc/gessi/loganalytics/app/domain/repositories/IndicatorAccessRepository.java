@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface IndicatorAccessRepository extends CrudRepository<IndicatorAccess, LogPrimaryKey> {
-    List<IndicatorAccess> findByTeamAndIndicatorsId(String team, String indicator);
-    List<IndicatorAccess> findByTeamAndViewFormat(String team, String viewFormat);
-    List<IndicatorAccess> findByHistoricAndTeam(boolean historic, String team);
+    List<IndicatorAccess> findByTeamAndIndicatorsIdAndTimeBetween(String team, String indicator, long timeBefore, long timeAfter);
+    List<IndicatorAccess> findByTeamAndViewFormatAndTimeBetween(String team, String viewFormat, long timeBefore, long timeAfter);
+    List<IndicatorAccess> findByHistoricAndTeamAndTimeBetween(boolean historic, String team, long timeBefore, long timeAfter);
 }

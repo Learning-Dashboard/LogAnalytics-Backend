@@ -35,7 +35,7 @@ class DaysLoginsControllerTest {
         Session session1 = new Session("s", team1, 0, 10, 10, 10);
         Session session2 = new Session("s", team1, 15, 25, 10, 5);
         sessions.add(session1); sessions.add(session2);
-        Mockito.when(sessionController.getAllAfterTimestamp(Mockito.anyLong(), Mockito.any()))
+        Mockito.when(sessionController.getAllByTimestampBetweenAndTeam(Mockito.anyLong(), Mockito.anyLong(), Mockito.any()))
                 .thenReturn(sessions);
         assertEquals(2, daysLoginsController.evaluate(team1));
         assertEquals(2, 2);

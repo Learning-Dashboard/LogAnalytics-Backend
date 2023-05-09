@@ -41,13 +41,15 @@ class QModelAccessRepositoryTest {
     void findByTeamAndViewFormat() {
         QModelAccess qModelAccess1 = new QModelAccess(0, "team1", "testMessage", "testPage", session1, "testView");
         QModelAccess qModelAccess2 = new QModelAccess(5, "team1", "testMessage", "testPage", session1, "testView2");
-        QModelAccess qModelAccess3 = new QModelAccess(0, "team2", "testMessage", "testPage", session2, "testView");
-        QModelAccess qModelAccess4 = new QModelAccess(5, "team2", "testMessage", "testPage", session2, "testView2");
+        QModelAccess qModelAccess3 = new QModelAccess(10, "team1", "testMessage", "testPage", session1, "testView2");
+        QModelAccess qModelAccess4 = new QModelAccess(0, "team2", "testMessage", "testPage", session2, "testView");
+        QModelAccess qModelAccess5 = new QModelAccess(5, "team2", "testMessage", "testPage", session2, "testView2");
         entityManager.persistAndFlush(qModelAccess1);
         entityManager.persistAndFlush(qModelAccess2);
         entityManager.persistAndFlush(qModelAccess3);
         entityManager.persistAndFlush(qModelAccess4);
-        assertEquals(1, qModelAccessRepository.findByTeamAndViewFormat("team1", "testView2").size());
-        assertEquals(qModelAccess2, qModelAccessRepository.findByTeamAndViewFormat("team1", "testView2").get(0));
+        entityManager.persistAndFlush(qModelAccess5);
+        assertEquals(1, qModelAccessRepository.findByTeamAndViewFormatAndTimeBetween("team1", "testView2", 0L, 5L).size());
+        assertEquals(qModelAccess2, qModelAccessRepository.findByTeamAndViewFormatAndTimeBetween("team1", "testView2", 0L, 5L).get(0));
     }
 }

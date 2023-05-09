@@ -42,7 +42,7 @@ class IndicatorAccessControllerTest {
                 new IndicatorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /StrategicIndicators/CurrentChart", "StrategicIndicators", s, true, "Chart", indicators)
         );
-        Mockito.when(indicatorAccessRepository.findByTeamAndIndicatorsId(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(indicatorAccessRepository.findByTeamAndIndicatorsIdAndTimeBetween(Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<IndicatorAccess> actualLogs = indicatorAccessController.getAllByTeamAndIndicator(t, "i1");
         assertEquals(expectedLogs, actualLogs);
     }
@@ -63,7 +63,7 @@ class IndicatorAccessControllerTest {
                 new IndicatorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /StrategicIndicators/CurrentChart", "StrategicIndicators", s, true, "Chart", indicators)
         );
-        Mockito.when(indicatorAccessRepository.findByTeamAndViewFormat(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(indicatorAccessRepository.findByTeamAndViewFormatAndTimeBetween(Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<IndicatorAccess> actualLogs = indicatorAccessController.getAllByTeamAndViewFormat(t, "Chart");
         assertEquals(expectedLogs, actualLogs);
     }
@@ -84,7 +84,7 @@ class IndicatorAccessControllerTest {
                 new IndicatorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /StrategicIndicators/CurrentChart", "StrategicIndicators", s, true, "Chart", indicators)
         );
-        Mockito.when(indicatorAccessRepository.findByHistoricAndTeam(Mockito.anyBoolean(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(indicatorAccessRepository.findByHistoricAndTeamAndTimeBetween(Mockito.anyBoolean(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<IndicatorAccess> actualLogs = indicatorAccessController.getAllByHistoricAndTeam(true, t);
         assertEquals(expectedLogs, actualLogs);
     }

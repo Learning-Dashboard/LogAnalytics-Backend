@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface QModelAccessRepository extends CrudRepository<QModelAccess, LogPrimaryKey> {
 
-    List<QModelAccess> findByTeamAndViewFormat(String team, String viewFormat);
+    List<QModelAccess> findByTeamAndViewFormatAndTimeBetween(String team, String viewFormat, long timeBefore, long timeAfter);
 
 }

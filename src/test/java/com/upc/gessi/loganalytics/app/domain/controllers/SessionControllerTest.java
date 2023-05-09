@@ -83,7 +83,7 @@ class SessionControllerTest {
         Session session1 = new Session("s1", team1, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
-        Mockito.when(sessionRepository.findByTeam(team1)).thenReturn(sessions);
+        Mockito.when(sessionRepository.findByTeamAndEndTimestampLessThan(Mockito.any(), Mockito.anyLong())).thenReturn(sessions);
         List<Session> actualSessions = sessionController.getAllByTeam(team1);
         assertEquals(sessions, actualSessions);
     }
@@ -101,14 +101,14 @@ class SessionControllerTest {
     }
 
     @Test
-    void getAllAfterTimestamp() {
+    void getAllByTimestampBetweenAndTeam() {
         Subject s = new Subject("s");
         Team team1 = new Team("t1", "22-23-Q1", s);
-        Session session1 = new Session("s1", team1, 0);
+        Session session1 = new Session("s1", team1, 0, 50, 50, 4);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
-        Mockito.when(sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(0, team1)).thenReturn(sessions);
-        List<Session> actualSessions = sessionController.getAllAfterTimestamp(0, team1);
+        Mockito.when(sessionRepository.findByStartTimestampBetweenAndTeam(0, 100, team1)).thenReturn(sessions);
+        List<Session> actualSessions = sessionController.getAllByTimestampBetweenAndTeam(0, 100, team1);
         assertEquals(sessions, actualSessions);
     }
 }

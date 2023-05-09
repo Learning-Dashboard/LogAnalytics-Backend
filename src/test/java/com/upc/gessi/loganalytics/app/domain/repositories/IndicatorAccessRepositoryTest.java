@@ -48,16 +48,18 @@ class IndicatorAccessRepositoryTest {
         indicators2.add(new Indicator("i2"));
         IndicatorAccess indicatorAccess1 = new IndicatorAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", indicators);
         IndicatorAccess indicatorAccess2 = new IndicatorAccess(5, "team1", "testMessage", "testPage", session1, true, "testView", indicators2);
-        IndicatorAccess indicatorAccess3 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
-        IndicatorAccess indicatorAccess4 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView", indicators2);
+        IndicatorAccess indicatorAccess3 = new IndicatorAccess(10, "team1", "testMessage", "testPage", session1, true, "testView", indicators2);
+        IndicatorAccess indicatorAccess4 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
+        IndicatorAccess indicatorAccess5 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView", indicators2);
         entityManager.persistAndFlush(new Indicator("i1"));
         entityManager.persistAndFlush(new Indicator("i2"));
         entityManager.persistAndFlush(indicatorAccess1);
         entityManager.persistAndFlush(indicatorAccess2);
         entityManager.persistAndFlush(indicatorAccess3);
         entityManager.persistAndFlush(indicatorAccess4);
-        assertEquals(1, indicatorAccessRepository.findByTeamAndIndicatorsId("team1", "i2").size());
-        assertEquals(indicatorAccess2, indicatorAccessRepository.findByTeamAndIndicatorsId("team1", "i2").get(0));
+        entityManager.persistAndFlush(indicatorAccess5);
+        assertEquals(1, indicatorAccessRepository.findByTeamAndIndicatorsIdAndTimeBetween("team1", "i2", 0L, 5L).size());
+        assertEquals(indicatorAccess2, indicatorAccessRepository.findByTeamAndIndicatorsIdAndTimeBetween("team1", "i2", 0L, 5L).get(0));
     }
 
     @Test
@@ -66,15 +68,17 @@ class IndicatorAccessRepositoryTest {
         indicators.add(new Indicator("i1"));
         IndicatorAccess indicatorAccess1 = new IndicatorAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", indicators);
         IndicatorAccess indicatorAccess2 = new IndicatorAccess(5, "team1", "testMessage", "testPage", session1, true, "testView2", indicators);
-        IndicatorAccess indicatorAccess3 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
-        IndicatorAccess indicatorAccess4 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView2", indicators);
+        IndicatorAccess indicatorAccess3 = new IndicatorAccess(10, "team1", "testMessage", "testPage", session1, true, "testView2", indicators);
+        IndicatorAccess indicatorAccess4 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
+        IndicatorAccess indicatorAccess5 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, true, "testView2", indicators);
         entityManager.persistAndFlush(new Indicator("i1"));
         entityManager.persistAndFlush(indicatorAccess1);
         entityManager.persistAndFlush(indicatorAccess2);
         entityManager.persistAndFlush(indicatorAccess3);
         entityManager.persistAndFlush(indicatorAccess4);
-        assertEquals(1, indicatorAccessRepository.findByTeamAndViewFormat("team1", "testView2").size());
-        assertEquals(indicatorAccess2, indicatorAccessRepository.findByTeamAndViewFormat("team1", "testView2").get(0));
+        entityManager.persistAndFlush(indicatorAccess5);
+        assertEquals(1, indicatorAccessRepository.findByTeamAndViewFormatAndTimeBetween("team1", "testView2", 0L, 5L).size());
+        assertEquals(indicatorAccess2, indicatorAccessRepository.findByTeamAndViewFormatAndTimeBetween("team1", "testView2", 0L, 5L).get(0));
     }
 
     @Test
@@ -83,14 +87,16 @@ class IndicatorAccessRepositoryTest {
         indicators.add(new Indicator("i1"));
         IndicatorAccess indicatorAccess1 = new IndicatorAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", indicators);
         IndicatorAccess indicatorAccess2 = new IndicatorAccess(5, "team1", "testMessage", "testPage", session1, false, "testView", indicators);
-        IndicatorAccess indicatorAccess3 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
-        IndicatorAccess indicatorAccess4 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, false, "testView", indicators);
+        IndicatorAccess indicatorAccess3 = new IndicatorAccess(10, "team1", "testMessage", "testPage", session1, false, "testView", indicators);
+        IndicatorAccess indicatorAccess4 = new IndicatorAccess(0, "team2", "testMessage", "testPage", session2, true, "testView", indicators);
+        IndicatorAccess indicatorAccess5 = new IndicatorAccess(5, "team2", "testMessage", "testPage", session2, false, "testView", indicators);
         entityManager.persistAndFlush(new Indicator("i1"));
         entityManager.persistAndFlush(indicatorAccess1);
         entityManager.persistAndFlush(indicatorAccess2);
         entityManager.persistAndFlush(indicatorAccess3);
         entityManager.persistAndFlush(indicatorAccess4);
-        assertEquals(1, indicatorAccessRepository.findByHistoricAndTeam(false, "team1").size());
-        assertEquals(indicatorAccess2, indicatorAccessRepository.findByHistoricAndTeam(false, "team1").get(0));
+        entityManager.persistAndFlush(indicatorAccess5);
+        assertEquals(1, indicatorAccessRepository.findByHistoricAndTeamAndTimeBetween(false, "team1", 0L, 5L).size());
+        assertEquals(indicatorAccess2, indicatorAccessRepository.findByHistoricAndTeamAndTimeBetween(false, "team1", 0L, 5L).get(0));
     }
 }

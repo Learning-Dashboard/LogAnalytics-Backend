@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface MetricAccessRepository extends CrudRepository<MetricAccess, LogPrimaryKey> {
 
-    List<MetricAccess> findByTeamAndMetricsId(String team, String metric);
-    List<MetricAccess> findByTeamAndViewFormat(String team, String viewFormat);
-    List<MetricAccess> findByHistoricAndTeam(boolean historic, String team);
+    List<MetricAccess> findByTeamAndMetricsIdAndTimeBetween(String team, String metric, long timeBefore, long timeAfter);
+    List<MetricAccess> findByTeamAndViewFormatAndTimeBetween(String team, String viewFormat, long timeBefore, long timeAfter);
+    List<MetricAccess> findByHistoricAndTeamAndTimeBetween(boolean historic, String team, long timeBefore, long timeAfter);
 }

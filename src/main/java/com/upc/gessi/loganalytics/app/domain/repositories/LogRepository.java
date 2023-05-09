@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface LogRepository extends CrudRepository<Log, LogPrimaryKey> {
 
-    List<Log> findByPageAndTeam(String page, String team);
+    List<Log> findByPageAndTeamAndTimeBetween(String page, String team, long timeBefore, long timeAfter);
 
     List<Log> findAllByOrderByTimeDesc();
     Page<Log> findAllByOrderByTimeDesc(Pageable pageable);

@@ -35,11 +35,13 @@ class LogRepositoryTest {
         entityManager.persistAndFlush(session);
 
         Log log1 = new Log(0, "pes11a", "testMessage", "testPage", session);
-        Log log2 = new Log(10, "pes11a", "testMessage", "testPage2", session);
+        Log log2 = new Log(6, "pes11a", "testMessage", "testPage", session);
+        Log log3 = new Log(10, "pes11a", "testMessage", "testPage2", session);
         entityManager.persistAndFlush(log1);
         entityManager.persistAndFlush(log2);
+        entityManager.persistAndFlush(log3);
 
-        Iterable<Log> logIterable = logRepository.findByPageAndTeam("testPage", "pes11a");
+        Iterable<Log> logIterable = logRepository.findByPageAndTeamAndTimeBetween("testPage", "pes11a", 0L, 5L);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         assertEquals(logList.get(0), log1);

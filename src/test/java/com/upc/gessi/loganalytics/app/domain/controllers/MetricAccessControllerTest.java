@@ -42,7 +42,7 @@ class MetricAccessControllerTest {
                 new MetricAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                     "GET /Metrics/CurrentGaugeChart", "Metrics", s, true, "GaugeChart", metrics)
         );
-        Mockito.when(metricAccessRepository.findByTeamAndMetricsId(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(metricAccessRepository.findByTeamAndMetricsIdAndTimeBetween(Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<MetricAccess> actualLogs = metricAccessController.getAllByTeamAndMetric(t, "m1");
         assertEquals(expectedLogs, actualLogs);
     }
@@ -63,7 +63,7 @@ class MetricAccessControllerTest {
                 new MetricAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /Metrics/CurrentGaugeChart", "Metrics", s, true,"GaugeChart", metrics)
         );
-        Mockito.when(metricAccessRepository.findByTeamAndViewFormat(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(metricAccessRepository.findByTeamAndViewFormatAndTimeBetween(Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<MetricAccess> actualLogs = metricAccessController.getAllByTeamAndViewFormat(t, "GaugeChart");
         assertEquals(expectedLogs, actualLogs);
     }
@@ -84,7 +84,7 @@ class MetricAccessControllerTest {
                 new MetricAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /Metrics/CurrentGaugeChart", "Metrics", s, true,"GaugeChart", metrics)
         );
-        Mockito.when(metricAccessRepository.findByHistoricAndTeam(Mockito.anyBoolean(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(metricAccessRepository.findByHistoricAndTeamAndTimeBetween(Mockito.anyBoolean(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<MetricAccess> actualLogs = metricAccessController.getAllByHistoricAndTeam(true, t);
         assertEquals(expectedLogs, actualLogs);
     }

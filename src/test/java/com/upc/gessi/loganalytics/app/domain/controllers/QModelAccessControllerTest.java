@@ -36,7 +36,7 @@ class QModelAccessControllerTest {
                 new QModelAccess(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, GET /QualityModelGraph", "QualityModelGraph", s, "Graph"),
                 new QModelAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, GET /QualityModelGraph", "QualityModelGraph", s, "Graph")
         );
-        Mockito.when(qModelAccessRepository.findByTeamAndViewFormat(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(qModelAccessRepository.findByTeamAndViewFormatAndTimeBetween(Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<QModelAccess> actualLogs = qModelAccessController.getAllByTeamAndViewFormat(t, "Graph");
         assertEquals(expectedLogs, actualLogs);
     }

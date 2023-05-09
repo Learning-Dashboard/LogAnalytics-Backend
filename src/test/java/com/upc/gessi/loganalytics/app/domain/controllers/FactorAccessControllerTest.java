@@ -42,7 +42,8 @@ class FactorAccessControllerTest {
                 new FactorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /QualityFactors/CurrentChart", "StrategicIndicators", s, true, "Chart", factors)
         );
-        Mockito.when(factorAccessRepository.findByTeamAndFactorsId(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(factorAccessRepository.findByTeamAndFactorsIdAndTimeBetween
+            (Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<FactorAccess> actualLogs = factorAccessController.getAllByTeamAndFactor(t, "f1");
         assertEquals(expectedLogs, actualLogs);
     }
@@ -63,7 +64,7 @@ class FactorAccessControllerTest {
                 new FactorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /QualityFactors/CurrentChart", "StrategicIndicators", s, true, "Chart", factors)
         );
-        Mockito.when(factorAccessRepository.findByTeamAndViewFormat(Mockito.any(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(factorAccessRepository.findByTeamAndViewFormatAndTimeBetween(Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<FactorAccess> actualLogs = factorAccessController.getAllByTeamAndViewFormat(t, "Chart");
         assertEquals(expectedLogs, actualLogs);
     }
@@ -84,7 +85,7 @@ class FactorAccessControllerTest {
                 new FactorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
                         "GET /QualityFactors/CurrentChart", "StrategicIndicators", s, true, "Chart", factors)
         );
-        Mockito.when(factorAccessRepository.findByHistoricAndTeam(Mockito.anyBoolean(), Mockito.any())).thenReturn(expectedLogs);
+        Mockito.when(factorAccessRepository.findByHistoricAndTeamAndTimeBetween(Mockito.anyBoolean(), Mockito.any(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<FactorAccess> actualLogs = factorAccessController.getAllByHistoricAndTeam(true, t);
         assertEquals(expectedLogs, actualLogs);
     }

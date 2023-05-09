@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface FactorAccessRepository extends CrudRepository<FactorAccess, LogPrimaryKey> {
-    List<FactorAccess> findByTeamAndFactorsId(String team, String factor);
-    List<FactorAccess> findByTeamAndViewFormat(String team, String viewFormat);
-    List<FactorAccess> findByHistoricAndTeam(boolean historic, String team);
+    List<FactorAccess> findByTeamAndFactorsIdAndTimeBetween(String team, String factor, long timeBefore, long timeAfter);
+    List<FactorAccess> findByTeamAndViewFormatAndTimeBetween(String team, String viewFormat, long timeBefore, long timeAfter);
+    List<FactorAccess> findByHistoricAndTeamAndTimeBetween(boolean historic, String team, long timeBefore, long timeAfter);
 }

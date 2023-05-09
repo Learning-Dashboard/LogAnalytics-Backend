@@ -42,7 +42,7 @@ public class EvaluationController {
             LoggerFactory.getLogger("ActionLogger");
 
     public void evaluateMetrics() {
-        Date today = new Date(System.currentTimeMillis());
+        Date today = new Date(System.currentTimeMillis() - 86400000L);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String date = format.format(today);
 

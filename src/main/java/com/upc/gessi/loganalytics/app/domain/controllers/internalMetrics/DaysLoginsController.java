@@ -7,6 +7,10 @@ import com.upc.gessi.loganalytics.app.domain.models.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Controller
@@ -19,9 +23,14 @@ public class DaysLoginsController implements Strategy {
 
     @Override
     public double evaluate(Team team) {
-        long today = System.currentTimeMillis();
-        long milliseconds = today - (days * 86400000L);
-        List<Session> sessions = sessionController.getAllAfterTimestamp(milliseconds, team);
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli() - 1;
+        long timestampPrev = timestampToday - (days * 86400000L) + 1;
+
+        System.out.println(timestampPrev);
+        System.out.println(timestampToday);
+
+        List<Session> sessions = sessionController.getAllByTimestampBetweenAndTeam(timestampPrev, timestampToday, team);
         return sessions.size();
     }
 

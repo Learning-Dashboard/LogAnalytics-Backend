@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @Controller
@@ -168,7 +172,12 @@ public class LogController {
     }
 
     public List<Log> getAllByPageAndTeam(String page, String team) {
-        Iterable<Log> logIterable = logRepository.findByPageAndTeam(page, team);
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);
+        long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli() - 1;
+        long timestampYesterday = yesterday.toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        Iterable<Log> logIterable = logRepository.findByPageAndTeamAndTimeBetween(page, team, timestampYesterday, timestampToday);
         List<Log> logList = new ArrayList<>();
         logIterable.forEach(logList::add);
         return logList;

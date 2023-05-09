@@ -7,6 +7,10 @@ import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +71,10 @@ public class SessionController {
     }
 
     public List<Session> getAllByTeam(Team team) {
-        Iterable<Session> sessionIterable = sessionRepository.findByTeam(team);
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamAndEndTimestampLessThan(team, timestampToday);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         return sessionList;
@@ -80,8 +87,9 @@ public class SessionController {
         return sessionList;
     }
 
-    public List<Session> getAllAfterTimestamp(long epoch, Team team) {
-        Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(epoch, team);
+    public List<Session> getAllByTimestampBetweenAndTeam(long timeBefore, long timeAfter, Team team) {
+        Iterable<Session> sessionIterable = sessionRepository.
+            findByStartTimestampBetweenAndTeam(timeBefore, timeAfter, team);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         return sessionList;

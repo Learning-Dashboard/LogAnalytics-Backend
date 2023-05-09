@@ -39,7 +39,7 @@ class SessionRepositoryTest {
         entityManager.persistAndFlush(session1);
         entityManager.persistAndFlush(session2);
 
-        Iterable<Session> sessionIterable = sessionRepository.findByTeam(team1);
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamAndEndTimestampLessThan(team1, 5L);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         assertEquals(sessionList.get(0), session1);
@@ -67,7 +67,7 @@ class SessionRepositoryTest {
     }
 
     @Test
-    void findByStartTimestampGreaterThanEqualAndTeam() {
+    void findByStartTimestampBetweenAndTeam() {
         Subject subj1 = new Subject("PES");
         Subject subj2 = new Subject("ASW");
         Team team1 = new Team("pes11a", "sem", subj1);
@@ -83,7 +83,7 @@ class SessionRepositoryTest {
         entityManager.persistAndFlush(session2);
         entityManager.persistAndFlush(session3);
 
-        Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampGreaterThanEqualAndTeam(5, team1);
+        Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampBetweenAndTeam(5, 10, team1);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         assertEquals(sessionList.get(0), session2);
