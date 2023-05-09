@@ -17,7 +17,7 @@ class InternalMetricTest {
     void setUp() {
         List<String> teams = new ArrayList<>();
         teams.add("testTeam");
-        internalMetric = new InternalMetric("test", "testName", "testParam", "testController", teams);
+        internalMetric = new InternalMetric("test", "testName", "testParam", "testController", "testControllerName", false, teams);
     }
 
     @AfterEach
@@ -67,6 +67,28 @@ class InternalMetricTest {
     void setController() {
         internalMetric.setController("testController2");
         assertEquals("testController2", internalMetric.getController());
+    }
+
+    @Test
+    void getControllerName() {
+        assertEquals("testControllerName", internalMetric.getControllerName());
+    }
+
+    @Test
+    void setControllerName() {
+        internalMetric.setControllerName("testControllerName2");
+        assertEquals("testControllerName2", internalMetric.getControllerName());
+    }
+
+    @Test
+    void getGroupable() {
+        assertFalse(internalMetric.isGroupable());
+    }
+
+    @Test
+    void setGroupable() {
+        internalMetric.setGroupable(true);
+        assertTrue(internalMetric.isGroupable());
     }
 
     @Test
@@ -128,9 +150,9 @@ class InternalMetricTest {
 
     @Test
     void testToString() {
-        String result = "InternalMetric{id='test', " +
-            "name='testName', param='testParam', " +
-            "controller='testController', teams='[testTeam]'}";
+        String result = "InternalMetric{id='test', name='testName', " +
+            "param='testParam', controller='testController', " +
+            "controllerName='testControllerName', groupable=false, teams=[testTeam]}";
         assertEquals(result, internalMetric.toString());
     }
 }

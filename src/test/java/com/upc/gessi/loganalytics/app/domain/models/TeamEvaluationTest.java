@@ -70,9 +70,10 @@ class TeamEvaluationTest {
 
     @Test
     void testToString() {
-        String result = "TeamEvaluation{date='2023-04-18', internalMetric=InternalMetric{id='test', " +
-            "name='Test', param='null', controller='null', " +
-            "teams='null'}, team='pes', value=0.0}";
+        String result = "TeamEvaluation{date='2023-04-18', " +
+            "internalMetric=InternalMetric{id='test', name='Test', " +
+            "param='null', controller='null', controllerName='null', " +
+            "groupable=false, teams=null}, team='pes', value=0.0}";
         assertEquals(result, evaluation.toString());
     }
 }

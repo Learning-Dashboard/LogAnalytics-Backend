@@ -18,6 +18,10 @@ public class InternalMetric implements Serializable {
     private String param;
     @Column (name = "controller")
     private String controller;
+    @Column (name = "controllerName")
+    private String controllerName;
+    @Column (name = "groupable")
+    private boolean groupable;
     @Column (name = "teams")
     private List<String> teams;
 
@@ -40,18 +44,22 @@ public class InternalMetric implements Serializable {
         this.name = name;
     }
 
-    public InternalMetric(String id, String name, String param, String controller) {
+    public InternalMetric(String id, String name, String param, String controller, String controllerName, boolean groupable) {
         this.id = id;
         this.name = name;
         this.param = param;
         this.controller = controller;
+        this.controllerName = controllerName;
+        this.groupable = groupable;
     }
 
-    public InternalMetric(String id, String name, String param, String controller, List<String> teams) {
+    public InternalMetric(String id, String name, String param, String controller, String controllerName, boolean groupable, List<String> teams) {
         this.id = id;
         this.name = name;
         this.param = param;
         this.controller = controller;
+        this.controllerName = controllerName;
+        this.groupable = groupable;
         this.teams = teams;
     }
 
@@ -85,6 +93,22 @@ public class InternalMetric implements Serializable {
 
     public void setController(String controller) {
         this.controller = controller;
+    }
+
+    public String getControllerName() {
+        return controllerName;
+    }
+
+    public void setControllerName(String controllerName) {
+        this.controllerName = controllerName;
+    }
+
+    public boolean isGroupable() {
+        return groupable;
+    }
+
+    public void setGroupable(boolean groupable) {
+        this.groupable = groupable;
     }
 
     public List<String> getTeams() {
@@ -126,7 +150,9 @@ public class InternalMetric implements Serializable {
                 ", name='" + name + '\'' +
                 ", param='" + param + '\'' +
                 ", controller='" + controller + '\'' +
-                ", teams='" + teams + '\'' +
+                ", controllerName='" + controllerName + '\'' +
+                ", groupable=" + groupable +
+                ", teams=" + teams +
                 '}';
     }
 }
