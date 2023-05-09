@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +25,11 @@ public class TeamEvaluationRestController {
     public List<TeamEvaluation> getCurrentEvaluations(
         @RequestParam(name = "team") String team) {
         TeamEvaluation latestEvaluation = teamEvaluationRepository.findFirstByTeamOrderByDateDesc(team);
-        String latestDate = latestEvaluation.getDate();
-        return teamEvaluationRepository.findByDateAndTeam(latestDate, team);
+        if (latestEvaluation != null) {
+            String latestDate = latestEvaluation.getDate();
+            return teamEvaluationRepository.findByDateAndTeam(latestDate, team);
+        }
+        return new ArrayList<>();
     }
 
     @GetMapping("/historical")

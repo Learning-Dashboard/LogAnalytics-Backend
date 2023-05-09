@@ -26,8 +26,8 @@ public class InternalMetricController {
         internalMetrics.add(new InternalMetric("InteractionsPerSession", "Interactions per session"));
         internalMetrics.add(new InternalMetric("7DaysLogins", "7 days logins", "7", "DaysLogins", null, false));
         internalMetrics.add(new InternalMetric("30DaysLogins", "30 days logins", "30", "DaysLogins", null, false));
-        internalMetrics.add(new InternalMetric("HistoricAccesses", "Historical data accesses", "true", "HistoricAccesses", "Current vs. Historical accesses", true));
-        internalMetrics.add(new InternalMetric("CurrentAccesses", "Current data accesses", "false", "HistoricAccesses", "Current vs. Historical accesses", true));
+        internalMetrics.add(new InternalMetric("HistoricAccesses", "Historical data accesses", "Historical", "HistoricAccesses", "Current vs. Historical accesses", true));
+        internalMetrics.add(new InternalMetric("CurrentAccesses", "Current data accesses", "Current", "HistoricAccesses", "Current vs. Historical accesses", true));
 
         internalMetricRepository.saveAll(internalMetrics);
     }

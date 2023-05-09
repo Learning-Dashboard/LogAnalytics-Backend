@@ -42,6 +42,6 @@ public class HistoricAccessesController implements Strategy {
 
     @Override
     public void setParams(String entity) {
-        historic = entity.equals("true");
+        historic = entity.equals("Historical");
     }
 }

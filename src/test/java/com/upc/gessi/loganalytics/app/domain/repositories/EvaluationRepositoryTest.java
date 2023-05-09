@@ -57,14 +57,14 @@ class EvaluationRepositoryTest {
         entityManager.persistAndFlush(e3); entityManager.persistAndFlush(e4);
         entityManager.persistAndFlush(e5); entityManager.persistAndFlush(e6);
         assertEquals(4, evaluationRepository.
-                findByDateBetweenOrderByInternalMetricAsc("2001-07-22", "2001-10-22").size());
-        assertEquals(e1, evaluationRepository.
-            findByDateBetweenOrderByInternalMetricAsc("2001-07-22", "2001-10-22").get(0));
-        assertEquals(e3, evaluationRepository.
-            findByDateBetweenOrderByInternalMetricAsc("2001-07-22", "2001-10-22").get(1));
-        assertEquals(e2, evaluationRepository.
-            findByDateBetweenOrderByInternalMetricAsc("2001-07-22", "2001-10-22").get(2));
+                findByDateBetweenOrderByDateDesc("2001-07-22", "2001-10-22").size());
         assertEquals(e4, evaluationRepository.
-            findByDateBetweenOrderByInternalMetricAsc("2001-07-22", "2001-10-22").get(3));
+            findByDateBetweenOrderByDateDesc("2001-07-22", "2001-10-22").get(0));
+        assertEquals(e3, evaluationRepository.
+            findByDateBetweenOrderByDateDesc("2001-07-22", "2001-10-22").get(1));
+        assertEquals(e2, evaluationRepository.
+            findByDateBetweenOrderByDateDesc("2001-07-22", "2001-10-22").get(2));
+        assertEquals(e1, evaluationRepository.
+            findByDateBetweenOrderByDateDesc("2001-07-22", "2001-10-22").get(3));
     }
 }

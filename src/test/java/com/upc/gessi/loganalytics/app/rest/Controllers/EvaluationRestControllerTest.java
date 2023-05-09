@@ -4,6 +4,7 @@ import com.upc.gessi.loganalytics.app.domain.controllers.EvaluationController;
 import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
 import com.upc.gessi.loganalytics.app.domain.repositories.EvaluationRepository;
+import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,17 +33,17 @@ class EvaluationRestControllerTest {
         InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         Evaluation evaluation = new Evaluation("2001-07-22", im, 5.0);
         Mockito.when(evaluationRepository.findFirstByOrderByDateDesc()).thenReturn(evaluation);
-        List<Evaluation> evaluationList = evaluationRestController.getCurrentEvaluations();
-        Mockito.verify(evaluationRepository, Mockito.times(1)).findByDate("2001-07-22");
+        List<EvaluationDTO> evaluationList = evaluationRestController.getCurrentEvaluations();
+        Mockito.verify(evaluationRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     void getHistoricalEvaluations() {
         String dateBefore = "2001-07-22";
         String dateAfter = "2001-10-20";
-        List<Evaluation> evaluationList = evaluationRestController.getHistoricalEvaluations(dateBefore, dateAfter);
+        List<EvaluationDTO> evaluationList = evaluationRestController.getHistoricalEvaluations(dateBefore, dateAfter);
         Mockito.verify(evaluationRepository, Mockito.times(1)).
-            findByDateBetweenOrderByInternalMetricAsc(dateBefore, dateAfter);
+            findByDateBetweenOrderByDateDesc(dateBefore, dateAfter);
 
         try {
             evaluationRestController.getHistoricalEvaluations(dateAfter, dateBefore);

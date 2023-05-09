@@ -31,7 +31,7 @@ class HistoricAccessesControllerTest {
 
     @Test
     void evaluate() {
-        historicAccessesController.setParams("true");
+        historicAccessesController.setParams("Historical");
         Subject subject = new Subject("subject");
         Team team = new Team("team", "sem", subject);
 
