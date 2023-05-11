@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,9 +33,11 @@ class EvaluationRestControllerTest {
     void getCurrentEvaluations() {
         InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         Evaluation evaluation = new Evaluation("2001-07-22", im, 5.0);
-        Mockito.when(evaluationRepository.findFirstByOrderByDateDesc()).thenReturn(evaluation);
+        List<EvaluationDTO> evaluationDTOS = new ArrayList<>();
+        evaluationDTOS.add(new EvaluationDTO(evaluation));
+        Mockito.when(evaluationController.getCurrentEvaluations()).thenReturn(evaluationDTOS);
         List<EvaluationDTO> evaluationList = evaluationRestController.getCurrentEvaluations();
-        Mockito.verify(evaluationRepository, Mockito.times(1)).findAll();
+        Mockito.verify(evaluationController, Mockito.times(1)).getCurrentEvaluations();
     }
 
     @Test
@@ -42,8 +45,8 @@ class EvaluationRestControllerTest {
         String dateBefore = "2001-07-22";
         String dateAfter = "2001-10-20";
         List<EvaluationDTO> evaluationList = evaluationRestController.getHistoricalEvaluations(dateBefore, dateAfter);
-        Mockito.verify(evaluationRepository, Mockito.times(1)).
-            findByDateBetweenOrderByDateDesc(dateBefore, dateAfter);
+        Mockito.verify(evaluationController, Mockito.times(1)).
+            getHistoricalEvaluations(dateBefore, dateAfter);
 
         try {
             evaluationRestController.getHistoricalEvaluations(dateAfter, dateBefore);

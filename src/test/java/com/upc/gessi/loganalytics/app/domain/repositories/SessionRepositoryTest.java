@@ -25,13 +25,14 @@ class SessionRepositoryTest {
     private SessionRepository sessionRepository;
 
     @Test
-    void findByTeam() {
+    void findByStartTimestampLessThan() {
         Subject subj1 = new Subject("PES");
         Subject subj2 = new Subject("ASW");
         Team team1 = new Team("pes11a", "sem", subj1);
         Team team2 = new Team("asw11a", "sem", subj2);
         Session session1 = new Session("s1", team1, 0);
-        Session session2 = new Session("s2", team2, 0);
+        Session session2 = new Session("s2", team1, 10);
+        Session session3 = new Session("s3", team2, 5);
         entityManager.persistAndFlush(subj1);
         entityManager.persistAndFlush(subj2);
         entityManager.persistAndFlush(team1);
@@ -39,20 +40,21 @@ class SessionRepositoryTest {
         entityManager.persistAndFlush(session1);
         entityManager.persistAndFlush(session2);
 
-        Iterable<Session> sessionIterable = sessionRepository.findByTeamAndEndTimestampLessThan(team1, 5L);
+        Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampLessThan(5L);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         assertEquals(sessionList.get(0), session1);
     }
 
     @Test
-    void findByTeamSubject() {
+    void findByTeamAndStartTimestampLessThan() {
         Subject subj1 = new Subject("PES");
         Subject subj2 = new Subject("ASW");
         Team team1 = new Team("pes11a", "sem", subj1);
         Team team2 = new Team("asw11a", "sem", subj2);
         Session session1 = new Session("s1", team1, 0);
-        Session session2 = new Session("s2", team2, 0);
+        Session session2 = new Session("s2", team1, 10);
+        Session session3 = new Session("s3", team2, 0);
         entityManager.persistAndFlush(subj1);
         entityManager.persistAndFlush(subj2);
         entityManager.persistAndFlush(team1);
@@ -60,7 +62,30 @@ class SessionRepositoryTest {
         entityManager.persistAndFlush(session1);
         entityManager.persistAndFlush(session2);
 
-        Iterable<Session> sessionIterable = sessionRepository.findByTeamSubject(subj1);
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamAndStartTimestampLessThan(team1, 5L);
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        assertEquals(sessionList.get(0), session1);
+    }
+
+    @Test
+    void findByTeamSubjectAndStartTimestampLessThan() {
+        Subject subj1 = new Subject("PES");
+        Subject subj2 = new Subject("ASW");
+        Team team1 = new Team("pes11a", "sem", subj1);
+        Team team2 = new Team("asw11a", "sem", subj2);
+        Session session1 = new Session("s1", team1, 0);
+        Session session2 = new Session("s2", team1, 10);
+        Session session3 = new Session("s3", team2, 0);
+        entityManager.persistAndFlush(subj1);
+        entityManager.persistAndFlush(subj2);
+        entityManager.persistAndFlush(team1);
+        entityManager.persistAndFlush(team2);
+        entityManager.persistAndFlush(session1);
+        entityManager.persistAndFlush(session2);
+        entityManager.persistAndFlush(session3);
+
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamSubjectAndStartTimestampLessThan(subj1, 5L);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         assertEquals(sessionList.get(0), session1);

@@ -12,7 +12,9 @@ import java.util.List;
 public interface EvaluationRepository extends CrudRepository<Evaluation, EvaluationPrimaryKey> {
     List<Evaluation> findByDate(String date);
     Evaluation findFirstByOrderByDateDesc();
-    List<Evaluation> findByDateBetweenOrderByDateDesc(String dateBefore, String dateAfter);
+    List<Evaluation> findByDateBetween(String dateBefore, String dateAfter);
+    List<Evaluation> findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
+        (String dateBefore, String dateAfter, String controllerName, String param);
     @NotNull
     List<Evaluation> findAll();
 }

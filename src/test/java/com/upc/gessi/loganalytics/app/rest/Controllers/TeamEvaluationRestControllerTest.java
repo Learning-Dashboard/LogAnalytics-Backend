@@ -1,8 +1,10 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.TeamEvaluationController;
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
 import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
+import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TeamEvaluationRestControllerTest {
 
     @Mock
-    TeamEvaluationRepository teamEvaluationRepository;
+    TeamEvaluationController teamEvaluationController;
 
     @InjectMocks
     TeamEvaluationRestController teamEvaluationRestController;
@@ -28,19 +31,21 @@ class TeamEvaluationRestControllerTest {
     void getCurrentEvaluations() {
         InternalMetric im = new InternalMetric("internalMetric", "Internal metric");
         TeamEvaluation e1 = new TeamEvaluation("2001-07-22", im, "PES", 5.0);
-        Mockito.when(teamEvaluationRepository.findFirstByTeamOrderByDateDesc("PES")).thenReturn(e1);
-        List<TeamEvaluation> evaluationList = teamEvaluationRestController.getCurrentEvaluations("PES");
-        Mockito.verify(teamEvaluationRepository, Mockito.times(1)).
-                findByDateAndTeam("2001-07-22", "PES");
+        List<EvaluationDTO> evaluationDTOS = new ArrayList<>();
+        evaluationDTOS.add(new EvaluationDTO(e1));
+        Mockito.when(teamEvaluationController.getCurrentEvaluations("PES")).thenReturn(evaluationDTOS);
+        List<EvaluationDTO> evaluationList = teamEvaluationRestController.getCurrentEvaluations("PES");
+        Mockito.verify(teamEvaluationController, Mockito.times(1)).
+                getCurrentEvaluations("PES");
     }
 
     @Test
     void getHistoricalEvaluations() {
         String dateBefore = "2001-07-22";
         String dateAfter = "2001-10-20";
-        List<TeamEvaluation> evaluationList = teamEvaluationRestController.getHistoricalEvaluations("PES", dateBefore, dateAfter);
-        Mockito.verify(teamEvaluationRepository, Mockito.times(1)).
-                findByDateBetweenAndTeamOrderByInternalMetricAsc(dateBefore, dateAfter, "PES");
+        List<EvaluationDTO> evaluationList = teamEvaluationRestController.getHistoricalEvaluations("PES", dateBefore, dateAfter);
+        Mockito.verify(teamEvaluationController, Mockito.times(1)).
+                getHistoricalEvaluations("PES", dateBefore, dateAfter);
 
         try {
             teamEvaluationRestController.getHistoricalEvaluations("PES", dateAfter, dateBefore);

@@ -10,7 +10,8 @@ import java.util.List;
 
 @Repository
 public interface SessionRepository extends CrudRepository<Session, String> {
-    List<Session> findByTeamAndEndTimestampLessThan(Team team, long time);
-    List<Session> findByTeamSubject(Subject subject);
+    List<Session> findByStartTimestampLessThan(long time);
+    List<Session> findByTeamAndStartTimestampLessThan(Team team, long time);
+    List<Session> findByTeamSubjectAndStartTimestampLessThan(Subject subject, long time);
     List<Session> findByStartTimestampBetweenAndTeam(long timeBefore, long timeAfter, Team team);
 }

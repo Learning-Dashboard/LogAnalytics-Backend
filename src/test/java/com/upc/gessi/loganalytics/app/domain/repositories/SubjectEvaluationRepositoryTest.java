@@ -64,16 +64,16 @@ class SubjectEvaluationRepositoryTest {
         entityManager.persistAndFlush(e3); entityManager.persistAndFlush(e4);
         entityManager.persistAndFlush(e5); entityManager.persistAndFlush(e6);
         assertEquals(e3, subjectEvaluationRepository.
-            findByDateBetweenAndSubjectOrderByInternalMetricAsc("2001-07-20",
-            "2001-11-20", "ASW").get(0));
+            findBySubjectAndDateBetween("ASW", "2001-07-20",
+            "2001-11-20").get(0));
         assertEquals(e4, subjectEvaluationRepository.
-            findByDateBetweenAndSubjectOrderByInternalMetricAsc("2001-07-20",
-            "2001-11-20", "ASW").get(1));
+            findBySubjectAndDateBetween("ASW", "2001-07-20",
+            "2001-11-20").get(1));
         assertEquals(e5, subjectEvaluationRepository.
-            findByDateBetweenAndSubjectOrderByInternalMetricAsc("2001-07-20",
-            "2001-11-20", "ASW").get(2));
+            findBySubjectAndDateBetween("ASW", "2001-07-20",
+            "2001-11-20").get(2));
         assertEquals(3, subjectEvaluationRepository.
-            findByDateBetweenAndSubjectOrderByInternalMetricAsc("2001-07-20",
-            "2001-11-20", "ASW").size());
+            findBySubjectAndDateBetween("ASW", "2001-07-20",
+            "2001-11-20").size());
     }
 }

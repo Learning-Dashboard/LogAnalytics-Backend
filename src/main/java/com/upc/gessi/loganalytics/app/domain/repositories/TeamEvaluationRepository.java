@@ -11,6 +11,8 @@ import java.util.List;
 public interface TeamEvaluationRepository extends CrudRepository<TeamEvaluation, TeamEvaluationPrimaryKey> {
     List<TeamEvaluation> findByDateAndTeam(String date, String team);
     TeamEvaluation findFirstByTeamOrderByDateDesc(String team);
-    List<TeamEvaluation> findByDateBetweenAndTeamOrderByInternalMetricAsc(
-        String dateBefore, String dateAfter, String team);
+    List<TeamEvaluation> findByTeamAndDateBetween(String team, String dateBefore, String dateAfter);
+    List<TeamEvaluation> findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
+        (String team, String dateBefore, String dateAfter, String controllerName, String param);
+    List<TeamEvaluation> findByTeam(String team);
 }

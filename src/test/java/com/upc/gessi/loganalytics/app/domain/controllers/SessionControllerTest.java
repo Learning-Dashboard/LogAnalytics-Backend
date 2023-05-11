@@ -71,7 +71,7 @@ class SessionControllerTest {
         Session session = new Session("s", team, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session);
-        Mockito.when(sessionRepository.findAll()).thenReturn(sessions);
+        Mockito.when(sessionRepository.findByStartTimestampLessThan(Mockito.anyLong())).thenReturn(sessions);
         List<Session> actualSessions = sessionController.getAll();
         assertEquals(sessions, actualSessions);
     }
@@ -83,7 +83,7 @@ class SessionControllerTest {
         Session session1 = new Session("s1", team1, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
-        Mockito.when(sessionRepository.findByTeamAndEndTimestampLessThan(Mockito.any(), Mockito.anyLong())).thenReturn(sessions);
+        Mockito.when(sessionRepository.findByTeamAndStartTimestampLessThan(Mockito.any(), Mockito.anyLong())).thenReturn(sessions);
         List<Session> actualSessions = sessionController.getAllByTeam(team1);
         assertEquals(sessions, actualSessions);
     }
@@ -95,7 +95,7 @@ class SessionControllerTest {
         Session session1 = new Session("s1", team1, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
-        Mockito.when(sessionRepository.findByTeamSubject(s)).thenReturn(sessions);
+        Mockito.when(sessionRepository.findByTeamSubjectAndStartTimestampLessThan(Mockito.any(), Mockito.anyLong())).thenReturn(sessions);
         List<Session> actualSessions = sessionController.getAllBySubject(s);
         assertEquals(sessions, actualSessions);
     }

@@ -64,7 +64,10 @@ public class SessionController {
     }
 
     public List<Session> getAll() {
-        Iterable<Session> sessionIterable = sessionRepository.findAll();
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampLessThan(timestampToday);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         return sessionList;
@@ -74,14 +77,17 @@ public class SessionController {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli();
 
-        Iterable<Session> sessionIterable = sessionRepository.findByTeamAndEndTimestampLessThan(team, timestampToday);
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamAndStartTimestampLessThan(team, timestampToday);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         return sessionList;
     }
 
     public List<Session> getAllBySubject(Subject subject) {
-        Iterable<Session> sessionIterable = sessionRepository.findByTeamSubject(subject);
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        Iterable<Session> sessionIterable = sessionRepository.findByTeamSubjectAndStartTimestampLessThan(subject, timestampToday);
         List<Session> sessionList = new ArrayList<>();
         sessionIterable.forEach(sessionList::add);
         return sessionList;
