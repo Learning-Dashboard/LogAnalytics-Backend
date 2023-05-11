@@ -192,8 +192,8 @@ public class EvaluationController {
             boolean found = false;
             if (!e.getInternalMetric().isGroupable()) {
                 for (int i = 0; i < result.size() && !found; ++i) {
-                    if (Objects.equals(result.get(i).getInternalMetric().getController(), e.getInternalMetric().getController())) {
-                        Map<String,Double> oldEntities = result.get(i).getEntities();
+                    if (Objects.equals(result.get(i).getInternalMetric().getId(), e.getInternalMetric().getId())) {
+                        Map<String, Double> oldEntities = result.get(i).getEntities();
                         oldEntities.put(e.getDate(), e.getValue());
                         result.get(i).setEntities(oldEntities);
                         found = true;
