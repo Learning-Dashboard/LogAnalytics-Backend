@@ -38,7 +38,7 @@ class QModelAccessRepositoryTest {
     }
 
     @Test
-    void findByTeamAndViewFormat() {
+    void findByTeamAndViewFormatAndTimeBetween() {
         QModelAccess qModelAccess1 = new QModelAccess(0, "team1", "testMessage", "testPage", session1, "testView");
         QModelAccess qModelAccess2 = new QModelAccess(5, "team1", "testMessage", "testPage", session1, "testView2");
         QModelAccess qModelAccess3 = new QModelAccess(10, "team1", "testMessage", "testPage", session1, "testView2");

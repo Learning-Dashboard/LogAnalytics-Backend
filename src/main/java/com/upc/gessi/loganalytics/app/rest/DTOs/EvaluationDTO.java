@@ -132,4 +132,18 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
     public int hashCode() {
         return Objects.hash(getName(), getSubject(), getTeam(), getDate(), getInternalMetric(), getValue(), isGroupable(), getEntities());
     }
+
+    @Override
+    public String toString() {
+        return "EvaluationDTO{" +
+                "name='" + name + '\'' +
+                ", subject='" + subject + '\'' +
+                ", team='" + team + '\'' +
+                ", date='" + date + '\'' +
+                ", internalMetric=" + internalMetric +
+                ", value=" + value +
+                ", groupable=" + groupable +
+                ", entities=" + entities +
+                '}';
+    }
 }

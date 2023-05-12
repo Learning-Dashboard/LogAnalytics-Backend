@@ -31,6 +31,7 @@ public class MetricAccessController {
         metricAccessIterable.forEach(metricAccesses::add);
         return metricAccesses;
     }
+
     public List<MetricAccess> getAllByTeamAndViewFormat(Team team, String viewFormat) {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);

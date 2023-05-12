@@ -59,4 +59,29 @@ class TeamEvaluationRestControllerTest {
             assertEquals(e.getMessage(), "400 BAD_REQUEST \"Date formats are incorrect\"");
         }
     }
+
+    @Test
+    void getHistoricalEvaluationsByParam() {
+        String dateBefore = "2001-07-22";
+        String dateAfter = "2001-10-20";
+        EvaluationDTO evaluation = teamEvaluationRestController.getHistoricalEvaluationsByParam
+            ("PES", dateBefore, dateAfter, "testMetric", "testParam");
+        Mockito.verify(teamEvaluationController, Mockito.times(1)).
+            getHistoricalEvaluationsByParam("PES", dateBefore,
+            dateAfter, "testMetric", "testParam");
+
+        try {
+            teamEvaluationRestController.getHistoricalEvaluationsByParam
+                ("PES", dateAfter, dateBefore, "testMetric", "testParam");
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getMessage(), "400 BAD_REQUEST \"dateBefore is not previous to dateAfter\"");
+        }
+        try {
+            String wrongDateBefore = "22-07-2001";
+            teamEvaluationRestController.getHistoricalEvaluationsByParam
+                ("PES", wrongDateBefore, dateAfter, "testMetric", "testParam");
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getMessage(), "400 BAD_REQUEST \"Date formats are incorrect\"");
+        }
+    }
 }

@@ -45,7 +45,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(page) &&
-            internalMetric.getController().equals("PageAccesses")));
+            internalMetric.getController().equals("PageAccesses") &&
+            internalMetric.getControllerName().equals("Page accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -59,7 +61,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(factor) &&
-            internalMetric.getController().equals("FactorAccesses")));
+            internalMetric.getController().equals("FactorAccesses") &&
+            internalMetric.getControllerName().equals("Factor accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -73,7 +77,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(indicator) &&
-            internalMetric.getController().equals("IndicatorAccesses")));
+            internalMetric.getController().equals("IndicatorAccesses") &&
+            internalMetric.getControllerName().equals("Indicator accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -87,7 +93,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(metric) &&
-            internalMetric.getController().equals("MetricAccesses")));
+            internalMetric.getController().equals("MetricAccesses") &&
+            internalMetric.getControllerName().equals("Metric accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -101,7 +109,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(indicator) &&
-            internalMetric.getController().equals("IViewAccesses")));
+            internalMetric.getController().equals("IViewAccesses") &&
+            internalMetric.getControllerName().equals("Indicator view accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -115,7 +125,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(factor) &&
-            internalMetric.getController().equals("FViewAccesses")));
+            internalMetric.getController().equals("FViewAccesses") &&
+            internalMetric.getControllerName().equals("Factor view accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -129,7 +141,9 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(metric) &&
-            internalMetric.getController().equals("MViewAccesses")));
+            internalMetric.getController().equals("MViewAccesses") &&
+            internalMetric.getControllerName().equals("Metric view accesses") &&
+            internalMetric.isGroupable()));
     }
 
     @Test
@@ -143,6 +157,8 @@ class InternalMetricControllerTest {
             .save(Mockito.argThat(internalMetric -> internalMetric.getId().equals(id) &&
             internalMetric.getName().equals(name) &&
             internalMetric.getParam().equals(qModel) &&
-            internalMetric.getController().equals("QModViewAccesses")));
+            internalMetric.getController().equals("QModViewAccesses") &&
+            internalMetric.getControllerName().equals("Quality Model view accesses") &&
+            internalMetric.isGroupable()));
     }
 }

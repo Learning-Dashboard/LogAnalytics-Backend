@@ -37,16 +37,38 @@ public class EvaluationRestController {
     public List<EvaluationDTO> getHistoricalEvaluations(
         @RequestParam(name = "dateBefore") String dateBefore,
         @RequestParam (name = "dateAfter") String dateAfter) {
-        return evaluationController.getHistoricalEvaluations(dateBefore, dateAfter);
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            formatter.setLenient(false);
+            Date dBefore = formatter.parse(dateBefore);
+            Date dAfter = formatter.parse(dateAfter);
+            if (dateBefore.compareTo(dateAfter) > 0)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "dateBefore is not previous to dateAfter");
+            else return evaluationController.getHistoricalEvaluations(dateBefore, dateAfter); //TODO: No sé si irá bien
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date formats are incorrect");
+        }
     }
 
-    @GetMapping("/historical/{displayableMetric}/{param}")
+    @GetMapping("/historical/{metric}/{param}")
     @ResponseStatus(HttpStatus.OK)
     public EvaluationDTO getHistoricalEvaluationsByParam(
         @RequestParam(name = "dateBefore") String dateBefore,
         @RequestParam (name = "dateAfter") String dateAfter,
-        @PathVariable (name = "displayableMetric") String displayableMetric,
+        @PathVariable (name = "metric") String metric,
         @PathVariable (name = "param") String param) {
-        return evaluationController.getHistoricalEvaluationsByParam(dateBefore, dateAfter, displayableMetric, param);
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            formatter.setLenient(false);
+            Date dBefore = formatter.parse(dateBefore);
+            Date dAfter = formatter.parse(dateAfter);
+            if (dateBefore.compareTo(dateAfter) > 0)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "dateBefore is not previous to dateAfter");
+            else return evaluationController.getHistoricalEvaluationsByParam(dateBefore, dateAfter, metric, param);
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date formats are incorrect");
+        }
     }
 }

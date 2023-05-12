@@ -51,7 +51,7 @@ class SubjectEvaluationRepositoryTest {
     }
 
     @Test
-    void findByDateBetweenAndSubjectOrderByInternalMetricAsc() {
+    void findBySubjectAndDateBetween() {
         InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im, "PES", 5.0);
@@ -75,5 +75,52 @@ class SubjectEvaluationRepositoryTest {
         assertEquals(3, subjectEvaluationRepository.
             findBySubjectAndDateBetween("ASW", "2001-07-20",
             "2001-11-20").size());
+    }
+
+    @Test
+    void findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam() {
+        InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
+            "testParam", "testController", "testControllerName", true);
+        InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric2",
+            "testParam2", "testController2", "testControllerName2", true);
+        SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im1, "PES", 5.0);
+        SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im2, "PES", 5.0);
+        SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im1, "ASW", 5.0);
+        SubjectEvaluation e4 = new SubjectEvaluation("2001-10-20", im2, "ASW", 5.0);
+        SubjectEvaluation e5 = new SubjectEvaluation("2001-11-20", im1, "ASW", 5.0);
+        SubjectEvaluation e6 = new SubjectEvaluation("2001-12-20", im2, "ASW", 5.0);
+        entityManager.persistAndFlush(im1);
+        entityManager.persistAndFlush(im2);
+        entityManager.persistAndFlush(e1); entityManager.persistAndFlush(e2);
+        entityManager.persistAndFlush(e3); entityManager.persistAndFlush(e4);
+        entityManager.persistAndFlush(e5); entityManager.persistAndFlush(e6);
+
+        assertEquals(e3, subjectEvaluationRepository.
+            findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam("ASW", "2001-07-20",
+            "2001-11-20", "testControllerName", "testParam").get(0));
+        assertEquals(e5, subjectEvaluationRepository.
+            findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam("ASW", "2001-07-20",
+            "2001-11-20", "testControllerName", "testParam").get(1));
+        assertEquals(2, subjectEvaluationRepository.
+            findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam("ASW", "2001-07-20",
+            "2001-11-20", "testControllerName", "testParam").size());
+    }
+
+    @Test
+    void findBySubject() {
+        InternalMetric im = new InternalMetric("testInternalMetric", "Test internal metric");
+        SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im, "PES", 5.0);
+        SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im, "PES", 5.0);
+        SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im, "ASW", 5.0);
+        SubjectEvaluation e4 = new SubjectEvaluation("2001-10-20", im, "ASW", 5.0);
+        SubjectEvaluation e5 = new SubjectEvaluation("2001-11-20", im, "ASW", 5.0);
+        SubjectEvaluation e6 = new SubjectEvaluation("2001-12-20", im, "ASW", 5.0);
+        entityManager.persistAndFlush(im);
+        entityManager.persistAndFlush(e1); entityManager.persistAndFlush(e2);
+        entityManager.persistAndFlush(e3); entityManager.persistAndFlush(e4);
+        entityManager.persistAndFlush(e5); entityManager.persistAndFlush(e6);
+        assertEquals(e1, subjectEvaluationRepository.findBySubject("PES").get(0));
+        assertEquals(e2, subjectEvaluationRepository.findBySubject("PES").get(1));
+        assertEquals(2, subjectEvaluationRepository.findBySubject("PES").size());
     }
 }

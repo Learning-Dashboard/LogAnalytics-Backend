@@ -26,7 +26,7 @@ class LogRepositoryTest {
     private LogRepository logRepository;
 
     @Test
-    void findByPageAndTeam() {
+    void findByPageAndTeamAndTimeBetween() {
         Subject subj = new Subject("PES");
         Team team = new Team("pes11a", "sem", subj);
         Session session = new Session("s", team, 0);
@@ -49,7 +49,7 @@ class LogRepositoryTest {
     }
 
     @Test
-    void findAll() {
+    void findAllByOrderByTimeDesc() {
         Subject subj = new Subject("PES");
         Team team = new Team("pes11a", "sem", subj);
         Session session = new Session("s", team, 0);

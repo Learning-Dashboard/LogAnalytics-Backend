@@ -41,7 +41,7 @@ class IndicatorAccessRepositoryTest {
     }
 
     @Test
-    void findByTeamAndIndicatorsId() {
+    void findByTeamAndIndicatorsIdAndTimeBetween() {
         List<Indicator> indicators = new ArrayList<>();
         indicators.add(new Indicator("i1"));
         List<Indicator> indicators2 = new ArrayList<>();
@@ -63,7 +63,7 @@ class IndicatorAccessRepositoryTest {
     }
 
     @Test
-    void findByTeamAndViewFormat() {
+    void findByTeamAndViewFormatAndTimeBetween() {
         List<Indicator> indicators = new ArrayList<>();
         indicators.add(new Indicator("i1"));
         IndicatorAccess indicatorAccess1 = new IndicatorAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", indicators);
@@ -82,7 +82,7 @@ class IndicatorAccessRepositoryTest {
     }
 
     @Test
-    void findByHistoricAndTeam() {
+    void findByHistoricAndTeamAndTimeBetween() {
         List<Indicator> indicators = new ArrayList<>();
         indicators.add(new Indicator("i1"));
         IndicatorAccess indicatorAccess1 = new IndicatorAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", indicators);

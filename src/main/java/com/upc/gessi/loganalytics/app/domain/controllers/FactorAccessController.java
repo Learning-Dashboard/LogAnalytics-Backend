@@ -32,6 +32,7 @@ public class FactorAccessController {
         factorAccessIterable.forEach(factorAccesses::add);
         return factorAccesses;
     }
+    
     public List<FactorAccess> getAllByTeamAndViewFormat(Team team, String viewFormat) {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);

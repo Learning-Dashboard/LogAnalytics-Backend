@@ -30,46 +30,20 @@ public class TeamEvaluationController {
     }
 
     public List<EvaluationDTO> getHistoricalEvaluations(String team, String dateBefore, String dateAfter) {
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            formatter.setLenient(false);
-            Date dBefore = formatter.parse(dateBefore);
-            Date dAfter = formatter.parse(dateAfter);
-            if (dateBefore.compareTo(dateAfter) > 0)
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "dateBefore is not previous to dateAfter");
-            List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.
-                    findByTeamAndDateBetween(team, dateBefore, dateAfter);
-            if (!unfilteredEvaluations.isEmpty()) {
-                return filterHistoricalEvaluations(unfilteredEvaluations);
-            }
-            return new ArrayList<>();
-
-        } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date formats are incorrect");
-        }
+        List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.
+                findByTeamAndDateBetween(team, dateBefore, dateAfter);
+        if (!unfilteredEvaluations.isEmpty())
+            return filterHistoricalEvaluations(unfilteredEvaluations);
+        return new ArrayList<>();
     }
 
-    public EvaluationDTO getHistoricalEvaluationsByParam(String team, String dateBefore, String dateAfter, String displayableMetric, String param) {
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            formatter.setLenient(false);
-            Date dBefore = formatter.parse(dateBefore);
-            Date dAfter = formatter.parse(dateAfter);
-            if (dateBefore.compareTo(dateAfter) > 0)
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "dateBefore is not previous to dateAfter");
-            List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.
-                    findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
-                            (team, dateBefore, dateAfter, displayableMetric, param);
-            if (!unfilteredEvaluations.isEmpty()) {
-                return filterHistoricalEvaluationsByParam(unfilteredEvaluations);
-            }
-            return null;
-
-        } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date formats are incorrect");
-        }
+    public EvaluationDTO getHistoricalEvaluationsByParam(String team, String dateBefore, String dateAfter, String metric, String param) {
+        List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.
+                findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
+                        (team, dateBefore, dateAfter, metric, param);
+        if (!unfilteredEvaluations.isEmpty())
+            return filterHistoricalEvaluationsByParam(unfilteredEvaluations);
+        return null;
     }
 
     public List<EvaluationDTO> filterEvaluations(List<TeamEvaluation> unfilteredEvaluations, String latestDate) {

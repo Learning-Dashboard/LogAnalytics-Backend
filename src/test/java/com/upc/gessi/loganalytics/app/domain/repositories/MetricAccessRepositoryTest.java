@@ -41,7 +41,7 @@ class MetricAccessRepositoryTest {
     }
 
     @Test
-    void findByTeamAndMetricsId() {
+    void findByTeamAndMetricsIdAndTimeBetween() {
         List<Metric> metrics = new ArrayList<>();
         metrics.add(new Metric("m1"));
         List<Metric> metrics2 = new ArrayList<>();
@@ -63,7 +63,7 @@ class MetricAccessRepositoryTest {
     }
 
     @Test
-    void findByTeamAndViewFormat() {
+    void findByTeamAndViewFormatAndTimeBetween() {
         List<Metric> metrics = new ArrayList<>();
         metrics.add(new Metric("m1"));
         MetricAccess metricAccess1 = new MetricAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", metrics);
@@ -82,7 +82,7 @@ class MetricAccessRepositoryTest {
     }
 
     @Test
-    void findByHistoricAndTeam() {
+    void findByHistoricAndTeamAndTimeBetween() {
         List<Metric> metrics = new ArrayList<>();
         metrics.add(new Metric("m1"));
         MetricAccess metricAccess1 = new MetricAccess(0, "team1", "testMessage", "testPage", session1, true, "testView", metrics);

@@ -39,6 +39,7 @@ class SessionRepositoryTest {
         entityManager.persistAndFlush(team2);
         entityManager.persistAndFlush(session1);
         entityManager.persistAndFlush(session2);
+        entityManager.persistAndFlush(session3);
 
         Iterable<Session> sessionIterable = sessionRepository.findByStartTimestampLessThan(5L);
         List<Session> sessionList = new ArrayList<>();
@@ -61,6 +62,7 @@ class SessionRepositoryTest {
         entityManager.persistAndFlush(team2);
         entityManager.persistAndFlush(session1);
         entityManager.persistAndFlush(session2);
+        entityManager.persistAndFlush(session3);
 
         Iterable<Session> sessionIterable = sessionRepository.findByTeamAndStartTimestampLessThan(team1, 5L);
         List<Session> sessionList = new ArrayList<>();
