@@ -12,7 +12,7 @@ public class Indicator implements Serializable {
 
     @Id @Column(name = "id", nullable = false)
     private String id;
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
     @ManyToMany(mappedBy = "indicators", cascade = CascadeType.REMOVE)
     private List<IndicatorAccess> indicatorAccesses;

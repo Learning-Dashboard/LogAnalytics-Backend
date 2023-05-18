@@ -10,12 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,6 +33,13 @@ public class EvaluationController {
     TeamController teamController;
     @Autowired
     SubjectController subjectController;
+
+    @Autowired
+    IndicatorController indicatorController;
+    @Autowired
+    FactorController factorController;
+    @Autowired
+    MetricController metricController;
 
     @Autowired
     ApplicationContext applicationContext;
@@ -137,18 +141,18 @@ public class EvaluationController {
                 boolean found = false;
                 for (int i = 0; i < result.size() && !found; ++i) {
                     if (Objects.equals(result.get(i).getInternalMetric().getController(), e.getInternalMetric().getController())) {
-                        Double oldValue = result.get(i).getEntities().get(e.getInternalMetric().getParam());
+                        Double oldValue = result.get(i).getEntities().get(getEntityName(e.getInternalMetric().getParam()));
                         if (oldValue == null) oldValue = 0.0;
                         double newValue = oldValue + e.getValue();
                         Map<String,Double> oldEntities = result.get(i).getEntities();
-                        oldEntities.put(e.getInternalMetric().getParam(), newValue);
+                        oldEntities.put(getEntityName(e.getInternalMetric().getParam()), newValue);
                         result.get(i).setEntities(oldEntities);
                         found = true;
                     }
                 }
                 if (!found) {
                     Map<String,Double> entities = new HashMap<>();
-                    entities.put(e.getInternalMetric().getParam(), e.getValue());
+                    entities.put(getEntityName(e.getInternalMetric().getParam()), e.getValue());
                     EvaluationDTO eDTO = new EvaluationDTO(e);
                     eDTO.setValue(0.0);
                     eDTO.setEntities(entities);
@@ -184,18 +188,18 @@ public class EvaluationController {
             else {
                 for (int i = 0; i < result.size() && !found; ++i) {
                     if (Objects.equals(result.get(i).getInternalMetric().getController(), e.getInternalMetric().getController())) {
-                        Double oldValue = result.get(i).getEntities().get(e.getInternalMetric().getParam());
+                        Double oldValue = result.get(i).getEntities().get(getEntityName(e.getInternalMetric().getParam()));
                         if (oldValue == null) oldValue = 0.0;
                         double newValue = oldValue + e.getValue();
                         Map<String,Double> oldEntities = result.get(i).getEntities();
-                        oldEntities.put(e.getInternalMetric().getParam(), newValue);
+                        oldEntities.put(getEntityName(e.getInternalMetric().getParam()), newValue);
                         result.get(i).setEntities(oldEntities);
                         found = true;
                     }
                 }
                 if (!found) {
                     Map<String,Double> entities = new HashMap<>();
-                    entities.put(e.getInternalMetric().getParam(), e.getValue());
+                    entities.put(getEntityName(e.getInternalMetric().getParam()), e.getValue());
                     EvaluationDTO eDTO = new EvaluationDTO(e);
                     eDTO.setValue(0.0);
                     eDTO.setEntities(entities);
@@ -210,7 +214,7 @@ public class EvaluationController {
         EvaluationDTO result = null;
         for (Evaluation e : unfilteredEvaluations) {
             if (result == null) {
-                Map<String, Double> entities = new HashMap<>();
+                Map<String,Double> entities = new HashMap<>();
                 entities.put(e.getDate(), e.getValue());
                 EvaluationDTO eDTO = new EvaluationDTO(e);
                 eDTO.setValue(0.0);
@@ -224,6 +228,16 @@ public class EvaluationController {
             }
         }
         return result;
+    }
+
+    public String getEntityName(String paramName) {
+        Indicator i = indicatorController.getIndicator(paramName);
+        if (i != null) return i.getName();
+        Factor f = factorController.getFactor(paramName);
+        if (f != null) return f.getName();
+        Metric m = metricController.getMetric(paramName);
+        if (m != null) return m.getName();
+        return paramName;
     }
 
     private void setStrategy(InternalMetric im) {

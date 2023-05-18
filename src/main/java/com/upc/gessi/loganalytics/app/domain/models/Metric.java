@@ -12,7 +12,7 @@ public class Metric implements Serializable {
 
     @Id @Column(name = "id", nullable = false)
     private String id;
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
     @Column(name = "noUserId")
     private String noUserId;

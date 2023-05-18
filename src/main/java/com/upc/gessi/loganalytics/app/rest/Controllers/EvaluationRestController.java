@@ -21,13 +21,13 @@ public class EvaluationRestController {
     EvaluationController evaluationController;
 
     @GetMapping("/update")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public void evaluateInternalMetrics() {
         evaluationController.evaluateMetrics();
     }
 
     @GetMapping("/current")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public List<EvaluationDTO> getCurrentEvaluations() {
         return evaluationController.getCurrentEvaluations();
     }

@@ -13,6 +13,9 @@ public class SubjectEvaluationController {
     @Autowired
     SubjectEvaluationRepository subjectEvaluationRepository;
 
+    @Autowired
+    EvaluationController evaluationController;
+
     public List<EvaluationDTO> getCurrentEvaluations(String subject) {
         SubjectEvaluation latestEvaluation = subjectEvaluationRepository.findFirstBySubjectOrderByDateDesc(subject);
         if (latestEvaluation != null) {
@@ -80,7 +83,7 @@ public class SubjectEvaluationController {
             if (!e.getInternalMetric().isGroupable()) {
                 for (int i = 0; i < result.size() && !found; ++i) {
                     if (Objects.equals(result.get(i).getInternalMetric().getId(), e.getInternalMetric().getId())) {
-                        Map<String,Double> oldEntities = result.get(i).getEntities();
+                        Map<String, Double> oldEntities = result.get(i).getEntities();
                         oldEntities.put(e.getDate(), e.getValue());
                         result.get(i).setEntities(oldEntities);
                         found = true;
@@ -124,7 +127,7 @@ public class SubjectEvaluationController {
         EvaluationDTO result = null;
         for (SubjectEvaluation e : unfilteredEvaluations) {
             if (result == null) {
-                Map<String, Double> entities = new HashMap<>();
+                Map<String,Double> entities = new HashMap<>();
                 entities.put(e.getDate(), e.getValue());
                 EvaluationDTO eDTO = new EvaluationDTO(e);
                 eDTO.setValue(0.0);

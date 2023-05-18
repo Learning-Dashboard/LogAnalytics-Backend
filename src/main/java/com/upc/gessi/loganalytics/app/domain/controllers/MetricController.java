@@ -205,4 +205,9 @@ public class MetricController {
         Optional<Metric> metricOptional = metricRepository.findById(m.getId());
         return metricOptional.isPresent();
     }
+
+    public Metric getMetric(String id) {
+        Optional<Metric> metricOptional = metricRepository.findById(id);
+        return metricOptional.orElse(null);
+    }
 }

@@ -1,16 +1,11 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
-import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
 import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
 import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -18,6 +13,9 @@ public class TeamEvaluationController {
 
     @Autowired
     TeamEvaluationRepository teamEvaluationRepository;
+
+    @Autowired
+    EvaluationController evaluationController;
 
     public List<EvaluationDTO> getCurrentEvaluations(String team) {
         TeamEvaluation latestEvaluation = teamEvaluationRepository.findFirstByTeamOrderByDateDesc(team);
@@ -86,7 +84,7 @@ public class TeamEvaluationController {
             if (!e.getInternalMetric().isGroupable()) {
                 for (int i = 0; i < result.size() && !found; ++i) {
                     if (Objects.equals(result.get(i).getInternalMetric().getId(), e.getInternalMetric().getId())) {
-                        Map<String,Double> oldEntities = result.get(i).getEntities();
+                        Map<String, Double> oldEntities = result.get(i).getEntities();
                         oldEntities.put(e.getDate(), e.getValue());
                         result.get(i).setEntities(oldEntities);
                         found = true;
@@ -130,7 +128,7 @@ public class TeamEvaluationController {
         EvaluationDTO result = null;
         for (TeamEvaluation e : unfilteredEvaluations) {
             if (result == null) {
-                Map<String, Double> entities = new HashMap<>();
+                Map<String,Double> entities = new HashMap<>();
                 entities.put(e.getDate(), e.getValue());
                 EvaluationDTO eDTO = new EvaluationDTO(e);
                 eDTO.setValue(0.0);

@@ -101,4 +101,9 @@ public class FactorController {
         Optional<Factor> factorOptional = factorRepository.findById(f.getId());
         return factorOptional.isPresent();
     }
+
+    public Factor getFactor(String id) {
+        Optional<Factor> factorOptional = factorRepository.findById(id);
+        return factorOptional.orElse(null);
+    }
 }

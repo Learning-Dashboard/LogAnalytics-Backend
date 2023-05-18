@@ -8,11 +8,9 @@ import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationReposito
 import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +37,12 @@ class EvaluationControllerTest {
     SubjectEvaluationRepository subjectEvaluationRepository;
     @Mock
     Strategy strategy;
+    @Mock
+    IndicatorController indicatorController;
+    @Mock
+    FactorController factorController;
+    @Mock
+    MetricController metricController;
 
     @InjectMocks
     EvaluationController evaluationController;

@@ -97,4 +97,9 @@ public class IndicatorController {
         Optional<Indicator> indicatorOptional = indicatorRepository.findById(i.getId());
         return indicatorOptional.isPresent();
     }
+
+    public Indicator getIndicator(String id) {
+        Optional<Indicator> indicatorOptional = indicatorRepository.findById(id);
+        return indicatorOptional.orElse(null);
+    }
 }
