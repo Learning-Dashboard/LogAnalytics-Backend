@@ -12,7 +12,7 @@ class FactorTest {
 
     @BeforeEach
     void setUp() {
-        f = new Factor("factorTest");
+        f = new Factor("factorTest", "factorName");
     }
 
     @AfterEach
@@ -32,8 +32,19 @@ class FactorTest {
     }
 
     @Test
+    void getName() {
+        assertEquals(f.getName(), "factorName");
+    }
+
+    @Test
+    void setName() {
+        f.setName("factorName2");
+        assertEquals(f.getName(), "factorName2");
+    }
+
+    @Test
     void testToString() {
-        String factorString = "Factor{id='factorTest'}";
+        String factorString = "Factor{id='factorTest', name='factorName'}";
         assertEquals(f.toString(), factorString);
     }
 }

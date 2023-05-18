@@ -74,7 +74,7 @@ class FactorAccessTest {
     void testToString() {
         String result = "FactorAccess{" +
             "historic=true, viewFormat='testViewFormat', " +
-            "factors=[Factor{id='f1'}]} Log{time=0, team='pes11a', " +
+            "factors=[Factor{id='f1', name='null'}]} Log{time=0, team='pes11a', " +
             "message='testMessage', page='testPage', " +
             "session=Session{id='null', team=null, startTimestamp=0, endTimestamp=0, " +
             "duration=0.0, nInteractions=0}}";

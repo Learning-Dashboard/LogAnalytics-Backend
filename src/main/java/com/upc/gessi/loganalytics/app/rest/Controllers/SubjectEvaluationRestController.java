@@ -51,7 +51,7 @@ public class SubjectEvaluationRestController {
         }
     }
 
-    @GetMapping("/historical/{displayableMetric}/{param}")
+    @GetMapping("/historical/{metric}/{param}")
     @ResponseStatus(HttpStatus.OK)
     public EvaluationDTO getHistoricalEvaluationsByParam(
             @RequestParam(name = "subject") String subject,

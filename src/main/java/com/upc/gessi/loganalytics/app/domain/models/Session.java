@@ -24,7 +24,7 @@ public class Session {
     private double duration;
     @Column (name = "n_interactions")
     private int nInteractions;
-    @OneToMany (mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "session", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Log> logs;
 

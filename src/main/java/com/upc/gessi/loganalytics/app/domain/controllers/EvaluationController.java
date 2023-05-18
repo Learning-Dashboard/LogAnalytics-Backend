@@ -242,7 +242,9 @@ public class EvaluationController {
             }
             else throw new IllegalArgumentException("Class is not a @Controller");
         } catch (ClassNotFoundException e) {
-            logger.error(e.getMessage());
+            if (!Objects.equals(e.getMessage(),
+                "com.upc.gessi.loganalytics.app.domain.controllers.internalMetrics.TestInternalMetricController"))
+                logger.error(e.getMessage());
         }
     }
 

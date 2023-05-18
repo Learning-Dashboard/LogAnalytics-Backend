@@ -12,7 +12,7 @@ public class Subject implements Serializable {
 
     @Id @Column (name = "acronym", nullable = false)
     private String acronym;
-    @OneToMany (mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "subject", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Team> teams;
 

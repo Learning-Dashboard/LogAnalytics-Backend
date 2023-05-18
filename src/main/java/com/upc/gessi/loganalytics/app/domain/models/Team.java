@@ -22,7 +22,7 @@ public class Team {
     @JoinColumn(name = "subject", referencedColumnName = "acronym", nullable = false)
     private Subject subject;
 
-    @OneToMany (mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "team", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Session> sessions;
 

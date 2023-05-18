@@ -12,7 +12,7 @@ class IndicatorTest {
 
     @BeforeEach
     void setUp() {
-        i = new Indicator("indicatorTest");
+        i = new Indicator("indicatorTest", "indicatorName");
     }
 
     @AfterEach
@@ -32,8 +32,19 @@ class IndicatorTest {
     }
 
     @Test
+    void getName() {
+        assertEquals(i.getName(), "indicatorName");
+    }
+
+    @Test
+    void setName() {
+        i.setName("indicatorName2");
+        assertEquals(i.getName(), "indicatorName2");
+    }
+
+    @Test
     void testToString() {
-        String indicatorString = "Indicator{id='indicatorTest'}";
+        String indicatorString = "Indicator{id='indicatorTest', name='indicatorName'}";
         assertEquals(i.toString(), indicatorString);
     }
 }

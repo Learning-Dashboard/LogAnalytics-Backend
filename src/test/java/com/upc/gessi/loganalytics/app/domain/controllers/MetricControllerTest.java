@@ -21,8 +21,22 @@ class MetricControllerTest {
         JsonObject student = new JsonObject();
         student.addProperty("taigaUsername", "laura_cazorla");
         student.addProperty("githubUsername", "laura_cazorla");
+        student.addProperty("prtUsername", "laura_cazorla");
         metric.add("student", student);
         metric.addProperty("externalId", externalId);
         assertEquals("closedtasks", metricController.removeUsername(metric, externalId));
+    }
+
+    @Test
+    void removeUsernameFromName() {
+        String externalId = "laura_cazorla closed tasks";
+        JsonObject metric = new JsonObject();
+        JsonObject student = new JsonObject();
+        student.addProperty("taigaUsername", "laura_cazorla");
+        student.addProperty("githubUsername", "laura_cazorla");
+        student.addProperty("prtUsername", "laura_cazorla");
+        metric.add("student", student);
+        metric.addProperty("name", externalId);
+        assertEquals("Closed tasks", metricController.removeUsernameFromName(metric, externalId));
     }
 }

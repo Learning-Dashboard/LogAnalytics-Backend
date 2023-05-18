@@ -5,9 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.upc.gessi.loganalytics.app.client.APIClient;
 import com.upc.gessi.loganalytics.app.domain.models.Factor;
+import com.upc.gessi.loganalytics.app.domain.models.Indicator;
 import com.upc.gessi.loganalytics.app.domain.repositories.FactorRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import okhttp3.Response;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +86,8 @@ public class FactorController {
                 for (int i = 0; i < jsonMetrics.size(); ++i) {
                     JsonObject item = jsonMetrics.get(i).getAsJsonObject();
                     String externalId = item.get("externalId").getAsString();
-                    Factor newFactor = new Factor(externalId);
+                    String name = item.get("name").getAsString();
+                    Factor newFactor = new Factor(externalId, name);
                     factors.add(newFactor);
                 }
             }

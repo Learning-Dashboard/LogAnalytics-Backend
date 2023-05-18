@@ -13,7 +13,8 @@ class MetricTest {
 
     @BeforeEach
     public void setUp() {
-        m = new Metric("metricTest");
+        m = new Metric("metricTest", "metricName",
+            "metricNoUserId", "metricNoUserName");
     }
 
     @AfterEach
@@ -33,8 +34,42 @@ class MetricTest {
     }
 
     @Test
+    void getName() {
+        assertEquals(m.getName(), "metricName");
+    }
+
+    @Test
+    void setName() {
+        m.setName("metricName2");
+        assertEquals(m.getName(), "metricName2");
+    }
+
+    @Test
+    void getNoUserId() {
+        assertEquals(m.getNoUserId(), "metricNoUserId");
+    }
+
+    @Test
+    void setNoUserId() {
+        m.setNoUserId("metricNoUserId2");
+        assertEquals(m.getNoUserId(), "metricNoUserId2");
+    }
+
+    @Test
+    void getNoUserName() {
+        assertEquals(m.getNoUserName(), "metricNoUserName");
+    }
+
+    @Test
+    void setNoUserName() {
+        m.setNoUserName("metricNoUserName2");
+        assertEquals(m.getNoUserName(), "metricNoUserName2");
+    }
+
+    @Test
     void testToString() {
-        String metricString = "Metric{id='metricTest'}";
+        String metricString = "Metric{id='metricTest', name='metricName', " +
+            "noUserId='metricNoUserId', noUserName='metricNoUserName'}";
         assertEquals(m.toString(), metricString);
     }
 }

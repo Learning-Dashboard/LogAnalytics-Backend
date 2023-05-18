@@ -82,7 +82,8 @@ public class IndicatorController {
                 for (int i = 0; i < jsonMetrics.size(); ++i) {
                     JsonObject item = jsonMetrics.get(i).getAsJsonObject();
                     String externalId = item.get("externalId").getAsString();
-                    Indicator newIndicator = new Indicator(externalId);
+                    String name = item.get("name").getAsString();
+                    Indicator newIndicator = new Indicator(externalId, name);
                     indicators.add(newIndicator);
                 }
             }

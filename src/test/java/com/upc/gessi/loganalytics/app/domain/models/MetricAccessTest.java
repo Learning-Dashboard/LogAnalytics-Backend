@@ -74,7 +74,8 @@ class MetricAccessTest {
     void testToString() {
         String result = "MetricAccess{" +
                 "historic=true, viewFormat='testViewFormat', " +
-                "metrics=[Metric{id='m1'}]} Log{time=0, team='pes11a', " +
+                "metrics=[Metric{id='m1', name='null', noUserId='null', " +
+                "noUserName='null'}]} Log{time=0, team='pes11a', " +
                 "message='testMessage', page='testPage', " +
                 "session=Session{id='null', team=null, startTimestamp=0, endTimestamp=0, " +
                 "duration=0.0, nInteractions=0}}";

@@ -27,9 +27,6 @@ public class DaysLoginsController implements Strategy {
         long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli() - 1;
         long timestampPrev = timestampToday - (days * 86400000L) + 1;
 
-        System.out.println(timestampPrev);
-        System.out.println(timestampToday);
-
         List<Session> sessions = sessionController.getAllByTimestampBetweenAndTeam(timestampPrev, timestampToday, team);
         return sessions.size();
     }

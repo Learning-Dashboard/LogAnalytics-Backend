@@ -74,7 +74,7 @@ class IndicatorAccessTest {
     void testToString() {
         String result = "IndicatorAccess{" +
                 "historic=true, viewFormat='testViewFormat', " +
-                "indicators=[Indicator{id='i1'}]} Log{time=0, team='pes11a', " +
+                "indicators=[Indicator{id='i1', name='null'}]} Log{time=0, team='pes11a', " +
                 "message='testMessage', page='testPage', " +
                 "session=Session{id='null', team=null, startTimestamp=0, endTimestamp=0, " +
                 "duration=0.0, nInteractions=0}}";
