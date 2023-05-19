@@ -2,6 +2,7 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
 import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
+import com.upc.gessi.loganalytics.app.domain.models.UserlessInternalMetric;
 import com.upc.gessi.loganalytics.app.domain.repositories.SubjectEvaluationRepository;
 import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class SubjectEvaluationController {
         if (latestEvaluation != null) {
             String latestDate = latestEvaluation.getDate();
             List<SubjectEvaluation> unfilteredEvaluations = subjectEvaluationRepository.findBySubject(subject);
-            return filterEvaluations(unfilteredEvaluations, latestDate);
+            return filterEvaluations(groupMetrics(unfilteredEvaluations), latestDate);
         }
         return new ArrayList<>();
     }
@@ -33,7 +34,7 @@ public class SubjectEvaluationController {
         List<SubjectEvaluation> unfilteredEvaluations = subjectEvaluationRepository.
                 findBySubjectAndDateBetween(subject, dateBefore, dateAfter);
         if (!unfilteredEvaluations.isEmpty())
-            return filterHistoricalEvaluations(unfilteredEvaluations);
+            return filterHistoricalEvaluations(groupMetrics(unfilteredEvaluations));
         return new ArrayList<>();
     }
 
@@ -51,7 +52,7 @@ public class SubjectEvaluationController {
                 (subject, dateBefore, dateAfter, metric, param);
         }
         if (!unfilteredEvaluations.isEmpty())
-            return filterHistoricalEvaluationsByParam(unfilteredEvaluations);
+            return filterHistoricalEvaluationsByParam(groupMetrics(unfilteredEvaluations));
         return null;
     }
 
@@ -153,5 +154,48 @@ public class SubjectEvaluationController {
             }
         }
         return result;
+    }
+
+    public List<SubjectEvaluation> groupMetrics(List<SubjectEvaluation> unfilteredEvaluations) {
+        List<SubjectEvaluation> groupedMetrics = new ArrayList<>();
+        Map<String,Map<String,Double>> aggregations = new HashMap<>();
+        Map<String, InternalMetric> internalMetrics = new HashMap<>();
+        Map<String, String> subjects = new HashMap<>();
+        for (SubjectEvaluation e : unfilteredEvaluations) {
+            if (e.getInternalMetric() instanceof UserlessInternalMetric) {
+                String generalMetric = ((UserlessInternalMetric) e.getInternalMetric()).getUserlessName();
+                if (generalMetric == null) groupedMetrics.add(e);
+                else {
+                    Map<String, Double> m = aggregations.get(generalMetric);
+                    if (m == null) {
+                        m = new HashMap<>();
+                        m.put(e.getDate(), e.getValue());
+                        aggregations.put(generalMetric, m);
+                        internalMetrics.put(generalMetric, e.getInternalMetric());
+                        subjects.put(generalMetric, e.getSubject());
+                    } else {
+                        if (m.containsKey(e.getDate())) {
+                            Double value = m.get(e.getDate());
+                            value += e.getValue();
+                            m.put(e.getDate(), value);
+                            aggregations.put(generalMetric, m);
+                        } else {
+                            m.put(e.getDate(), e.getValue());
+                            aggregations.put(generalMetric, m);
+                        }
+                    }
+                }
+            }
+            else groupedMetrics.add(e);
+        }
+        for (Map.Entry<String,Map<String,Double>> entry : aggregations.entrySet()) {
+            for (Map.Entry<String,Double> innerEntry : entry.getValue().entrySet()) {
+                InternalMetric im = internalMetrics.get(entry.getKey());
+                String subject = subjects.get(entry.getKey());
+                SubjectEvaluation e = new SubjectEvaluation(innerEntry.getKey(), im, subject, innerEntry.getValue());
+                groupedMetrics.add(e);
+            }
+        }
+        return groupedMetrics;
     }
 }

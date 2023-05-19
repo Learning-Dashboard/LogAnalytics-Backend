@@ -3,6 +3,8 @@ package com.upc.gessi.loganalytics.app.domain.models;
 import com.upc.gessi.loganalytics.app.domain.models.pkey.TeamEvaluationPrimaryKey;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "TeamEvaluation")
 @IdClass(TeamEvaluationPrimaryKey.class)
@@ -65,6 +67,18 @@ public class TeamEvaluation {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TeamEvaluation that)) return false;
+        return Double.compare(that.getValue(), getValue()) == 0 && Objects.equals(getDate(), that.getDate()) && Objects.equals(getInternalMetric(), that.getInternalMetric()) && Objects.equals(getTeam(), that.getTeam());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDate(), getInternalMetric(), getTeam(), getValue());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
-import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
-import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
+import com.upc.gessi.loganalytics.app.domain.models.*;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
 import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class TeamEvaluationController {
         if (latestEvaluation != null) {
             String latestDate = latestEvaluation.getDate();
             List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.findByTeam(team);
-            return filterEvaluations(unfilteredEvaluations, latestDate);
+            return filterEvaluations(groupMetrics(unfilteredEvaluations), latestDate);
         }
         return new ArrayList<>();
     }
@@ -34,7 +33,7 @@ public class TeamEvaluationController {
         List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.
                 findByTeamAndDateBetween(team, dateBefore, dateAfter);
         if (!unfilteredEvaluations.isEmpty())
-            return filterHistoricalEvaluations(unfilteredEvaluations);
+            return filterHistoricalEvaluations(groupMetrics(unfilteredEvaluations));
         return new ArrayList<>();
     }
 
@@ -52,7 +51,7 @@ public class TeamEvaluationController {
                 (team, dateBefore, dateAfter, metric, param);
         }
         if (!unfilteredEvaluations.isEmpty())
-            return filterHistoricalEvaluationsByParam(unfilteredEvaluations);
+            return filterHistoricalEvaluationsByParam(groupMetrics(unfilteredEvaluations));
         return null;
     }
 
@@ -154,5 +153,48 @@ public class TeamEvaluationController {
             }
         }
         return result;
+    }
+
+    public List<TeamEvaluation> groupMetrics(List<TeamEvaluation> unfilteredEvaluations) {
+        List<TeamEvaluation> groupedMetrics = new ArrayList<>();
+        Map<String,Map<String,Double>> aggregations = new HashMap<>();
+        Map<String, InternalMetric> internalMetrics = new HashMap<>();
+        Map<String, String> teams = new HashMap<>();
+        for (TeamEvaluation e : unfilteredEvaluations) {
+            if (e.getInternalMetric() instanceof UserlessInternalMetric) {
+                String generalMetric = ((UserlessInternalMetric) e.getInternalMetric()).getUserlessName();
+                if (generalMetric == null) groupedMetrics.add(e);
+                else {
+                    Map<String, Double> m = aggregations.get(generalMetric);
+                    if (m == null) {
+                        m = new HashMap<>();
+                        m.put(e.getDate(), e.getValue());
+                        aggregations.put(generalMetric, m);
+                        internalMetrics.put(generalMetric, e.getInternalMetric());
+                        teams.put(generalMetric, e.getTeam());
+                    } else {
+                        if (m.containsKey(e.getDate())) {
+                            Double value = m.get(e.getDate());
+                            value += e.getValue();
+                            m.put(e.getDate(), value);
+                            aggregations.put(generalMetric, m);
+                        } else {
+                            m.put(e.getDate(), e.getValue());
+                            aggregations.put(generalMetric, m);
+                        }
+                    }
+                }
+            }
+            else groupedMetrics.add(e);
+        }
+        for (Map.Entry<String,Map<String,Double>> entry : aggregations.entrySet()) {
+            for (Map.Entry<String,Double> innerEntry : entry.getValue().entrySet()) {
+                InternalMetric im = internalMetrics.get(entry.getKey());
+                String team = teams.get(entry.getKey());
+                TeamEvaluation e = new TeamEvaluation(innerEntry.getKey(), im, team, innerEntry.getValue());
+                groupedMetrics.add(e);
+            }
+        }
+        return groupedMetrics;
     }
 }

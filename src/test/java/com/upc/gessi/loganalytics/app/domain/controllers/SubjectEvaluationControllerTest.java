@@ -3,6 +3,7 @@ package com.upc.gessi.loganalytics.app.domain.controllers;
 import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
 import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
 import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
+import com.upc.gessi.loganalytics.app.domain.models.UserlessInternalMetric;
 import com.upc.gessi.loganalytics.app.domain.repositories.SubjectEvaluationRepository;
 import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
 import org.junit.jupiter.api.Test;
@@ -157,5 +158,33 @@ class SubjectEvaluationControllerTest {
         inputList.add(eG1); inputList.add(eG2); inputList.add(eG3);
         EvaluationDTO output = subjectEvaluationController.filterHistoricalEvaluationsByParam(inputList);
         assertEquals(eDTOG, output);
+    }
+
+    @Test
+    void groupMetrics() {
+        InternalMetric im1 = new InternalMetric("im1", "name1", "p1", "pName1", "c1", "cName1", true);
+        UserlessInternalMetric im2 = new UserlessInternalMetric("im2", "name2", "p2", "pName2", "c2", "cName2", true, null, null);
+        UserlessInternalMetric im3 = new UserlessInternalMetric("im3", "name3", "p3", "pName3", "c3", "cName3", true, "id", "name");
+        UserlessInternalMetric im4 = new UserlessInternalMetric("im4", "name4", "p4", "pName4", "c3", "cName3", true, "id", "name");
+
+        SubjectEvaluation e1 = new SubjectEvaluation("2023-05-19", im1, "PES", 10.0);
+        SubjectEvaluation e2 = new SubjectEvaluation("2023-05-20", im1, "PES", 10.5);
+        SubjectEvaluation e3 = new SubjectEvaluation("2023-05-19", im2, "PES", 1.0);
+        SubjectEvaluation e4 = new SubjectEvaluation("2023-05-20", im2, "PES", 1.5);
+        SubjectEvaluation e5 = new SubjectEvaluation("2023-05-19", im3, "PES", 5.0);
+        SubjectEvaluation e6 = new SubjectEvaluation("2023-05-19", im4, "PES", 5.5);
+
+        List<SubjectEvaluation> input = new ArrayList<>();
+        input.add(e1); input.add(e2); input.add(e3);
+        input.add(e4); input.add(e5); input.add(e6);
+
+        List<SubjectEvaluation> output = subjectEvaluationController.groupMetrics(input);
+        List<SubjectEvaluation> expectedOutput = new ArrayList<>();
+        expectedOutput.add(e1); expectedOutput.add(e2);
+        expectedOutput.add(e3); expectedOutput.add(e4);
+        expectedOutput.add(new SubjectEvaluation("2023-05-19", im3, "PES", 10.5));
+
+        assertEquals(expectedOutput, output);
+
     }
 }
