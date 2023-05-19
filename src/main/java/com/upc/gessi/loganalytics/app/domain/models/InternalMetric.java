@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "InternalMetric", uniqueConstraints =
@@ -157,6 +158,18 @@ public class InternalMetric implements Serializable {
 
     public void setSubjectEvaluations(List<SubjectEvaluation> subjectEvaluations) {
         this.subjectEvaluations = subjectEvaluations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InternalMetric that)) return false;
+        return isGroupable() == that.isGroupable() && Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getParam(), that.getParam()) && Objects.equals(getParamName(), that.getParamName()) && Objects.equals(getController(), that.getController()) && Objects.equals(getControllerName(), that.getControllerName()) && Objects.equals(getTeams(), that.getTeams()) && Objects.equals(getEvaluations(), that.getEvaluations()) && Objects.equals(getTeamEvaluations(), that.getTeamEvaluations()) && Objects.equals(getSubjectEvaluations(), that.getSubjectEvaluations());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getParam(), getParamName(), getController(), getControllerName(), isGroupable(), getTeams(), getEvaluations(), getTeamEvaluations(), getSubjectEvaluations());
     }
 
     @Override

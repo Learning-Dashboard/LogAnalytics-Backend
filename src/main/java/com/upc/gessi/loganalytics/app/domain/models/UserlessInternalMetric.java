@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class UserlessInternalMetric extends InternalMetric {
@@ -14,17 +15,6 @@ public class UserlessInternalMetric extends InternalMetric {
 
     public UserlessInternalMetric() {
 
-    }
-
-    public UserlessInternalMetric(String userlessId, String userlessName) {
-        this.userlessId = userlessId;
-        this.userlessName = userlessName;
-    }
-
-    public UserlessInternalMetric(String id, String name, String userlessId, String userlessName) {
-        super(id, name);
-        this.userlessId = userlessId;
-        this.userlessName = userlessName;
     }
 
     public UserlessInternalMetric(String id, String name, String param,
@@ -57,6 +47,18 @@ public class UserlessInternalMetric extends InternalMetric {
 
     public void setUserlessName(String userlessName) {
         this.userlessName = userlessName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserlessInternalMetric that)) return false;
+        return Objects.equals(getUserlessId(), that.getUserlessId()) && Objects.equals(getUserlessName(), that.getUserlessName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserlessId(), getUserlessName());
     }
 
     @Override

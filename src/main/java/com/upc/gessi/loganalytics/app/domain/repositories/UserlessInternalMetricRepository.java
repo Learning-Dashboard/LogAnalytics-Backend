@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserlessInternalMetricRepository extends CrudRepository<UserlessInternalMetric, String> {
-
+    boolean existsByUserlessName(String noUserName);
 }

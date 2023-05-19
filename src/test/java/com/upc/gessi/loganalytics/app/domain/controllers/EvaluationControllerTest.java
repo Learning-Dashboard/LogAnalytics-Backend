@@ -28,6 +28,8 @@ class EvaluationControllerTest {
     @Mock
     InternalMetricController internalMetricController;
     @Mock
+    UserlessInternalMetricController userlessInternalMetricController;
+    @Mock
     TeamController teamController;
     @Mock
     SubjectController subjectController;
@@ -213,9 +215,39 @@ class EvaluationControllerTest {
 
     @Test
     void getEntityName() {
+        UserlessInternalMetric uim = new UserlessInternalMetric("im", "imName", "param", "paramName", "controller", "controllerName", true, "userlessId", "userlessName");
+        assertEquals("userlessName", evaluationController.getEntityName(uim));
         InternalMetric im = new InternalMetric("im", "imName", "param", "paramName", "controller", "controllerName", true);
         assertEquals("paramName", evaluationController.getEntityName(im));
         im.setParamName(null);
         assertEquals("param", evaluationController.getEntityName(im));
+    }
+
+    @Test
+    void groupMetrics() {
+        InternalMetric im1 = new InternalMetric("im1", "name1", "p1", "pName1", "c1", "cName1", true);
+        UserlessInternalMetric im2 = new UserlessInternalMetric("im2", "name2", "p2", "pName2", "c2", "cName2", true, null, null);
+        UserlessInternalMetric im3 = new UserlessInternalMetric("im3", "name3", "p3", "pName3", "c3", "cName3", true, "id", "name");
+        UserlessInternalMetric im4 = new UserlessInternalMetric("im4", "name4", "p4", "pName4", "c3", "cName3", true, "id", "name");
+
+        Evaluation e1 = new Evaluation("2023-05-19", im1, 10.0);
+        Evaluation e2 = new Evaluation("2023-05-20", im1, 10.5);
+        Evaluation e3 = new Evaluation("2023-05-19", im2, 1.0);
+        Evaluation e4 = new Evaluation("2023-05-20", im2, 1.5);
+        Evaluation e5 = new Evaluation("2023-05-19", im3, 5.0);
+        Evaluation e6 = new Evaluation("2023-05-19", im4, 5.5);
+
+        List<Evaluation> input = new ArrayList<>();
+        input.add(e1); input.add(e2); input.add(e3);
+        input.add(e4); input.add(e5); input.add(e6);
+
+        List<Evaluation> output = evaluationController.groupMetrics(input);
+        List<Evaluation> expectedOutput = new ArrayList<>();
+        expectedOutput.add(e1); expectedOutput.add(e2);
+        expectedOutput.add(e3); expectedOutput.add(e4);
+        expectedOutput.add(new Evaluation("2023-05-19", im3, 10.5));
+
+        assertEquals(expectedOutput, output);
+
     }
 }

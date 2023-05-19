@@ -28,6 +28,8 @@ public class EvaluationController {
 
     @Autowired
     InternalMetricController internalMetricController;
+    @Autowired
+    UserlessInternalMetricController userlessInternalMetricController;
 
     @Autowired
     TeamController teamController;
@@ -102,7 +104,7 @@ public class EvaluationController {
         if (latestEvaluation != null) {
             String latestDate = latestEvaluation.getDate();
             List<Evaluation> unfilteredEvaluations = evaluationRepository.findAll();
-            return filterEvaluations(unfilteredEvaluations, latestDate);
+            return filterEvaluations(groupMetrics(unfilteredEvaluations), latestDate);
         }
         return new ArrayList<>();
     }
@@ -110,25 +112,31 @@ public class EvaluationController {
     public List<EvaluationDTO> getHistoricalEvaluations(String dateBefore, String dateAfter) {
         List<Evaluation> unfilteredEvaluations = evaluationRepository.findByDateBetween(dateBefore, dateAfter);
         if (!unfilteredEvaluations.isEmpty())
-            return filterHistoricalEvaluations(unfilteredEvaluations);
+            return filterHistoricalEvaluations(groupMetrics(unfilteredEvaluations));
         return new ArrayList<>();
     }
 
     public EvaluationDTO getHistoricalEvaluationsByParam(String dateBefore, String dateAfter, String metric, String param) {
-        boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
         List<Evaluation> unfilteredEvaluations;
-        if (paramNamePresent) {
+        boolean noUserNamePresent = userlessInternalMetricController.checkNoUserNameExistence(param);
+        if (noUserNamePresent) {
             unfilteredEvaluations = evaluationRepository.
-                findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
-                (dateBefore, dateAfter, metric, param);
+                findByNoUserName(dateBefore, dateAfter, metric, param);
         }
         else {
-            unfilteredEvaluations = evaluationRepository.
-                findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
-                (dateBefore, dateAfter, metric, param);
+            boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
+            if (paramNamePresent) {
+                unfilteredEvaluations = evaluationRepository.
+                    findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+                    (dateBefore, dateAfter, metric, param);
+            } else {
+                unfilteredEvaluations = evaluationRepository.
+                    findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
+                    (dateBefore, dateAfter, metric, param);
+            }
         }
         if (!unfilteredEvaluations.isEmpty())
-            return filterHistoricalEvaluationsByParam(unfilteredEvaluations);
+            return filterHistoricalEvaluationsByParam(groupMetrics(unfilteredEvaluations));
         return null;
     }
 
@@ -233,8 +241,53 @@ public class EvaluationController {
     }
 
     public String getEntityName(InternalMetric im) {
-        if (im.getParamName() != null) return im.getParamName();
+        if (im instanceof UserlessInternalMetric) {
+            String res = ((UserlessInternalMetric) im).getUserlessName();
+            if (res != null) return res;
+            return im.getParamName();
+        }
+        else if (im.getParamName() != null) return im.getParamName();
         return im.getParam();
+    }
+
+    public List<Evaluation> groupMetrics(List<Evaluation> unfilteredEvaluations) {
+        List<Evaluation> groupedMetrics = new ArrayList<>();
+        Map<String,Map<String,Double>> aggregations = new HashMap<>();
+        Map<String,InternalMetric> internalMetrics = new HashMap<>();
+        for (Evaluation e : unfilteredEvaluations) {
+            if (e.getInternalMetric() instanceof UserlessInternalMetric) {
+                String generalMetric = ((UserlessInternalMetric) e.getInternalMetric()).getUserlessName();
+                if (generalMetric == null) groupedMetrics.add(e);
+                else {
+                    Map<String, Double> m = aggregations.get(generalMetric);
+                    if (m == null) {
+                        m = new HashMap<>();
+                        m.put(e.getDate(), e.getValue());
+                        aggregations.put(generalMetric, m);
+                        internalMetrics.put(generalMetric, e.getInternalMetric());
+                    } else {
+                        if (m.containsKey(e.getDate())) {
+                            Double value = m.get(e.getDate());
+                            value += e.getValue();
+                            m.put(e.getDate(), value);
+                            aggregations.put(generalMetric, m);
+                        } else {
+                            m.put(e.getDate(), e.getValue());
+                            aggregations.put(generalMetric, m);
+                        }
+                    }
+                }
+            }
+            else groupedMetrics.add(e);
+        }
+        for (Map.Entry<String,Map<String,Double>> entry : aggregations.entrySet()) {
+            for (Map.Entry<String,Double> innerEntry : entry.getValue().entrySet()) {
+                InternalMetric im = internalMetrics.get(entry.getKey());
+                Evaluation e = new Evaluation(innerEntry.getKey(), im, innerEntry.getValue());
+                groupedMetrics.add(e);
+            }
+        }
+        return groupedMetrics;
     }
 
     private void setStrategy(InternalMetric im) {
