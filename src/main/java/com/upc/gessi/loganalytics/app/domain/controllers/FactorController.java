@@ -42,7 +42,7 @@ public class FactorController {
             Optional<Factor> factorOptional = factorRepository.findById(f.getId());
             if (factorOptional.isEmpty()) {
                 factorRepository.save(f);
-                internalMetricController.createFactorMetric(f.getId());
+                internalMetricController.createFactorMetric(f);
             }
         }
     }

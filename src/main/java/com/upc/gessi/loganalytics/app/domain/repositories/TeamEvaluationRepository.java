@@ -14,5 +14,7 @@ public interface TeamEvaluationRepository extends CrudRepository<TeamEvaluation,
     List<TeamEvaluation> findByTeamAndDateBetween(String team, String dateBefore, String dateAfter);
     List<TeamEvaluation> findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
         (String team, String dateBefore, String dateAfter, String controllerName, String param);
+    List<TeamEvaluation> findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+        (String team, String dateBefore, String dateAfter, String controllerName, String paramName);
     List<TeamEvaluation> findByTeam(String team);
 }

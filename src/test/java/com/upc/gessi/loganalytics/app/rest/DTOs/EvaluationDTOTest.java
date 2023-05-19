@@ -115,11 +115,9 @@ class EvaluationDTOTest {
 
     @Test
     void testToString() {
-        String result = "EvaluationDTO{name='imName', subject='PES', " +
-            "team='null', date='2001-07-22', internalMetric=InternalMetric" +
-            "{id='im', name='imName', param='null', controller='null', " +
-            "controllerName='null', groupable=false, teams=null}, value=10.0, " +
-            "groupable=false, entities={}}";
+        String result = "EvaluationDTO{name='imName', " +
+            "subject='PES', team='null', date='2001-07-22', " +
+            "value=10.0, groupable=false, entities={}}";
         assertEquals(result, evaluationDTO.toString());
     }
 }

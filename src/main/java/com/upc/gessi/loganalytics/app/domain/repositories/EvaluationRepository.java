@@ -15,6 +15,8 @@ public interface EvaluationRepository extends CrudRepository<Evaluation, Evaluat
     List<Evaluation> findByDateBetween(String dateBefore, String dateAfter);
     List<Evaluation> findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
         (String dateBefore, String dateAfter, String controllerName, String param);
+    List<Evaluation> findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+        (String dateBefore, String dateAfter, String controllerName, String paramName);
     @NotNull
     List<Evaluation> findAll();
 }

@@ -60,8 +60,8 @@ class EvaluationTest {
 
     @Test
     void testToString() {
-        String result = "Evaluation{date=2023-04-18, internalMetric=InternalMetric" +
-            "{id='test', name='test', param='null', controller='null', " +
+        String result = "Evaluation{date=2023-04-18, internalMetric=InternalMetric{id='test', " +
+            "name='test', param='null', paramName='null', controller='null', " +
             "controllerName='null', groupable=false, teams=null}, value=0.0}";
         assertEquals(result, evaluation.toString());
     }

@@ -80,9 +80,9 @@ class SubjectEvaluationRepositoryTest {
     @Test
     void findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam() {
         InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
-            "testParam", "testController", "testControllerName", true);
+            "testParam", "testParamName", "testController", "testControllerName", true);
         InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric2",
-            "testParam2", "testController2", "testControllerName2", true);
+            "testParam2", "testParamName2", "testController2", "testControllerName2", true);
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im1, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im2, "PES", 5.0);
         SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im1, "ASW", 5.0);
@@ -104,6 +104,35 @@ class SubjectEvaluationRepositoryTest {
         assertEquals(2, subjectEvaluationRepository.
             findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam("ASW", "2001-07-20",
             "2001-11-20", "testControllerName", "testParam").size());
+    }
+
+    @Test
+    void findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName() {
+        InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
+                "testParam", "testParamName", "testController", "testControllerName", true);
+        InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric2",
+                "testParam2", "testParamName2", "testController2", "testControllerName2", true);
+        SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im1, "PES", 5.0);
+        SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im2, "PES", 5.0);
+        SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im1, "ASW", 5.0);
+        SubjectEvaluation e4 = new SubjectEvaluation("2001-10-20", im2, "ASW", 5.0);
+        SubjectEvaluation e5 = new SubjectEvaluation("2001-11-20", im1, "ASW", 5.0);
+        SubjectEvaluation e6 = new SubjectEvaluation("2001-12-20", im2, "ASW", 5.0);
+        entityManager.persistAndFlush(im1);
+        entityManager.persistAndFlush(im2);
+        entityManager.persistAndFlush(e1); entityManager.persistAndFlush(e2);
+        entityManager.persistAndFlush(e3); entityManager.persistAndFlush(e4);
+        entityManager.persistAndFlush(e5); entityManager.persistAndFlush(e6);
+
+        assertEquals(e3, subjectEvaluationRepository.
+                findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName("ASW", "2001-07-20",
+                        "2001-11-20", "testControllerName", "testParamName").get(0));
+        assertEquals(e5, subjectEvaluationRepository.
+                findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName("ASW", "2001-07-20",
+                        "2001-11-20", "testControllerName", "testParamName").get(1));
+        assertEquals(2, subjectEvaluationRepository.
+                findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName("ASW", "2001-07-20",
+                        "2001-11-20", "testControllerName", "testParamName").size());
     }
 
     @Test

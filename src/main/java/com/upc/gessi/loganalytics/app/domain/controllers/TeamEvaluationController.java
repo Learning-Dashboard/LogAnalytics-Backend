@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.domain.controllers;
 
+import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
 import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
 import com.upc.gessi.loganalytics.app.domain.repositories.TeamEvaluationRepository;
 import com.upc.gessi.loganalytics.app.rest.DTOs.EvaluationDTO;
@@ -16,6 +17,8 @@ public class TeamEvaluationController {
 
     @Autowired
     EvaluationController evaluationController;
+    @Autowired
+    InternalMetricController internalMetricController;
 
     public List<EvaluationDTO> getCurrentEvaluations(String team) {
         TeamEvaluation latestEvaluation = teamEvaluationRepository.findFirstByTeamOrderByDateDesc(team);
@@ -36,9 +39,18 @@ public class TeamEvaluationController {
     }
 
     public EvaluationDTO getHistoricalEvaluationsByParam(String team, String dateBefore, String dateAfter, String metric, String param) {
-        List<TeamEvaluation> unfilteredEvaluations = teamEvaluationRepository.
+        boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
+        List<TeamEvaluation> unfilteredEvaluations;
+        if (paramNamePresent) {
+            unfilteredEvaluations = teamEvaluationRepository.
+                findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+                (team, dateBefore, dateAfter, metric, param);
+        }
+        else {
+            unfilteredEvaluations = teamEvaluationRepository.
                 findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
-                        (team, dateBefore, dateAfter, metric, param);
+                (team, dateBefore, dateAfter, metric, param);
+        }
         if (!unfilteredEvaluations.isEmpty())
             return filterHistoricalEvaluationsByParam(unfilteredEvaluations);
         return null;
@@ -55,18 +67,18 @@ public class TeamEvaluationController {
                 boolean found = false;
                 for (int i = 0; i < result.size() && !found; ++i) {
                     if (Objects.equals(result.get(i).getInternalMetric().getController(), e.getInternalMetric().getController())) {
-                        Double oldValue = result.get(i).getEntities().get(e.getInternalMetric().getParam());
+                        Double oldValue = result.get(i).getEntities().get(evaluationController.getEntityName(e.getInternalMetric()));
                         if (oldValue == null) oldValue = 0.0;
                         double newValue = oldValue + e.getValue();
                         Map<String,Double> oldEntities = result.get(i).getEntities();
-                        oldEntities.put(e.getInternalMetric().getParam(), newValue);
+                        oldEntities.put(evaluationController.getEntityName(e.getInternalMetric()), newValue);
                         result.get(i).setEntities(oldEntities);
                         found = true;
                     }
                 }
                 if (!found) {
                     Map<String,Double> entities = new HashMap<>();
-                    entities.put(e.getInternalMetric().getParam(), e.getValue());
+                    entities.put(evaluationController.getEntityName(e.getInternalMetric()), e.getValue());
                     EvaluationDTO eDTO = new EvaluationDTO(e);
                     eDTO.setValue(0.0);
                     eDTO.setEntities(entities);
@@ -102,18 +114,18 @@ public class TeamEvaluationController {
             else {
                 for (int i = 0; i < result.size() && !found; ++i) {
                     if (Objects.equals(result.get(i).getInternalMetric().getController(), e.getInternalMetric().getController())) {
-                        Double oldValue = result.get(i).getEntities().get(e.getInternalMetric().getParam());
+                        Double oldValue = result.get(i).getEntities().get(evaluationController.getEntityName(e.getInternalMetric()));
                         if (oldValue == null) oldValue = 0.0;
                         double newValue = oldValue + e.getValue();
                         Map<String,Double> oldEntities = result.get(i).getEntities();
-                        oldEntities.put(e.getInternalMetric().getParam(), newValue);
+                        oldEntities.put(evaluationController.getEntityName(e.getInternalMetric()), newValue);
                         result.get(i).setEntities(oldEntities);
                         found = true;
                     }
                 }
                 if (!found) {
                     Map<String,Double> entities = new HashMap<>();
-                    entities.put(e.getInternalMetric().getParam(), e.getValue());
+                    entities.put(evaluationController.getEntityName(e.getInternalMetric()), e.getValue());
                     EvaluationDTO eDTO = new EvaluationDTO(e);
                     eDTO.setValue(0.0);
                     eDTO.setEntities(entities);

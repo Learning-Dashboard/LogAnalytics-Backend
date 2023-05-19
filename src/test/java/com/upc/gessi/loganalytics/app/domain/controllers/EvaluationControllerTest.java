@@ -128,13 +128,13 @@ class EvaluationControllerTest {
 
     @Test
     void filterEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
         Evaluation noG1 = new Evaluation("2023-05-11", noG, 10.0);
         Evaluation noG2 = new Evaluation("2023-05-10", noG, 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
         Evaluation eG1 = new Evaluation("2023-05-11", G1, 10.0);
         Evaluation eG2 = new Evaluation("2023-05-11", G2, 5.0);
         Evaluation eG3 = new Evaluation("2023-05-10", G2, 20.0);
@@ -158,7 +158,7 @@ class EvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
         Evaluation noG1 = new Evaluation("2023-05-11", noG, 10.0);
         Evaluation noG2 = new Evaluation("2023-05-10", noG, 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
@@ -168,8 +168,8 @@ class EvaluationControllerTest {
         entities.put("2023-05-10", 6.0);
         eDTOnoG.setEntities(entities);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
         Evaluation eG1 = new Evaluation("2023-05-11", G1, 10.0);
         Evaluation eG2 = new Evaluation("2023-05-11", G2, 5.0);
         Evaluation eG3 = new Evaluation("2023-05-10", G2, 20.0);
@@ -192,7 +192,7 @@ class EvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluationsByParam() {
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
         Evaluation eG1 = new Evaluation("2023-05-12", G1, 10.0);
         Evaluation eG2 = new Evaluation("2023-05-11", G1, 15.0);
         Evaluation eG3 = new Evaluation("2023-05-10", G1, 20.0);
@@ -209,5 +209,13 @@ class EvaluationControllerTest {
         inputList.add(eG1); inputList.add(eG2); inputList.add(eG3);
         EvaluationDTO output = evaluationController.filterHistoricalEvaluationsByParam(inputList);
         assertEquals(eDTOG, output);
+    }
+
+    @Test
+    void getEntityName() {
+        InternalMetric im = new InternalMetric("im", "imName", "param", "paramName", "controller", "controllerName", true);
+        assertEquals("paramName", evaluationController.getEntityName(im));
+        im.setParamName(null);
+        assertEquals("param", evaluationController.getEntityName(im));
     }
 }

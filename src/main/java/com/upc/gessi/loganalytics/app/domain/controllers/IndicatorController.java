@@ -38,7 +38,7 @@ public class IndicatorController {
             Optional<Indicator> indicatorOptional = indicatorRepository.findById(i.getId());
             if (indicatorOptional.isEmpty()) {
                 indicatorRepository.save(i);
-                internalMetricController.createIndicatorMetric(i.getId());
+                internalMetricController.createIndicatorMetric(i);
             }
         }
     }

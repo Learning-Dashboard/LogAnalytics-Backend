@@ -24,6 +24,10 @@ class SubjectEvaluationControllerTest {
 
     @Mock
     SubjectEvaluationRepository subjectEvaluationRepository;
+    @Mock
+    EvaluationController evaluationController;
+    @Mock
+    InternalMetricController internalMetricController;
 
     @InjectMocks
     SubjectEvaluationController subjectEvaluationController;
@@ -67,13 +71,13 @@ class SubjectEvaluationControllerTest {
 
     @Test
     void filterEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
         SubjectEvaluation noG1 = new SubjectEvaluation("2023-05-11", noG, "test", 10.0);
         SubjectEvaluation noG2 = new SubjectEvaluation("2023-05-10", noG, "test", 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
         SubjectEvaluation eG1 = new SubjectEvaluation("2023-05-11", G1, "test", 10.0);
         SubjectEvaluation eG2 = new SubjectEvaluation("2023-05-11", G2, "test", 5.0);
         SubjectEvaluation eG3 = new SubjectEvaluation("2023-05-10", G2, "test", 20.0);
@@ -84,6 +88,9 @@ class SubjectEvaluationControllerTest {
         entities.put("p1", 10.0);
         entities.put("p2", 25.0);
         eDTOG.setEntities(entities);
+
+        Mockito.when(evaluationController.getEntityName(G1)).thenReturn("p1");
+        Mockito.when(evaluationController.getEntityName(G2)).thenReturn("p2");
 
         List<SubjectEvaluation> inputList = new ArrayList<>();
         inputList.add(noG1); inputList.add(noG2);
@@ -96,7 +103,7 @@ class SubjectEvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
         SubjectEvaluation noG1 = new SubjectEvaluation("2023-05-11", noG, "test", 10.0);
         SubjectEvaluation noG2 = new SubjectEvaluation("2023-05-10", noG, "test", 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
@@ -106,11 +113,14 @@ class SubjectEvaluationControllerTest {
         entities.put("2023-05-10", 6.0);
         eDTOnoG.setEntities(entities);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
         SubjectEvaluation eG1 = new SubjectEvaluation("2023-05-11", G1, "test", 10.0);
         SubjectEvaluation eG2 = new SubjectEvaluation("2023-05-11", G2, "test", 5.0);
         SubjectEvaluation eG3 = new SubjectEvaluation("2023-05-10", G2, "test", 20.0);
+
+        Mockito.when(evaluationController.getEntityName(G1)).thenReturn("p1");
+        Mockito.when(evaluationController.getEntityName(G2)).thenReturn("p2");
 
         EvaluationDTO eDTOG = new EvaluationDTO(eG1);
         eDTOG.setValue(0.0);
@@ -130,7 +140,7 @@ class SubjectEvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluationsByParam() {
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
         SubjectEvaluation eG1 = new SubjectEvaluation("2023-05-12", G1, "test", 10.0);
         SubjectEvaluation eG2 = new SubjectEvaluation("2023-05-11", G1, "test", 15.0);
         SubjectEvaluation eG3 = new SubjectEvaluation("2023-05-10", G1, "test", 20.0);

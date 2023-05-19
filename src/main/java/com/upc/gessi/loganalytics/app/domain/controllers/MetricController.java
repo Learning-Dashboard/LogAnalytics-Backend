@@ -37,18 +37,17 @@ public class MetricController {
         for (Map.Entry<Metric,Set<String>> entry : metrics.entrySet()) {
             Metric m = entry.getKey();
             for (String team : entry.getValue())
-                internalMetricController.createMetricMetric(m.getId(), team);
+                internalMetricController.createMetricMetric(m, team);
             Optional<Metric> metricOptional = metricRepository.findById(m.getId());
             if (metricOptional.isEmpty()) metricRepository.save(m);
             else {
                 Metric met = metricOptional.get();
-                met.setName(m.getName());
-                met.setNoUserId(m.getNoUserId());
-                met.setNoUserName(m.getNoUserName());
-                if (!Objects.equals(met.getName(), m.getName())
-                    || !Objects.equals(met.getNoUserId(), m.getNoUserId())
-                    || !Objects.equals(met.getNoUserName(), m.getNoUserName()))
+                if (!Objects.equals(met.getNoUserId(), m.getNoUserId())
+                    || !Objects.equals(met.getNoUserName(), m.getNoUserName())) {
+                    met.setNoUserId(m.getNoUserId());
+                    met.setNoUserName(m.getNoUserName());
                     metricRepository.save(met);
+                }
             }
         }
     }

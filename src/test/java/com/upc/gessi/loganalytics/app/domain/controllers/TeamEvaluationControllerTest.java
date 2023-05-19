@@ -24,6 +24,10 @@ class TeamEvaluationControllerTest {
 
     @Mock
     TeamEvaluationRepository teamEvaluationRepository;
+    @Mock
+    EvaluationController evaluationController;
+    @Mock
+    InternalMetricController internalMetricController;
 
     @InjectMocks
     TeamEvaluationController teamEvaluationController;
@@ -67,16 +71,19 @@ class TeamEvaluationControllerTest {
 
     @Test
     void filterEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
         TeamEvaluation noG1 = new TeamEvaluation("2023-05-11", noG, "test", 10.0);
         TeamEvaluation noG2 = new TeamEvaluation("2023-05-10", noG, "test", 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
         TeamEvaluation eG1 = new TeamEvaluation("2023-05-11", G1, "test", 10.0);
         TeamEvaluation eG2 = new TeamEvaluation("2023-05-11", G2, "test", 5.0);
         TeamEvaluation eG3 = new TeamEvaluation("2023-05-10", G2, "test", 20.0);
+
+        Mockito.when(evaluationController.getEntityName(G1)).thenReturn("p1");
+        Mockito.when(evaluationController.getEntityName(G2)).thenReturn("p2");
 
         EvaluationDTO eDTOG = new EvaluationDTO(eG1);
         eDTOG.setValue(0.0);
@@ -96,7 +103,7 @@ class TeamEvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
         TeamEvaluation noG1 = new TeamEvaluation("2023-05-11", noG, "test", 10.0);
         TeamEvaluation noG2 = new TeamEvaluation("2023-05-10", noG, "test", 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
@@ -106,11 +113,14 @@ class TeamEvaluationControllerTest {
         entities.put("2023-05-10", 6.0);
         eDTOnoG.setEntities(entities);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
         TeamEvaluation eG1 = new TeamEvaluation("2023-05-11", G1, "test", 10.0);
         TeamEvaluation eG2 = new TeamEvaluation("2023-05-11", G2, "test", 5.0);
         TeamEvaluation eG3 = new TeamEvaluation("2023-05-10", G2, "test", 20.0);
+
+        Mockito.when(evaluationController.getEntityName(G1)).thenReturn("p1");
+        Mockito.when(evaluationController.getEntityName(G2)).thenReturn("p2");
 
         EvaluationDTO eDTOG = new EvaluationDTO(eG1);
         eDTOG.setValue(0.0);
@@ -130,7 +140,7 @@ class TeamEvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluationsByParam() {
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
         TeamEvaluation eG1 = new TeamEvaluation("2023-05-12", G1, "test", 10.0);
         TeamEvaluation eG2 = new TeamEvaluation("2023-05-11", G1, "test", 15.0);
         TeamEvaluation eG3 = new TeamEvaluation("2023-05-10", G1, "test", 20.0);

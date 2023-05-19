@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "InternalMetric")
+@Table(name = "InternalMetric", uniqueConstraints =
+    @UniqueConstraint(columnNames = {"param", "controller"}))
+@Inheritance(strategy = InheritanceType.JOINED)
 public class InternalMetric implements Serializable {
 
     @Id @Column (name = "id", nullable = false)
@@ -16,6 +18,8 @@ public class InternalMetric implements Serializable {
     private String name;
     @Column (name = "param")
     private String param;
+    @Column (name = "paramName")
+    private String paramName;
     @Column (name = "controller")
     private String controller;
     @Column (name = "controllerName")
@@ -44,19 +48,23 @@ public class InternalMetric implements Serializable {
         this.name = name;
     }
 
-    public InternalMetric(String id, String name, String param, String controller, String controllerName, boolean groupable) {
+    public InternalMetric(String id, String name, String param, String paramName,
+        String controller, String controllerName, boolean groupable) {
         this.id = id;
         this.name = name;
         this.param = param;
+        this.paramName = paramName;
         this.controller = controller;
         this.controllerName = controllerName;
         this.groupable = groupable;
     }
 
-    public InternalMetric(String id, String name, String param, String controller, String controllerName, boolean groupable, List<String> teams) {
+    public InternalMetric(String id, String name, String param, String paramName,
+        String controller, String controllerName, boolean groupable, List<String> teams) {
         this.id = id;
         this.name = name;
         this.param = param;
+        this.paramName = paramName;
         this.controller = controller;
         this.controllerName = controllerName;
         this.groupable = groupable;
@@ -85,6 +93,14 @@ public class InternalMetric implements Serializable {
 
     public void setParam(String param) {
         this.param = param;
+    }
+
+    public String getParamName() {
+        return paramName;
+    }
+
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
     }
 
     public String getController() {
@@ -149,6 +165,7 @@ public class InternalMetric implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", param='" + param + '\'' +
+                ", paramName='" + paramName + '\'' +
                 ", controller='" + controller + '\'' +
                 ", controllerName='" + controllerName + '\'' +
                 ", groupable=" + groupable +

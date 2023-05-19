@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InternalMetricRepository extends CrudRepository<InternalMetric, String> {
-
+    boolean existsByParamName(String s);
 }

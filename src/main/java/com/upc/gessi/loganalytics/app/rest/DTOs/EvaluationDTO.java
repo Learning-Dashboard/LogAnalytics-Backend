@@ -140,7 +140,6 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
                 ", subject='" + subject + '\'' +
                 ", team='" + team + '\'' +
                 ", date='" + date + '\'' +
-                ", internalMetric=" + internalMetric +
                 ", value=" + value +
                 ", groupable=" + groupable +
                 ", entities=" + entities +

@@ -16,5 +16,7 @@ public interface SubjectEvaluationRepository extends CrudRepository<SubjectEvalu
     List<SubjectEvaluation> findBySubjectAndDateBetween(String subject, String dateBefore, String dateAfter);
     List<SubjectEvaluation> findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
         (String subject, String dateBefore, String dateAfter, String controllerName, String param);
+    List<SubjectEvaluation> findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+        (String subject, String dateBefore, String dateAfter, String controllerName, String paramName);
     List<SubjectEvaluation> findBySubject(String subject);
 }
