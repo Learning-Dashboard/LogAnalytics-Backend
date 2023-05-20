@@ -16,7 +16,8 @@ class EvaluationDTOTest {
 
     @BeforeEach
     void setUp() {
-        internalMetric = new InternalMetric("im", "imName");
+        Category c = new Category("testCat");
+        internalMetric = new InternalMetric("im", "imName", c);
         SubjectEvaluation subjectEvaluation = new SubjectEvaluation("2001-07-22", internalMetric, "PES", 10.0);
         evaluationDTO = new EvaluationDTO(subjectEvaluation);
     }
@@ -100,6 +101,17 @@ class EvaluationDTOTest {
     }
 
     @Test
+    void getCategory() {
+        assertEquals("testCat", evaluationDTO.getCategory());
+    }
+
+    @Test
+    void setCategory() {
+        evaluationDTO.setCategory("testCat2");
+        assertEquals("testCat2", evaluationDTO.getCategory());
+    }
+
+    @Test
     void getEntities() {
         assertTrue(evaluationDTO.getEntities().isEmpty());
     }
@@ -115,9 +127,9 @@ class EvaluationDTOTest {
 
     @Test
     void testToString() {
-        String result = "EvaluationDTO{name='imName', " +
-            "subject='PES', team='null', date='2001-07-22', " +
-            "value=10.0, groupable=false, entities={}}";
+        String result = "EvaluationDTO{name='imName', subject='PES', " +
+            "team='null', date='2001-07-22', value=10.0, " +
+            "groupable=false, category='testCat', entities={}}";
         assertEquals(result, evaluationDTO.toString());
     }
 }

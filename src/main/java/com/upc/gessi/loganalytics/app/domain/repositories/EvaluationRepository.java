@@ -19,11 +19,11 @@ public interface EvaluationRepository extends CrudRepository<Evaluation, Evaluat
     List<Evaluation> findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
         (String dateBefore, String dateAfter, String controllerName, String paramName);
     @Query("SELECT e FROM Evaluation e " +
-            "JOIN InternalMetric im ON e.internalMetric = im.id " +
-            "JOIN UserlessInternalMetric uim ON im.id = uim.id " +
-            "WHERE e.date BETWEEN ?1 AND ?2 " +
-            "AND im.controllerName = ?3 " +
-            "AND uim.userlessName = ?4")
+        "JOIN InternalMetric im ON e.internalMetric = im.id " +
+        "JOIN UserlessInternalMetric uim ON im.id = uim.id " +
+        "WHERE e.date BETWEEN ?1 AND ?2 " +
+        "AND im.controllerName = ?3 " +
+        "AND uim.userlessName = ?4")
     List<Evaluation> findByNoUserName
         (String dateBefore, String dateAfter, String controllerName, String paramName);
     @NotNull

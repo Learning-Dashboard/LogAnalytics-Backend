@@ -72,9 +72,9 @@ class EvaluationRepositoryTest {
     @Test
     void findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParam() {
         InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
-            "testParam", "testParamName", "testController", "testControllerName", true);
+            "testParam", "testParamName", "testController", "testControllerName", true, null);
         InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric 2",
-            "testParam2", "testParamName2", "testController2", "testControllerName2", true);
+            "testParam2", "testParamName2", "testController2", "testControllerName2", true, null);
         Evaluation e1 = new Evaluation("2001-07-22", im1, 5.0);
         Evaluation e2 = new Evaluation("2001-08-22", im2, 2.5);
         Evaluation e3 = new Evaluation("2001-09-22", im1, 2.5);
@@ -102,9 +102,9 @@ class EvaluationRepositoryTest {
     @Test
     void findByDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName() {
         InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
-                "testParam", "testParamName", "testController", "testControllerName", true);
+                "testParam", "testParamName", "testController", "testControllerName", true, null);
         InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric 2",
-                "testParam2", "testParamName2", "testController2", "testControllerName2", true);
+                "testParam2", "testParamName2", "testController2", "testControllerName2", true, null);
         Evaluation e1 = new Evaluation("2001-07-22", im1, 5.0);
         Evaluation e2 = new Evaluation("2001-08-22", im2, 2.5);
         Evaluation e3 = new Evaluation("2001-09-22", im1, 2.5);
@@ -133,10 +133,10 @@ class EvaluationRepositoryTest {
     void findByNoUserName() {
         UserlessInternalMetric im1 = new UserlessInternalMetric("testInternalMetric", "Test internal metric",
                 "testParam", "testParamName", "testController",
-                "testControllerName", true, "testId", "testName");
+                "testControllerName", true, null, "testId", "testName");
         UserlessInternalMetric im2 = new UserlessInternalMetric("testInternalMetric2", "Test internal metric 2",
                 "testParam2", "testParamName2", "testController2",
-                "testControllerName2", true, "testId2", "testName2");
+                "testControllerName2", true, null, "testId2", "testName2");
         Evaluation e1 = new Evaluation("2001-07-22", im1, 5.0);
         Evaluation e2 = new Evaluation("2001-08-22", im2, 2.5);
         Evaluation e3 = new Evaluation("2001-09-22", im1, 2.5);

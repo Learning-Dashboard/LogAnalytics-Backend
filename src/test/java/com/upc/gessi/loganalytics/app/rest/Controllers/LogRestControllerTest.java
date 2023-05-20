@@ -61,6 +61,20 @@ class LogRestControllerTest {
             assertEquals(e.getMessage(),
                 "400 BAD_REQUEST \"Cannot filter by team and subject simultaneously\"");
         }
+        try {
+            logRestController.findAllLogs(null, null,
+                "2001-07-22", "2001-07-20", null, null, null);
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getMessage(),
+                "400 BAD_REQUEST \"dateBefore is not previous to dateAfter\"");
+        }
+        try {
+            logRestController.findAllLogs(null, null,
+                "22-07-2001", null, null, null, null);
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getMessage(),
+                "400 BAD_REQUEST \"Date formats are incorrect\"");
+        }
 
 
         logRestController.findAllLogs(null, null,

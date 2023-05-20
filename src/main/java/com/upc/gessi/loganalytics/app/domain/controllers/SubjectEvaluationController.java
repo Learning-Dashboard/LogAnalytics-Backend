@@ -19,6 +19,8 @@ public class SubjectEvaluationController {
     EvaluationController evaluationController;
     @Autowired
     InternalMetricController internalMetricController;
+    @Autowired
+    UserlessInternalMetricController userlessInternalMetricController;
 
     public List<EvaluationDTO> getCurrentEvaluations(String subject) {
         SubjectEvaluation latestEvaluation = subjectEvaluationRepository.findFirstBySubjectOrderByDateDesc(subject);
@@ -39,17 +41,23 @@ public class SubjectEvaluationController {
     }
 
     public EvaluationDTO getHistoricalEvaluationsByParam(String subject, String dateBefore, String dateAfter, String metric, String param) {
-        boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
         List<SubjectEvaluation> unfilteredEvaluations;
-        if (paramNamePresent) {
+        boolean noUserNamePresent = userlessInternalMetricController.checkNoUserNameExistence(param);
+        if (noUserNamePresent) {
             unfilteredEvaluations = subjectEvaluationRepository.
-                findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
-                (subject, dateBefore, dateAfter, metric, param);
+                findByNoUserName(subject, dateBefore, dateAfter, metric, param);
         }
         else {
-            unfilteredEvaluations = subjectEvaluationRepository.
-                findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
-                (subject, dateBefore, dateAfter, metric, param);
+            boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
+            if (paramNamePresent) {
+                unfilteredEvaluations = subjectEvaluationRepository.
+                    findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+                    (subject, dateBefore, dateAfter, metric, param);
+            } else {
+                unfilteredEvaluations = subjectEvaluationRepository.
+                    findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
+                    (subject, dateBefore, dateAfter, metric, param);
+            }
         }
         if (!unfilteredEvaluations.isEmpty())
             return filterHistoricalEvaluationsByParam(groupMetrics(unfilteredEvaluations));

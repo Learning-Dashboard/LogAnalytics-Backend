@@ -26,6 +26,8 @@ class TeamEvaluationControllerTest {
     EvaluationController evaluationController;
     @Mock
     InternalMetricController internalMetricController;
+    @Mock
+    UserlessInternalMetricController userlessInternalMetricController;
 
     @InjectMocks
     TeamEvaluationController teamEvaluationController;
@@ -69,13 +71,13 @@ class TeamEvaluationControllerTest {
 
     @Test
     void filterEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false, null);
         TeamEvaluation noG1 = new TeamEvaluation("2023-05-11", noG, "test", 10.0);
         TeamEvaluation noG2 = new TeamEvaluation("2023-05-10", noG, "test", 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true, null);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true, null);
         TeamEvaluation eG1 = new TeamEvaluation("2023-05-11", G1, "test", 10.0);
         TeamEvaluation eG2 = new TeamEvaluation("2023-05-11", G2, "test", 5.0);
         TeamEvaluation eG3 = new TeamEvaluation("2023-05-10", G2, "test", 20.0);
@@ -101,7 +103,7 @@ class TeamEvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluations() {
-        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false);
+        InternalMetric noG = new InternalMetric("im", "im", null, null, null, null, false, null);
         TeamEvaluation noG1 = new TeamEvaluation("2023-05-11", noG, "test", 10.0);
         TeamEvaluation noG2 = new TeamEvaluation("2023-05-10", noG, "test", 6.0);
         EvaluationDTO eDTOnoG = new EvaluationDTO(noG1);
@@ -111,8 +113,8 @@ class TeamEvaluationControllerTest {
         entities.put("2023-05-10", 6.0);
         eDTOnoG.setEntities(entities);
 
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
-        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true, null);
+        InternalMetric G2 = new InternalMetric("im2", "im2", "p2", "p2", "c1", "c1", true, null);
         TeamEvaluation eG1 = new TeamEvaluation("2023-05-11", G1, "test", 10.0);
         TeamEvaluation eG2 = new TeamEvaluation("2023-05-11", G2, "test", 5.0);
         TeamEvaluation eG3 = new TeamEvaluation("2023-05-10", G2, "test", 20.0);
@@ -138,7 +140,7 @@ class TeamEvaluationControllerTest {
 
     @Test
     void filterHistoricalEvaluationsByParam() {
-        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true);
+        InternalMetric G1 = new InternalMetric("im1", "im1", "p1", "p1", "c1", "c1", true, null);
         TeamEvaluation eG1 = new TeamEvaluation("2023-05-12", G1, "test", 10.0);
         TeamEvaluation eG2 = new TeamEvaluation("2023-05-11", G1, "test", 15.0);
         TeamEvaluation eG3 = new TeamEvaluation("2023-05-10", G1, "test", 20.0);
@@ -159,10 +161,10 @@ class TeamEvaluationControllerTest {
 
     @Test
     void groupMetrics() {
-        InternalMetric im1 = new InternalMetric("im1", "name1", "p1", "pName1", "c1", "cName1", true);
-        UserlessInternalMetric im2 = new UserlessInternalMetric("im2", "name2", "p2", "pName2", "c2", "cName2", true, null, null);
-        UserlessInternalMetric im3 = new UserlessInternalMetric("im3", "name3", "p3", "pName3", "c3", "cName3", true, "id", "name");
-        UserlessInternalMetric im4 = new UserlessInternalMetric("im4", "name4", "p4", "pName4", "c3", "cName3", true, "id", "name");
+        InternalMetric im1 = new InternalMetric("im1", "name1", "p1", "pName1", "c1", "cName1", true, null);
+        UserlessInternalMetric im2 = new UserlessInternalMetric("im2", "name2", "p2", "pName2", "c2", "cName2", true, null, null, null);
+        UserlessInternalMetric im3 = new UserlessInternalMetric("im3", "name3", "p3", "pName3", "c3", "cName3", true, null, "id", "name");
+        UserlessInternalMetric im4 = new UserlessInternalMetric("im4", "name4", "p4", "pName4", "c3", "cName3", true, null, "id", "name");
 
         TeamEvaluation e1 = new TeamEvaluation("2023-05-19", im1, "PES", 10.0);
         TeamEvaluation e2 = new TeamEvaluation("2023-05-20", im1, "PES", 10.5);

@@ -20,13 +20,13 @@ class UserlessInternalMetricRepositoryTest {
 
     @Test
     void existsByUserlessName() {
-        UserlessInternalMetric im1 = new UserlessInternalMetric("im1", "im1Name", "p1", "p1", "c1", "c1", true, null, null);
+        UserlessInternalMetric im1 = new UserlessInternalMetric("im1", "im1Name", "p1", "p1", "c1", "c1", true, null, null, null);
         entityManager.persistAndFlush(im1);
         assertFalse(userlessInternalMetricRepository.existsByUserlessName("name2"));
-        UserlessInternalMetric im2 = new UserlessInternalMetric("im2", "im2Name", "p2", "p2", "c2", "c2", true, "id", "name");
+        UserlessInternalMetric im2 = new UserlessInternalMetric("im2", "im2Name", "p2", "p2", "c2", "c2", true, null, "id", "name");
         entityManager.persistAndFlush(im2);
         assertFalse(userlessInternalMetricRepository.existsByUserlessName("name2"));
-        UserlessInternalMetric im3 = new UserlessInternalMetric("im3", "im3Name", "p3", "p3", "c3", "c3", true, "id2", "name2");
+        UserlessInternalMetric im3 = new UserlessInternalMetric("im3", "im3Name", "p3", "p3", "c3", "c3", true, null, "id2", "name2");
         entityManager.persistAndFlush(im3);
         assertTrue(userlessInternalMetricRepository.existsByUserlessName("name2"));
     }

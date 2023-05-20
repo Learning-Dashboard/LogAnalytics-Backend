@@ -80,9 +80,9 @@ class SubjectEvaluationRepositoryTest {
     @Test
     void findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam() {
         InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
-            "testParam", "testParamName", "testController", "testControllerName", true);
+            "testParam", "testParamName", "testController", "testControllerName", true, null);
         InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric2",
-            "testParam2", "testParamName2", "testController2", "testControllerName2", true);
+            "testParam2", "testParamName2", "testController2", "testControllerName2", true, null);
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im1, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im2, "PES", 5.0);
         SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im1, "ASW", 5.0);
@@ -109,9 +109,9 @@ class SubjectEvaluationRepositoryTest {
     @Test
     void findBySubjectAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName() {
         InternalMetric im1 = new InternalMetric("testInternalMetric", "Test internal metric",
-                "testParam", "testParamName", "testController", "testControllerName", true);
+                "testParam", "testParamName", "testController", "testControllerName", true, null);
         InternalMetric im2 = new InternalMetric("testInternalMetric2", "Test internal metric2",
-                "testParam2", "testParamName2", "testController2", "testControllerName2", true);
+                "testParam2", "testParamName2", "testController2", "testControllerName2", true, null);
         SubjectEvaluation e1 = new SubjectEvaluation("2001-07-22", im1, "PES", 5.0);
         SubjectEvaluation e2 = new SubjectEvaluation("2001-10-20", im2, "PES", 5.0);
         SubjectEvaluation e3 = new SubjectEvaluation("2001-07-22", im1, "ASW", 5.0);

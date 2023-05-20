@@ -5,6 +5,7 @@ import com.upc.gessi.loganalytics.app.domain.repositories.InternalMetricReposito
 import com.upc.gessi.loganalytics.app.domain.repositories.UserlessInternalMetricRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
+@DependsOn("categoryController")
 public class InternalMetricController {
 
     @Autowired
@@ -21,17 +23,23 @@ public class InternalMetricController {
     UserlessInternalMetricRepository userlessInternalMetricRepository;
 
     @Autowired
-    SessionController sessionController;
+    CategoryController categoryController;
 
     @PostConstruct
     public void storeInternalMetrics() {
         List<InternalMetric> internalMetrics = new ArrayList<>();
 
-        internalMetrics.add(new InternalMetric("InteractionsPerSession", "Interactions per session"));
-        internalMetrics.add(new InternalMetric("7DaysLogins", "7 days logins", "7", null, "DaysLogins", null, false));
-        internalMetrics.add(new InternalMetric("30DaysLogins", "30 days logins", "30", null, "DaysLogins", null, false));
-        internalMetrics.add(new InternalMetric("HistoricAccesses", "Historical data accesses", "Historical", null, "HistoricAccesses", "Current vs. Historical accesses", true));
-        internalMetrics.add(new InternalMetric("CurrentAccesses", "Current data accesses", "Current", null, "HistoricAccesses", "Current vs. Historical accesses", true));
+        Category c1 = categoryController.getByName("Session management");
+        Category c2 = categoryController.getByName("Other kinds of accesses");
+
+        InternalMetric im1 = new InternalMetric("InteractionsPerSession", "Interactions per session", c1);
+        InternalMetric im2 = new InternalMetric("7DaysLogins", "7 days logins", "7", null, "DaysLogins", null, false, c1);
+        InternalMetric im3 = new InternalMetric("30DaysLogins", "30 days logins", "30", null, "DaysLogins", null, false, c1);
+        InternalMetric im4 = new InternalMetric("HistoricAccesses", "Historical data accesses", "Historical", null, "HistoricAccesses", "Current vs. Historical accesses", true, c2);
+        InternalMetric im5 = new InternalMetric("CurrentAccesses", "Current data accesses", "Current", null, "HistoricAccesses", "Current vs. Historical accesses", true, c2);
+
+        internalMetrics.add(im1); internalMetrics.add(im2); internalMetrics.add(im3);
+        internalMetrics.add(im4); internalMetrics.add(im5);
 
         internalMetricRepository.saveAll(internalMetrics);
     }
@@ -51,8 +59,9 @@ public class InternalMetricController {
         String id = page + "PageAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Other kinds of accesses");
             String name = page + " page accesses";
-            InternalMetric im = new InternalMetric(id, name, page, null, "PageAccesses", "Page accesses", true);
+            InternalMetric im = new InternalMetric(id, name, page, null, "PageAccesses", "Page accesses", true, c);
             internalMetricRepository.save(im);
         }
     }
@@ -61,8 +70,9 @@ public class InternalMetricController {
         String id = factor.getId() + "FactorAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Factor accesses");
             String name = factor.getName() + " factor accesses";
-            InternalMetric im = new InternalMetric(id, name, factor.getId(), factor.getName(), "FactorAccesses", "Factor accesses", true);
+            InternalMetric im = new InternalMetric(id, name, factor.getId(), factor.getName(), "FactorAccesses", "Factor accesses", true, c);
             internalMetricRepository.save(im);
         }
     }
@@ -71,8 +81,9 @@ public class InternalMetricController {
         String id = indicator.getId() + "IndicatorAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Indicator accesses");
             String name = indicator.getName() + " indicator accesses";
-            InternalMetric im = new InternalMetric(id, name, indicator.getId(), indicator.getName(), "IndicatorAccesses", "Indicator accesses", true);
+            InternalMetric im = new InternalMetric(id, name, indicator.getId(), indicator.getName(), "IndicatorAccesses", "Indicator accesses", true, c);
             internalMetricRepository.save(im);
         }
     }
@@ -81,14 +92,15 @@ public class InternalMetricController {
         String id = metric.getId() + "MetricAccesses";
         Optional<UserlessInternalMetric> internalMetricOptional = userlessInternalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Metric accesses");
             String name = metric.getName() + " metric accesses";
             UserlessInternalMetric im;
             if (team != null) {
                 List<String> teams = new ArrayList<>();
                 teams.add(team);
-                im = new UserlessInternalMetric(id, name, metric.getId(), metric.getName(), "MetricAccesses", "Metric accesses", true, teams, metric.getNoUserId(), metric.getNoUserName());
+                im = new UserlessInternalMetric(id, name, metric.getId(), metric.getName(), "MetricAccesses", "Metric accesses", true, c, teams, metric.getNoUserId(), metric.getNoUserName());
             }
-            else im = new UserlessInternalMetric(id, name, metric.getId(), metric.getName(), "MetricAccesses", "Metric accesses", true, metric.getNoUserId(), metric.getNoUserName());
+            else im = new UserlessInternalMetric(id, name, metric.getId(), metric.getName(), "MetricAccesses", "Metric accesses", true, c, metric.getNoUserId(), metric.getNoUserName());
             internalMetricRepository.save(im);
         }
         else {
@@ -112,8 +124,9 @@ public class InternalMetricController {
         String id = view + "IViewAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Indicator accesses");
             String name = view + " indicator view accesses";
-            InternalMetric im = new InternalMetric(id, name, view, null, "IViewAccesses", "Indicator view accesses", true);
+            InternalMetric im = new InternalMetric(id, name, view, null, "IViewAccesses", "Indicator view accesses", true, c);
             internalMetricRepository.save(im);
         }
     }
@@ -122,8 +135,9 @@ public class InternalMetricController {
         String id = view + "FViewAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Factor accesses");
             String name = view + " factor view accesses";
-            InternalMetric im = new InternalMetric(id, name, view, null, "FViewAccesses", "Factor view accesses", true);
+            InternalMetric im = new InternalMetric(id, name, view, null, "FViewAccesses", "Factor view accesses", true, c);
             internalMetricRepository.save(im);
         }
     }
@@ -132,8 +146,9 @@ public class InternalMetricController {
         String id = view + "MViewAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Metric accesses");
             String name = view + " metric view accesses";
-            InternalMetric im = new InternalMetric(id, name, view, null, "MViewAccesses", "Metric view accesses", true);
+            InternalMetric im = new InternalMetric(id, name, view, null, "MViewAccesses", "Metric view accesses", true, c);
             internalMetricRepository.save(im);
         }
     }
@@ -142,8 +157,9 @@ public class InternalMetricController {
         String id = view + "QModViewAccesses";
         Optional<InternalMetric> internalMetricOptional = internalMetricRepository.findById(id);
         if (internalMetricOptional.isEmpty()) {
+            Category c = categoryController.getByName("Quality Model accesses");
             String name = view + " quality model view accesses";
-            InternalMetric im = new InternalMetric(id, name, view, null, "QModViewAccesses", "Quality Model view accesses", true);
+            InternalMetric im = new InternalMetric(id, name, view, null, "QModViewAccesses", "Quality Model view accesses", true, c);
             internalMetricRepository.save(im);
         }
     }

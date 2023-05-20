@@ -17,18 +17,18 @@ public class UserlessInternalMetric extends InternalMetric {
 
     }
 
-    public UserlessInternalMetric(String id, String name, String param,
-        String paramName, String controller, String controllerName, boolean groupable,
+    public UserlessInternalMetric(String id, String name, String param, String paramName,
+        String controller, String controllerName, boolean groupable, Category category,
         String userlessId, String userlessName) {
-        super(id, name, param, paramName, controller, controllerName, groupable);
+        super(id, name, param, paramName, controller, controllerName, groupable, category);
         this.userlessId = userlessId;
         this.userlessName = userlessName;
     }
 
-    public UserlessInternalMetric(String id, String name, String param,
-        String paramName, String controller, String controllerName, boolean groupable,
+    public UserlessInternalMetric(String id, String name, String param, String paramName,
+        String controller, String controllerName, boolean groupable, Category category,
         List<String> teams, String userlessId, String userlessName) {
-        super(id, name, param, paramName, controller, controllerName, groupable, teams);
+        super(id, name, param, paramName, controller, controllerName, groupable, category, teams);
         this.userlessId = userlessId;
         this.userlessName = userlessName;
     }

@@ -12,12 +12,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class InternalMetricTest {
 
     private InternalMetric internalMetric;
+    private Category c;
 
     @BeforeEach
     void setUp() {
         List<String> teams = new ArrayList<>();
         teams.add("testTeam");
-        internalMetric = new InternalMetric("test", "testName", "testParam", "testParamName", "testController", "testControllerName", false, teams);
+        c = new Category("testCategory");
+        internalMetric = new InternalMetric("test", "testName", "testParam", "testParamName", "testController", "testControllerName", false, c, teams);
     }
 
     @AfterEach
@@ -100,6 +102,18 @@ class InternalMetricTest {
     void setGroupable() {
         internalMetric.setGroupable(true);
         assertTrue(internalMetric.isGroupable());
+    }
+
+    @Test
+    void getCategory() {
+        assertEquals(internalMetric.getCategory(), c);
+    }
+
+    @Test
+    void setCategory() {
+        Category cat = new Category("testCategory2");
+        internalMetric.setCategory(cat);
+        assertEquals(cat, internalMetric.getCategory());
     }
 
     @Test

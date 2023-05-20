@@ -30,6 +30,10 @@ public class InternalMetric implements Serializable {
     @Column (name = "teams")
     private List<String> teams;
 
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn (name = "category", referencedColumnName = "id")
+    private Category category;
+
     @OneToMany (mappedBy = "internalMetric", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Evaluation> evaluations;
@@ -48,9 +52,14 @@ public class InternalMetric implements Serializable {
         this.id = id;
         this.name = name;
     }
+    public InternalMetric(String id, String name, Category category) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+    }
 
     public InternalMetric(String id, String name, String param, String paramName,
-        String controller, String controllerName, boolean groupable) {
+        String controller, String controllerName, boolean groupable, Category category) {
         this.id = id;
         this.name = name;
         this.param = param;
@@ -58,10 +67,11 @@ public class InternalMetric implements Serializable {
         this.controller = controller;
         this.controllerName = controllerName;
         this.groupable = groupable;
+        this.category = category;
     }
 
     public InternalMetric(String id, String name, String param, String paramName,
-        String controller, String controllerName, boolean groupable, List<String> teams) {
+        String controller, String controllerName, boolean groupable, Category category, List<String> teams) {
         this.id = id;
         this.name = name;
         this.param = param;
@@ -70,6 +80,7 @@ public class InternalMetric implements Serializable {
         this.controllerName = controllerName;
         this.groupable = groupable;
         this.teams = teams;
+        this.category = category;
     }
 
     public String getId() {
@@ -128,6 +139,14 @@ public class InternalMetric implements Serializable {
         this.groupable = groupable;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public List<String> getTeams() {
         return teams;
     }
@@ -163,13 +182,14 @@ public class InternalMetric implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof InternalMetric that)) return false;
-        return isGroupable() == that.isGroupable() && Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getParam(), that.getParam()) && Objects.equals(getParamName(), that.getParamName()) && Objects.equals(getController(), that.getController()) && Objects.equals(getControllerName(), that.getControllerName()) && Objects.equals(getTeams(), that.getTeams()) && Objects.equals(getEvaluations(), that.getEvaluations()) && Objects.equals(getTeamEvaluations(), that.getTeamEvaluations()) && Objects.equals(getSubjectEvaluations(), that.getSubjectEvaluations());
+        if (!(o instanceof InternalMetric)) return false;
+        InternalMetric that = (InternalMetric) o;
+        return isGroupable() == that.isGroupable() && Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getParam(), that.getParam()) && Objects.equals(getParamName(), that.getParamName()) && Objects.equals(getController(), that.getController()) && Objects.equals(getControllerName(), that.getControllerName()) && Objects.equals(getTeams(), that.getTeams()) && Objects.equals(getCategory(), that.getCategory()) && Objects.equals(getEvaluations(), that.getEvaluations()) && Objects.equals(getTeamEvaluations(), that.getTeamEvaluations()) && Objects.equals(getSubjectEvaluations(), that.getSubjectEvaluations());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getParam(), getParamName(), getController(), getControllerName(), isGroupable(), getTeams(), getEvaluations(), getTeamEvaluations(), getSubjectEvaluations());
+        return Objects.hash(getId(), getName(), getParam(), getParamName(), getController(), getControllerName(), isGroupable(), getTeams(), getCategory(), getEvaluations(), getTeamEvaluations(), getSubjectEvaluations());
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.upc.gessi.loganalytics.app.rest.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.upc.gessi.loganalytics.app.domain.models.Evaluation;
-import com.upc.gessi.loganalytics.app.domain.models.InternalMetric;
-import com.upc.gessi.loganalytics.app.domain.models.SubjectEvaluation;
-import com.upc.gessi.loganalytics.app.domain.models.TeamEvaluation;
+import com.upc.gessi.loganalytics.app.domain.models.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +17,7 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
     private InternalMetric internalMetric;
     private double value;
     private boolean groupable;
+    private String category;
     private Map<String, Double> entities;
 
     public EvaluationDTO(Evaluation e) {
@@ -31,6 +29,8 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
         else this.name = cName;
         this.entities = new HashMap<>();
         this.groupable = internalMetric.isGroupable();
+        Category c = internalMetric.getCategory();
+        if (c != null) this.category = internalMetric.getCategory().getId();
     }
 
     public EvaluationDTO(SubjectEvaluation e) {
@@ -43,6 +43,8 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
         else this.name = cName;
         this.entities = new HashMap<>();
         this.groupable = internalMetric.isGroupable();
+        Category c = internalMetric.getCategory();
+        if (c != null) this.category = internalMetric.getCategory().getId();
     }
 
     public EvaluationDTO(TeamEvaluation e) {
@@ -55,6 +57,8 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
         else this.name = cName;
         this.entities = new HashMap<>();
         this.groupable = internalMetric.isGroupable();
+        Category c = internalMetric.getCategory();
+        if (c != null) this.category = internalMetric.getCategory().getId();
     }
 
     public String getName() {
@@ -113,6 +117,14 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
         this.groupable = groupable;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public Map<String, Double> getEntities() {
         return entities;
     }
@@ -124,13 +136,14 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EvaluationDTO that)) return false;
-        return Double.compare(that.getValue(), getValue()) == 0 && isGroupable() == that.isGroupable() && Objects.equals(getName(), that.getName()) && Objects.equals(getSubject(), that.getSubject()) && Objects.equals(getTeam(), that.getTeam()) && Objects.equals(getDate(), that.getDate()) && Objects.equals(getInternalMetric(), that.getInternalMetric()) && Objects.equals(getEntities(), that.getEntities());
+        if (!(o instanceof EvaluationDTO)) return false;
+        EvaluationDTO that = (EvaluationDTO) o;
+        return Double.compare(that.getValue(), getValue()) == 0 && isGroupable() == that.isGroupable() && Objects.equals(getName(), that.getName()) && Objects.equals(getSubject(), that.getSubject()) && Objects.equals(getTeam(), that.getTeam()) && Objects.equals(getDate(), that.getDate()) && Objects.equals(getInternalMetric(), that.getInternalMetric()) && Objects.equals(getCategory(), that.getCategory()) && Objects.equals(getEntities(), that.getEntities());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getSubject(), getTeam(), getDate(), getInternalMetric(), getValue(), isGroupable(), getEntities());
+        return Objects.hash(getName(), getSubject(), getTeam(), getDate(), getInternalMetric(), getValue(), isGroupable(), getCategory(), getEntities());
     }
 
     @Override
@@ -142,6 +155,7 @@ public class EvaluationDTO { //Constructor, getters, setters, hashcode y equals
                 ", date='" + date + '\'' +
                 ", value=" + value +
                 ", groupable=" + groupable +
+                ", category='" + category + '\'' +
                 ", entities=" + entities +
                 '}';
     }

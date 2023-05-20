@@ -18,6 +18,8 @@ public class TeamEvaluationController {
     EvaluationController evaluationController;
     @Autowired
     InternalMetricController internalMetricController;
+    @Autowired
+    UserlessInternalMetricController userlessInternalMetricController;
 
     public List<EvaluationDTO> getCurrentEvaluations(String team) {
         TeamEvaluation latestEvaluation = teamEvaluationRepository.findFirstByTeamOrderByDateDesc(team);
@@ -38,17 +40,23 @@ public class TeamEvaluationController {
     }
 
     public EvaluationDTO getHistoricalEvaluationsByParam(String team, String dateBefore, String dateAfter, String metric, String param) {
-        boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
         List<TeamEvaluation> unfilteredEvaluations;
-        if (paramNamePresent) {
+        boolean noUserNamePresent = userlessInternalMetricController.checkNoUserNameExistence(param);
+        if (noUserNamePresent) {
             unfilteredEvaluations = teamEvaluationRepository.
-                findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
-                (team, dateBefore, dateAfter, metric, param);
+                findByNoUserName(team, dateBefore, dateAfter, metric, param);
         }
         else {
-            unfilteredEvaluations = teamEvaluationRepository.
-                findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
-                (team, dateBefore, dateAfter, metric, param);
+            boolean paramNamePresent = internalMetricController.checkParamNameExistence(param);
+            if (paramNamePresent) {
+                unfilteredEvaluations = teamEvaluationRepository.
+                    findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParamName
+                    (team, dateBefore, dateAfter, metric, param);
+            } else {
+                unfilteredEvaluations = teamEvaluationRepository.
+                    findByTeamAndDateBetweenAndInternalMetricControllerNameAndInternalMetricParam
+                    (team, dateBefore, dateAfter, metric, param);
+            }
         }
         if (!unfilteredEvaluations.isEmpty())
             return filterHistoricalEvaluationsByParam(groupMetrics(unfilteredEvaluations));

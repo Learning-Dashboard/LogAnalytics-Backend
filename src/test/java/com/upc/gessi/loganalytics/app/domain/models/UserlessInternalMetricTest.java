@@ -13,7 +13,7 @@ class UserlessInternalMetricTest {
     @BeforeEach
     void setUp() {
         uim = new UserlessInternalMetric("im", "inName", "param",
-            "paramName", "controller", "controllerName", true, "id", "name");
+            "paramName", "controller", "controllerName", true, null, "id", "name");
     }
 
     @AfterEach
