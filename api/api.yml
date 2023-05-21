@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Swagger Log Analytics Tool - OpenAPI 3.0
-  description: This is the REST API documentation for the TFG Log Analytics Tool for the Learning Dashboard, by Laura Cazorla.
+  description: This is the REST API documentation for the TFG Log Analytics Tool for the Learning Dashboard, by Laura Cazorla Garcés.
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api
@@ -43,7 +43,7 @@ paths:
     get:
       tags:
         - Team
-      summary: Stores the Teams from the LD.
+      summary: Stores the Teams from the LD
       description: Stores all of the Teams present in the current Learning Dashboard configuration, along with their corresponding subject.
       operationId: importTeams
       responses:
@@ -268,7 +268,7 @@ paths:
     get:
       tags:
         - Metric
-      summary: Stores the Metrics from the LD.
+      summary: Stores the Metrics from the LD
       description: Stores all of the Metrics present in the current Learning Dashboard configuration, and creates the corresponding Internal Metrics if necessary.
       operationId: importMetrics
       responses:
@@ -294,7 +294,7 @@ paths:
     get:
       tags:
         - Factor
-      summary: Stores the Factors from the LD.
+      summary: Stores the Factors from the LD
       description: Stores all of the Factors present in the current Learning Dashboard configuration, and creates the corresponding Internal Metrics if necessary.
       operationId: importFactors
       responses:
@@ -320,12 +320,28 @@ paths:
     get:
       tags:
         - Indicator
-      summary: Stores the Indicators from the LD.
+      summary: Stores the Indicators from the LD
       description: Stores all od the Indicators present in the current Learning Dashboard configuration, and creates the corresponding Internal Metrics if necessary.
       operationId: importIndicators
       responses:
         '201':
           description: created
+  /categories:
+    get:
+      tags:
+        - Category
+      summary: Finds all of the Categories
+      description: Retrieves all of the existing Categories.
+      operationId: getCategories
+      responses:
+        '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Category'
   /internalMetrics:
     get:
       tags:
@@ -342,6 +358,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/InternalMetric'
+  /evaluations/update:
+    get:
+      tags:
+        - Evaluation
+      summary: Updates the Evaluations
+      description: Performs and stores the Evaluations for all of the Internal Metrics using the current data. It stores evaluations using Team, Subject and general granularity.
+      operationId: updateEvaluations
+      responses:
+        '201':
+          description: created
   /evaluations/current:
     get:
       tags:
@@ -357,7 +383,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Evaluation'
+                  $ref: '#/components/schemas/EvaluationDTO'
   /evaluations/historical:
     get:
       tags:
@@ -390,7 +416,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Evaluation'
+                  $ref: '#/components/schemas/EvaluationDTO'
         '400':
           description: bad request
           content:
@@ -402,31 +428,81 @@ paths:
                     value: dateBefore is not previous to dateAfter
                   example 2:
                     value: Date formats are incorrect
-  /evaluations/update:
+                  example 3:
+                    value: Required parameter 'dateBefore' is not present
+  /evaluations/historical/{metric}/{param}:
     get:
       tags:
         - Evaluation
-      summary: Updates the Evaluations
-      description: Performs and stores the Evaluations for all of the Internal Metrics using the current data. It stores evaluations using Team, Subject and general granularity.
-      operationId: updateEvaluations
+      summary: Finds historical Evaluations of a certain Internal Metric
+      description: Retrieves all of the Evaluations that are included in a certain time range for the specified Internal Metric.
+      operationId: getHistoricalEvaluationsByParam
+      parameters:
+        - name: metric
+          in: path
+          description: Controller name of the metric.
+          required: true
+          schema:
+            type: string
+            example: Metric accesses
+        - name: param
+          in: path
+          description: Parameter name of the metric.
+          required: true
+          schema:
+            type: string
+            example: Tasks
+        - name: dateBefore
+          in: query
+          description: Starting date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-06-01
       responses:
-        '201':
-          description: created
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationDTOByParam'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples:
+                  example 1:
+                    value: dateBefore is not previous to dateAfter
+                  example 2:
+                    value: Date formats are incorrect
+                  example 3:
+                    value: Required parameter 'dateBefore' is not present
   /teamEvaluations/current:
     get:
       tags:
-        - Evaluation
-      summary: Finds the current Team Evaluations
-      description: Retrieves all of the Team Evaluations from the last evaluation date for a certain Team.
+        - TeamEvaluation
+      summary: Finds the current TeamEvaluations
+      description: Retrieves all of the TeamEvaluations from the last evaluation date.
       operationId: getCurrentTeamEvaluations
       parameters:
         - name: team
           in: query
-          description: Name of the Team.
+          description: Identifier of the team
           required: true
           schema:
             type: string
-            example: pes11a
+            example: asw11b
       responses:
         '200':
           description: successful operation
@@ -435,22 +511,22 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TeamEvaluation'
+                  $ref: '#/components/schemas/EvaluationDTO'
   /teamEvaluations/historical:
     get:
       tags:
-        - Evaluation
-      summary: Finds historical Team Evaluations
-      description: Retrieves all of the Team Evaluations that are included in a certain time range for the provided Team.
+        - TeamEvaluation
+      summary: Finds historical TeamEvaluations
+      description: Retrieves all of the TeamEvaluations that are included in a certain time range.
       operationId: getHistoricalTeamEvaluations
       parameters:
         - name: team
           in: query
-          description: Name of the team.
+          description: Identifier of the team
           required: true
           schema:
             type: string
-            example: pes11a
+            example: asw11b
         - name: dateBefore
           in: query
           description: Starting date.
@@ -475,7 +551,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TeamEvaluation'
+                  $ref: '#/components/schemas/EvaluationDTO'
         '400':
           description: bad request
           content:
@@ -487,21 +563,88 @@ paths:
                     value: dateBefore is not previous to dateAfter
                   example 2:
                     value: Date formats are incorrect
+                  example 3:
+                    value: Required parameter 'dateBefore' is not present
+  /teamEvaluations/historical/{metric}/{param}:
+    get:
+      tags:
+        - TeamEvaluation
+      summary: Finds historical TeamEvaluations of a certain Internal Metric
+      description: Retrieves all of the TeamEvaluations that are included in a certain time range for the specified Internal Metric.
+      operationId: getHistoricalTeamEvaluationsByParam
+      parameters:
+        - name: metric
+          in: path
+          description: Controller name of the metric.
+          required: true
+          schema:
+            type: string
+            example: Metric accesses
+        - name: param
+          in: path
+          description: Parameter name of the metric.
+          required: true
+          schema:
+            type: string
+            example: Tasks
+        - name: team
+          in: query
+          description: Identifier of the team
+          required: true
+          schema:
+            type: string
+            example: asw11b
+        - name: dateBefore
+          in: query
+          description: Starting date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-06-01
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationDTOByParam'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples:
+                  example 1:
+                    value: dateBefore is not previous to dateAfter
+                  example 2:
+                    value: Date formats are incorrect
+                  example 3:
+                    value: Required parameter 'dateBefore' is not present
   /subjectEvaluations/current:
     get:
       tags:
-        - Evaluation
-      summary: Finds the current Subject Evaluations
-      description: Retrieves all of the Subject Evaluations from the last evaluation date for a certain Subject.
+        - SubjectEvaluation
+      summary: Finds the current SubjectEvaluations
+      description: Retrieves all of the SubjectEvaluations from the last evaluation date.
       operationId: getCurrentSubjectEvaluations
       parameters:
         - name: subject
           in: query
-          description: Name of the subject.
+          description: Identifier of the subject
           required: true
           schema:
             type: string
-            example: PES
+            example: ASW
       responses:
         '200':
           description: successful operation
@@ -510,22 +653,22 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SubjectEvaluation'
+                  $ref: '#/components/schemas/EvaluationDTO'
   /subjectEvaluations/historical:
     get:
       tags:
-        - Evaluation
-      summary: Finds historical Subject Evaluations
-      description: Retrieves all of the Subject Evaluations that are included in a certain time range for the provided Subject.
+        - SubjectEvaluation
+      summary: Finds historical SubjectEvaluations
+      description: Retrieves all of the SubjectEvaluations that are included in a certain time range.
       operationId: getHistoricalSubjectEvaluations
       parameters:
         - name: subject
           in: query
-          description: Name of the subject.
+          description: Identifier of the subject
           required: true
           schema:
             type: string
-            example: PES
+            example: ASW
         - name: dateBefore
           in: query
           description: Starting date.
@@ -550,7 +693,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SubjectEvaluation'
+                  $ref: '#/components/schemas/EvaluationDTO'
         '400':
           description: bad request
           content:
@@ -562,6 +705,73 @@ paths:
                     value: dateBefore is not previous to dateAfter
                   example 2:
                     value: Date formats are incorrect
+                  example 3:
+                    value: Required parameter 'dateBefore' is not present
+  /subjectEvaluations/historical/{metric}/{param}:
+    get:
+      tags:
+        - SubjectEvaluation
+      summary: Finds historical SubjectEvaluations of a certain Internal Metric
+      description: Retrieves all of the SubjectEvaluations that are included in a certain time range for the specified Internal Metric.
+      operationId: getHistoricalSubjectEvaluationsByParam
+      parameters:
+        - name: metric
+          in: path
+          description: Controller name of the metric.
+          required: true
+          schema:
+            type: string
+            example: Metric accesses
+        - name: param
+          in: path
+          description: Parameter name of the metric.
+          required: true
+          schema:
+            type: string
+            example: Tasks
+        - name: subject
+          in: query
+          description: Identifier of the subject
+          required: true
+          schema:
+            type: string
+            example: ASW
+        - name: dateBefore
+          in: query
+          description: Starting date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-01-01
+        - name: dateAfter
+          in: query
+          description: Ending date.
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2023-06-01
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationDTOByParam'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema: 
+                type: string
+              examples:
+                  example 1:
+                    value: dateBefore is not previous to dateAfter
+                  example 2:
+                    value: Date formats are incorrect
+                  example 3:
+                    value: Required parameter 'dateBefore' is not present
 components:
   schemas:
     Subject:
@@ -648,7 +858,8 @@ components:
         message:
           type: string
           example: 2023-04-06 18:27:13.967, 
-            pes11a enters app
+            GET "/Metrics/CurrentTable", 
+            parameters={}, Action performed by pes11a
         page:
           type: string
           example: Metrics
@@ -699,32 +910,66 @@ components:
       properties:
         id:
           type: string
-          example: commits_anonymous
+          example: commits_laura_cazorla
+        name:
+          type: string
+          example: laura.cazorla commits
+        noUserId:
+          type: string
+          example: commits
+          nullable: true
+        noUserName:
+          type: string
+          example: Commits
+          nullable: true
     Factor:
       type: object
       properties:
         id:
           type: string
           example: commitsmanagement
+        name:
+          type: string
+          example: Commits Management
     Indicator:
       type: object
       properties:
         id:
           type: string
           example: repositorycontribution
+        name:
+          type: string
+          example: Repository Contribution
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          example: Other kinds of accesses
     InternalMetric:
       type: object
       properties:
+        id:
+          type: string
+          example: unassignedtasksFactorAccesses
         name:
           type: string
-          example: 7DaysLogins
+          example: Unassigned Tasks factor accesses
         param:
           type: string
-          example: 7
+          example: unassignedtasks
+          nullable: true
+        paramName:
+          type: string
+          example: Unassigned Tasks
           nullable: true
         controller:
           type: string
-          example: DaysLogins
+          example: FactorAccesses
+          nullable: true
+        controllerName:
+          type: string
+          example: Factor accesses
           nullable: true
         teams:
           type: array
@@ -732,33 +977,96 @@ components:
             type: string
             example: pes11a, asw11b
           nullable: true
-    Evaluation:
+        category:
+          $ref: '#/components/schemas/Category'
+    Entities: 
       type: object
       properties:
+        Information Completeness:
+          type: number
+          format: double
+          example: 20.0
+        Backlog Management:
+          type: number
+          format: double
+          example: 25.0
+        Repository Contribution:
+          type: number
+          format: double
+          example: 5.0
+    EntitiesByParam: 
+        type: object
+        properties:
+          2023-05-18:
+            type: number
+            format: double
+            example: 20.0
+          2023-05-19:
+            type: number
+            format: double
+            example: 25.0
+          2023-05-20:
+            type: number
+            format: double
+            example: 5.0
+    EvaluationDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Indicator accesses
+        subject:
+          type: string
+          example: null
+          nullable: true
+        team:
+          type: string
+          example: null
+          nullable: true
         date:
           type: string
           format: date
           example: 2022-05-14
-        internalMetric:
-          $ref: '#/components/schemas/InternalMetric'
         value:
           type: number
           format: double
-          example: 5.0
-    SubjectEvaluation:
-      allOf:
-        - $ref: '#/components/schemas/Evaluation'
-        - type: object
-          properties:
-            subject:
-              type: string
-              example: pes11a
-    TeamEvaluation:
-      allOf:
-        - $ref: '#/components/schemas/Evaluation'
-        - type: object
-          properties:
-            team:
-              type: string
-              example: pes11a
+          example: 0.0
+        groupable:
+          type: boolean
+          example: true
+        category:
+          type: string
+          example: Indicator Accesses
+        entities:
+          $ref: '#/components/schemas/Entities'
+    EvaluationDTOByParam:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Indicator accesses
+        subject:
+          type: string
+          example: null
+          nullable: true
+        team:
+          type: string
+          example: null
+          nullable: true
+        date:
+          type: string
+          format: date
+          example: 2022-05-14
+        value:
+          type: number
+          format: double
+          example: 0.0
+        groupable:
+          type: boolean
+          example: true
+        category:
+          type: string
+          example: Indicator Accesses
+        entities:
+          $ref: '#/components/schemas/EntitiesByParam'
       
