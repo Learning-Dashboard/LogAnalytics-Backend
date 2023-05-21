@@ -2,24 +2,17 @@ package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.LogController;
 import com.upc.gessi.loganalytics.app.domain.models.Log;
-import com.upc.gessi.loganalytics.app.domain.repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/logs")
 public class LogRestController {
-    @Autowired
-    private LogRepository logRepository;
     @Autowired
     private LogController logController;
 
