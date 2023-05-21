@@ -43,7 +43,7 @@ public class EvaluationRestController {
             if (dateBefore.compareTo(dateAfter) > 0)
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "dateBefore is not previous to dateAfter");
-            else return evaluationController.getHistoricalEvaluations(dateBefore, dateAfter); //TODO: No sé si irá bien
+            else return evaluationController.getHistoricalEvaluations(dateBefore, dateAfter);
         } catch (ParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date formats are incorrect");
         }

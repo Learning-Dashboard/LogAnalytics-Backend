@@ -55,6 +55,18 @@ class LogRestControllerTest {
             assertEquals(e.getMessage(), "400 BAD_REQUEST \"Page needed for pagination\"");
         }
         try {
+            logRestController.findAllLogs(-1, 1,
+                null, null, null, null, null);
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getMessage(), "400 BAD_REQUEST \"Page value must be greater than 0\"");
+        }
+        try {
+            logRestController.findAllLogs(1, -1,
+                null, null, null, null, null);
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getMessage(), "400 BAD_REQUEST \"Size value must be greater than 0\"");
+        }
+        try {
             logRestController.findAllLogs(null, null,
                 null, null, "pes11a", "PES", null);
         } catch (ResponseStatusException e) {
