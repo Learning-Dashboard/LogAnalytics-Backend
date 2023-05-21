@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.IndicatorAccessController;
 import com.upc.gessi.loganalytics.app.domain.models.IndicatorAccess;
 import com.upc.gessi.loganalytics.app.domain.repositories.IndicatorAccessRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 class IndicatorAccessRestControllerTest {
 
     @Mock
-    IndicatorAccessRepository indicatorAccessRepository;
+    IndicatorAccessController indicatorAccessController;
 
     @InjectMocks
     IndicatorAccessRestController indicatorAccessRestController;
@@ -29,7 +30,7 @@ class IndicatorAccessRestControllerTest {
         List<IndicatorAccess> indicatorAccesses = new LinkedList<>();
         indicatorAccesses.add(new IndicatorAccess());
         indicatorAccesses.add(new IndicatorAccess());
-        when(indicatorAccessRepository.findAll()).thenReturn(indicatorAccesses);
+        when(indicatorAccessController.getAll()).thenReturn(indicatorAccesses);
         List<IndicatorAccess> actualIndicators = indicatorAccessRestController.findAllIndicatorAccesses();
         assertEquals(indicatorAccesses, actualIndicators);
     }

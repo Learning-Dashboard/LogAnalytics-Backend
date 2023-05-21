@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.SessionController;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
@@ -21,22 +22,19 @@ import static org.mockito.Mockito.when;
 class SessionRestControllerTest {
 
     @Mock
-    SessionRepository sessionRepository;
+    SessionController sessionController;
 
     @InjectMocks
     SessionRestController sessionRestController;
 
     @Test
     void findAllSessions() {
-        List<Session> sessions = new ArrayList<>();
         List<SessionDTO> sessionDTOS = new ArrayList<>();
         Subject subject = new Subject("PES");
         Team team = new Team("t1", "sem", subject);
         sessionDTOS.add(new SessionDTO(new Session("s1", team, 0)));
         sessionDTOS.add(new SessionDTO(new Session("s2", team, 10)));
-        sessions.add(new Session("s1", team, 0));
-        sessions.add(new Session("s2", team, 10));
-        when(sessionRepository.findAll()).thenReturn(sessions);
+        when(sessionController.getAll()).thenReturn(sessionDTOS);
         List<SessionDTO> actualSessions = sessionRestController.findAllSessions();
         assertEquals(actualSessions, sessionDTOS);
     }

@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.SessionController;
 import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
 import com.upc.gessi.loganalytics.app.rest.DTOs.SessionDTO;
@@ -18,16 +19,11 @@ import java.util.List;
 public class SessionRestController {
 
     @Autowired
-    SessionRepository sessionRepository;
+    SessionController sessionController;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<SessionDTO> findAllSessions() {
-        Iterable<Session> sessionIterable = sessionRepository.findAll();
-        List<Session> sessionList = new ArrayList<>();
-        sessionIterable.forEach(sessionList::add);
-        List<SessionDTO> sessionDTOList = new ArrayList<>();
-        for (Session s : sessionList) sessionDTOList.add(new SessionDTO(s));
-        return sessionDTOList;
+        return sessionController.getAll();
     }
 }

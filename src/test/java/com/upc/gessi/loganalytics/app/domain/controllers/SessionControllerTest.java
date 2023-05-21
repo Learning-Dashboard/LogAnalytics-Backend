@@ -4,6 +4,7 @@ import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
+import com.upc.gessi.loganalytics.app.rest.DTOs.SessionDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -66,13 +67,28 @@ class SessionControllerTest {
 
     @Test
     void getAll() {
+        List<Session> sessions = new ArrayList<>();
+        List<SessionDTO> sessionDTOS = new ArrayList<>();
+        Subject subject = new Subject("PES");
+        Team team = new Team("t1", "sem", subject);
+        sessionDTOS.add(new SessionDTO(new Session("s1", team, 0)));
+        sessionDTOS.add(new SessionDTO(new Session("s2", team, 10)));
+        sessions.add(new Session("s1", team, 0));
+        sessions.add(new Session("s2", team, 10));
+        Mockito.when(sessionRepository.findAll()).thenReturn(sessions);
+        List<SessionDTO> actualSessions = sessionController.getAll();
+        assertEquals(sessionDTOS, actualSessions);
+    }
+
+    @Test
+    void getAllFromYesterday() {
         Subject s = new Subject("s");
         Team team = new Team("t1", "22-23-Q1", s);
         Session session = new Session("s", team, 0);
         List<Session> sessions = new ArrayList<>();
         sessions.add(session);
         Mockito.when(sessionRepository.findByStartTimestampLessThan(Mockito.anyLong())).thenReturn(sessions);
-        List<Session> actualSessions = sessionController.getAll();
+        List<Session> actualSessions = sessionController.getAllFromYesterday();
         assertEquals(sessions, actualSessions);
     }
 

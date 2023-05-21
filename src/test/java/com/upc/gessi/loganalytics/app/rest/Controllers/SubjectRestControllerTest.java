@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.SubjectController;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.repositories.SubjectRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 class SubjectRestControllerTest {
 
     @Mock
-    SubjectRepository subjectRepository;
+    SubjectController subjectController;
 
     @InjectMocks
     SubjectRestController subjectRestController;
@@ -28,7 +29,7 @@ class SubjectRestControllerTest {
         List<Subject> subjects = new LinkedList<>();
         subjects.add(new Subject("PES"));
         subjects.add(new Subject("ASW"));
-        when(subjectRepository.findAll()).thenReturn(subjects);
+        when(subjectController.getAll()).thenReturn(subjects);
         List<Subject> actualSubjects = subjectRestController.findAllSubjects();
         assertEquals(subjects, actualSubjects);
     }

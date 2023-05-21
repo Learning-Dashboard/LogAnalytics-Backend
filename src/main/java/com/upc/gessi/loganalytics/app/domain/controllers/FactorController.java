@@ -47,6 +47,13 @@ public class FactorController {
         }
     }
 
+    public List<Factor> getAll() {
+        Iterable<Factor> factorIterable = factorRepository.findAll();
+        List<Factor> factorList = new ArrayList<>();
+        factorIterable.forEach(factorList::add);
+        return factorList;
+    }
+
     private Set<Factor> getCurrentLDFactors() {
         Set<Factor> factors = new HashSet<>();
         try {

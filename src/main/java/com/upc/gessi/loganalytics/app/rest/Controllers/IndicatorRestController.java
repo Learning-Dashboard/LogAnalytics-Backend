@@ -2,7 +2,6 @@ package com.upc.gessi.loganalytics.app.rest.Controllers;
 
 import com.upc.gessi.loganalytics.app.domain.controllers.IndicatorController;
 import com.upc.gessi.loganalytics.app.domain.models.Indicator;
-import com.upc.gessi.loganalytics.app.domain.repositories.IndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +17,12 @@ import java.util.List;
 public class IndicatorRestController {
 
     @Autowired
-    private IndicatorRepository indicatorRepository;
-    @Autowired
     private IndicatorController indicatorController;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Indicator> findAllIndicators() {
-        Iterable<Indicator> indicatorIterable = indicatorRepository.findAll();
-        List<Indicator> indicatorList = new ArrayList<>();
-        indicatorIterable.forEach(indicatorList::add);
-        return indicatorList;
+        return indicatorController.getAll();
     }
 
     @GetMapping("/import")

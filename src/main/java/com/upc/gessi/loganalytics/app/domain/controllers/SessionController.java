@@ -4,6 +4,7 @@ import com.upc.gessi.loganalytics.app.domain.models.Session;
 import com.upc.gessi.loganalytics.app.domain.models.Subject;
 import com.upc.gessi.loganalytics.app.domain.models.Team;
 import com.upc.gessi.loganalytics.app.domain.repositories.SessionRepository;
+import com.upc.gessi.loganalytics.app.rest.DTOs.SessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -63,7 +64,16 @@ public class SessionController {
         return null;
     }
 
-    public List<Session> getAll() {
+    public List<SessionDTO> getAll() {
+        Iterable<Session> sessionIterable = sessionRepository.findAll();
+        List<Session> sessionList = new ArrayList<>();
+        sessionIterable.forEach(sessionList::add);
+        List<SessionDTO> sessionDTOList = new ArrayList<>();
+        for (Session s : sessionList) sessionDTOList.add(new SessionDTO(s));
+        return sessionDTOList;
+    }
+
+    public List<Session> getAllFromYesterday() {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         long timestampToday = today.toInstant(ZoneOffset.UTC).toEpochMilli();
 

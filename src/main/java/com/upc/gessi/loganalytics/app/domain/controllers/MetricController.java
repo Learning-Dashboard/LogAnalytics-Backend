@@ -52,6 +52,13 @@ public class MetricController {
         }
     }
 
+    public List<Metric> getAll() {
+        Iterable<Metric> metricIterable = metricRepository.findAll();
+        List<Metric> metricList = new ArrayList<>();
+        metricIterable.forEach(metricList::add);
+        return metricList;
+    }
+
     private Map<Metric,Set<String>> getCurrentLDMetrics() {
         Map<Metric,Set<String>> metrics = new HashMap<>();
         try {

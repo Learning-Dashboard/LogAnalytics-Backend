@@ -43,6 +43,13 @@ public class IndicatorController {
         }
     }
 
+    public List<Indicator> getAll() {
+        Iterable<Indicator> indicatorIterable = indicatorRepository.findAll();
+        List<Indicator> indicatorList = new ArrayList<>();
+        indicatorIterable.forEach(indicatorList::add);
+        return indicatorList;
+    }
+
     private Set<Indicator> getCurrentLDIndicators() {
         Set<Indicator> indicators = new HashSet<>();
         try {

@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 class FactorRestControllerTest {
 
     @Mock
-    FactorRepository factorRepository;
-    @Mock
     FactorController factorController;
     @InjectMocks
     FactorRestController factorRestController;
@@ -33,14 +31,14 @@ class FactorRestControllerTest {
         List<Factor> factors = new LinkedList<>();
         factors.add(new Factor("f1"));
         factors.add(new Factor("f2"));
-        when(factorRepository.findAll()).thenReturn(factors);
+        when(factorController.getAll()).thenReturn(factors);
         List<Factor> actualFactors = factorRestController.findAllFactors();
         assertEquals(factors, actualFactors);
     }
 
     @Test
-    void importMetrics() {
-        factorRestController.importMetrics();
+    void importFactors() {
+        factorRestController.importFactors();
         verify(factorController, Mockito.times(1)).storeAllFactors();
     }
 }

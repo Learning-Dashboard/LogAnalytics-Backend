@@ -60,7 +60,7 @@ class InteractionsPerSessionControllerTest {
         Session session1 = new Session("s", team1, 0, 10, 10, 10);
         Session session2 = new Session("s", team1, 15, 25, 10, 5);
         sessions.add(session1); sessions.add(session2);
-        Mockito.when(sessionController.getAll()).thenReturn(sessions);
+        Mockito.when(sessionController.getAllFromYesterday()).thenReturn(sessions);
         assertEquals(7.5, interactionsPerSessionController.evaluate());
     }
 }

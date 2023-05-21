@@ -15,6 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -89,5 +90,161 @@ class LogControllerTest {
         Mockito.when(logRepository.findByPageAndTeamAndTimeBetween(Mockito.anyString(), Mockito.anyString(), Mockito.anyLong(), Mockito.anyLong())).thenReturn(expectedLogs);
         List<Log> actualLogs = logController.getAllByPageAndTeam("page", "pes11a");
         assertEquals(expectedLogs, actualLogs);
+    }
+
+    @Test
+    void getAll() {
+        List<Log> logs = new ArrayList<>();
+        logs.add(new Log(0, "pes11a", "testMessage"));
+        logs.add(new Log(5, "pes11a", "testMessage"));
+        when(logRepository.findAllByOrderByTimeDesc()).thenReturn(logs);
+        List<Log> actualLogs = logController.getAll(null, null,
+                null, null, null, null, null);
+        assertEquals(logs, actualLogs);
+
+        logController.getAll(null, null,
+                "2001-07-22", "2001-10-20", "Team", null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeBetweenAndTeamAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.anyLong(), Mockito.eq("Team"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                "2001-07-22", "2001-10-20", "Team", null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeBetweenAndTeamOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.anyLong(), Mockito.eq("Team"));
+
+        logController.getAll(null, null,
+                "2001-07-22", "2001-10-20", null, "Subject", "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeBetweenAndSubjectAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.anyLong(), Mockito.eq("Subject"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                "2001-07-22", "2001-10-20", null, "Subject", null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeBetweenAndSubjectOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.anyLong(), Mockito.eq("Subject"));
+
+        logController.getAll(null, null,
+                "2001-07-22", "2001-10-20", null, null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeBetweenAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.anyLong(), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                "2001-07-22", "2001-10-20", null, null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeBetweenOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.anyLong());
+
+
+        logController.getAll(null, null,
+                "2001-07-22", null, "Team", null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeGreaterThanEqualAndTeamAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Team"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                "2001-07-22", null, "Team", null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeGreaterThanEqualAndTeamOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Team"));
+
+        logController.getAll(null, null,
+                "2001-07-22", null, null, "Subject", "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeGreaterThanEqualAndSubjectAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Subject"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                "2001-07-22", null, null, "Subject", null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeGreaterThanEqualAndSubjectOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Subject"));
+
+        logController.getAll(null, null,
+                "2001-07-22", null, null, null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeGreaterThanEqualAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                "2001-07-22", null, null, null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeGreaterThanEqualOrderByTimeDesc(Mockito.anyLong());
+
+
+        logController.getAll(null, null,
+                null, "2001-07-22", "Team", null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeLessThanEqualAndTeamAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Team"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                null, "2001-07-22", "Team", null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeLessThanEqualAndTeamOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Team"));
+
+        logController.getAll(null, null,
+                null, "2001-07-22", null, "Subject", "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeLessThanEqualAndSubjectAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Subject"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                null, "2001-07-22", null, "Subject", null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeLessThanEqualAndSubjectOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Subject"));
+
+        logController.getAll(null, null,
+                null, "2001-07-22", null, null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeLessThanEqualAndMessageContainingOrderByTimeDesc(Mockito.anyLong(),
+                        Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                null, "2001-07-22", null, null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTimeLessThanEqualOrderByTimeDesc(Mockito.anyLong());
+
+
+        logController.getAll(null, null,
+                null, null, "Team", null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTeamAndMessageContainingOrderByTimeDesc(
+                        Mockito.eq("Team"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                null, null, "Team", null, null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByTeamOrderByTimeDesc(Mockito.eq("Team"));
+
+        logController.getAll(null, null,
+                null, null, null, "Subject", "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findBySubjectAndMessageContainingOrderByTimeDesc(
+                        Mockito.eq("Subject"), Mockito.eq("Hello"));
+
+        logController.getAll(null, null,
+                null, null, null, "Subject", null);
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findBySubjectOrderByTimeDesc(Mockito.eq("Subject"));
+
+        logController.getAll(null, null,
+                null, null, null, null, "Hello");
+        Mockito.verify(logRepository, Mockito.times(1))
+                .findByMessageContainingOrderByTimeDesc(Mockito.eq("Hello"));
+    }
+
+    @Test
+    void storeLogs() {
+        List<Log> parsedLogs = new ArrayList<>();
+        parsedLogs.add(new Log(0, "pes11a", "message"));
+        Mockito.when(logRepository.findFirstByOrderByTimeDesc()).thenReturn(null);
+        logController.storeLogs(parsedLogs);
+        Mockito.verify(logRepository, Mockito.times(1)).saveAll(parsedLogs);
     }
 }

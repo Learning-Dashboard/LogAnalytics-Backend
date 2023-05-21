@@ -19,6 +19,13 @@ public class MetricAccessController {
     @Autowired
     MetricAccessRepository metricAccessRepository;
 
+    public List<MetricAccess> getAll() {
+        Iterable<MetricAccess> metricAccessIterable = metricAccessRepository.findAll();
+        List<MetricAccess> metricAccessList = new ArrayList<>();
+        metricAccessIterable.forEach(metricAccessList::add);
+        return metricAccessList;
+    }
+
     public List<MetricAccess> getAllByTeamAndMetric(Team team, String metric) {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);

@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 class IndicatorRestControllerTest {
 
     @Mock
-    IndicatorRepository indicatorRepository;
-    @Mock
     IndicatorController indicatorController;
     @InjectMocks
     IndicatorRestController indicatorRestController;
@@ -33,7 +31,7 @@ class IndicatorRestControllerTest {
         List<Indicator> indicators = new LinkedList<>();
         indicators.add(new Indicator("i1"));
         indicators.add(new Indicator("i2"));
-        when(indicatorRepository.findAll()).thenReturn(indicators);
+        when(indicatorController.getAll()).thenReturn(indicators);
         List<Indicator> actualIndicators = indicatorRestController.findAllIndicators();
         assertEquals(indicators, actualIndicators);
     }

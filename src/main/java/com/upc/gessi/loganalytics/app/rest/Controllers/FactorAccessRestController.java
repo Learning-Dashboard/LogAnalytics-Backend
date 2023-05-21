@@ -1,7 +1,7 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.FactorAccessController;
 import com.upc.gessi.loganalytics.app.domain.models.FactorAccess;
-import com.upc.gessi.loganalytics.app.domain.repositories.FactorAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,14 +17,11 @@ import java.util.List;
 public class FactorAccessRestController {
 
     @Autowired
-    private FactorAccessRepository factorAccessRepository;
+    private FactorAccessController factorAccessController;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<FactorAccess> findAllFactorAccesses() {
-        Iterable<FactorAccess> factorAccessIterable = factorAccessRepository.findAll();
-        List<FactorAccess> factorAccessList = new ArrayList<>();
-        factorAccessIterable.forEach(factorAccessList::add);
-        return factorAccessList;
+        return factorAccessController.getAll();
     }
 }

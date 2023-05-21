@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 class MetricRestControllerTest {
 
     @Mock
-    MetricRepository metricRepository;
-    @Mock
     MetricController metricController;
     @InjectMocks
     MetricRestController metricRestController;
@@ -33,7 +31,7 @@ class MetricRestControllerTest {
         List<Metric> metrics = new LinkedList<>();
         metrics.add(new Metric("m1"));
         metrics.add(new Metric("m2"));
-        when(metricRepository.findAll()).thenReturn(metrics);
+        when(metricController.getAll()).thenReturn(metrics);
         List<Metric> actualMetrics = metricRestController.findAllMetrics();
         assertEquals(metrics, actualMetrics);
     }

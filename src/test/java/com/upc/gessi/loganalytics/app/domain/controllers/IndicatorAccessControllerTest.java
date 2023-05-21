@@ -27,6 +27,25 @@ class IndicatorAccessControllerTest {
     IndicatorAccessController indicatorAccessController;
 
     @Test
+    void getAll() throws ParseException {
+        Subject subj = new Subject("PES");
+        Team t = new Team("pes11a", "s", subj);
+        Session s = new Session("s", t, 1);
+        Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:15.000");
+        Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:50.000");
+        List<Indicator> indicators = new ArrayList<>();
+        List<IndicatorAccess> expectedLogs = List.of(
+                new IndicatorAccess(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, " +
+                        "GET /StrategicIndicators/CurrentChart", "StrategicIndicators", s, true, "Chart", indicators),
+                new IndicatorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
+                        "GET /StrategicIndicators/CurrentChart", "StrategicIndicators", s, true, "Chart", indicators)
+        );
+        Mockito.when(indicatorAccessRepository.findAll()).thenReturn(expectedLogs);
+        List<IndicatorAccess> actualLogs = indicatorAccessController.getAll();
+        assertEquals(expectedLogs, actualLogs);
+    }
+
+    @Test
     void getAllByTeamAndIndicator() throws ParseException {
         Subject subj = new Subject("PES");
         Team t = new Team("pes11a", "s", subj);

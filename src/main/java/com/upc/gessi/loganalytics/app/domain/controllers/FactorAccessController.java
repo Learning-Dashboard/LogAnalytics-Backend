@@ -20,6 +20,13 @@ public class FactorAccessController {
     @Autowired
     FactorAccessRepository factorAccessRepository;
 
+    public List<FactorAccess> getAll() {
+        Iterable<FactorAccess> factorAccessIterable = factorAccessRepository.findAll();
+        List<FactorAccess> factorAccessList = new ArrayList<>();
+        factorAccessIterable.forEach(factorAccessList::add);
+        return factorAccessList;
+    }
+
     public List<FactorAccess> getAllByTeamAndFactor(Team team, String factor) {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);

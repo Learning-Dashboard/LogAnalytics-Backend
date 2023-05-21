@@ -39,7 +39,7 @@ public class InteractionsPerSessionController implements Strategy {
 
     @Override
     public double evaluate() {
-        List<Session> sessions = sessionController.getAll();
+        List<Session> sessions = sessionController.getAllFromYesterday();
         int nSessions = sessions.size();
         double nInteractions = 0.0;
         for (Session s : sessions)

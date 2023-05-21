@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 class TeamRestControllerTest {
 
     @Mock
-    TeamRepository teamRepository;
-    @Mock
     TeamController teamController;
 
     @InjectMocks
@@ -35,7 +33,7 @@ class TeamRestControllerTest {
         Subject subject = new Subject("PES");
         teams.add(new Team("t1", "sem", subject));
         teams.add(new Team("t2", "sem", subject));
-        when(teamRepository.findAll()).thenReturn(teams);
+        when(teamController.getAll()).thenReturn(teams);
         List<Team> actualTeams = teamRestController.findAllTeams();
         assertEquals(teams, actualTeams);
     }

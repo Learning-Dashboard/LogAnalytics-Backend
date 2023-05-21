@@ -44,6 +44,13 @@ public class TeamController {
         }
     }
 
+    public List<Team> getAll() {
+        Iterable<Team> teamIterable = teamRepository.findAll();
+        List<Team> teamList = new ArrayList<>();
+        teamIterable.forEach(teamList::add);
+        return teamList;
+    }
+
     private HashSet<Team> getCurrentLDTeams() {
         HashSet<String> subjectSet = new HashSet<>();
         HashMap<Integer, String> teamIdsMap = new HashMap<>();

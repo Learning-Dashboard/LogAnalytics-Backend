@@ -19,6 +19,13 @@ public class IndicatorAccessController {
     @Autowired
     IndicatorAccessRepository indicatorAccessRepository;
 
+    public List<IndicatorAccess> getAll() {
+        Iterable<IndicatorAccess> indicatorAccessIterable = indicatorAccessRepository.findAll();
+        List<IndicatorAccess> indicatorAccessList = new ArrayList<>();
+        indicatorAccessIterable.forEach(indicatorAccessList::add);
+        return indicatorAccessList;
+    }
+
     public List<IndicatorAccess> getAllByTeamAndIndicator(Team team, String indicator) {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);

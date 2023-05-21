@@ -19,6 +19,13 @@ public class QModelAccessController {
     @Autowired
     QModelAccessRepository qModelAccessRepository;
 
+    public List<QModelAccess> getAll() {
+        Iterable<QModelAccess> qModelAccessIterable = qModelAccessRepository.findAll();
+        List<QModelAccess> qModelAccessList = new ArrayList<>();
+        qModelAccessIterable.forEach(qModelAccessList::add);
+        return qModelAccessList;
+    }
+
     public List<QModelAccess> getAllByTeamAndViewFormat(Team team, String viewFormat) {
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime yesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIDNIGHT);

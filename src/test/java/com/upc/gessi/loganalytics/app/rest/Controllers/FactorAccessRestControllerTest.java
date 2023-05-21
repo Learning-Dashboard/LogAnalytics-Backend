@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.FactorAccessController;
 import com.upc.gessi.loganalytics.app.domain.models.FactorAccess;
 import com.upc.gessi.loganalytics.app.domain.repositories.FactorAccessRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 class FactorAccessRestControllerTest {
 
     @Mock
-    FactorAccessRepository factorAccessRepository;
+    FactorAccessController factorAccessController;
 
     @InjectMocks
     FactorAccessRestController factorAccessRestController;
@@ -28,7 +29,7 @@ class FactorAccessRestControllerTest {
         List<FactorAccess> factorAccesses = new LinkedList<>();
         factorAccesses.add(new FactorAccess());
         factorAccesses.add(new FactorAccess());
-        when(factorAccessRepository.findAll()).thenReturn(factorAccesses);
+        when(factorAccessController.getAll()).thenReturn(factorAccesses);
         List<FactorAccess> actualFactors = factorAccessRestController.findAllFactorAccesses();
         assertEquals(factorAccesses, actualFactors);
     }

@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.MetricAccessController;
 import com.upc.gessi.loganalytics.app.domain.models.MetricAccess;
 import com.upc.gessi.loganalytics.app.domain.repositories.MetricAccessRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 class MetricAccessRestControllerTest {
 
     @Mock
-    MetricAccessRepository metricAccessRepository;
+    MetricAccessController metricAccessController;
 
     @InjectMocks
     MetricAccessRestController metricAccessRestController;
@@ -28,7 +29,7 @@ class MetricAccessRestControllerTest {
         List<MetricAccess> metricAccesses = new LinkedList<>();
         metricAccesses.add(new MetricAccess());
         metricAccesses.add(new MetricAccess());
-        when(metricAccessRepository.findAll()).thenReturn(metricAccesses);
+        when(metricAccessController.getAll()).thenReturn(metricAccesses);
         List<MetricAccess> actualMetrics = metricAccessRestController.findAllMetricAccesses();
         assertEquals(metricAccesses, actualMetrics);
     }

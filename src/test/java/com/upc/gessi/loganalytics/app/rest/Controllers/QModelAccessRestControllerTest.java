@@ -1,5 +1,6 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.QModelAccessController;
 import com.upc.gessi.loganalytics.app.domain.models.QModelAccess;
 import com.upc.gessi.loganalytics.app.domain.repositories.QModelAccessRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 class QModelAccessRestControllerTest {
 
     @Mock
-    QModelAccessRepository qModelAccessRepository;
+    QModelAccessController qModelAccessController;
 
     @InjectMocks
     QModelAccessRestController qModelAccessRestController;
@@ -28,7 +29,7 @@ class QModelAccessRestControllerTest {
         List<QModelAccess> qModelAccesses = new LinkedList<>();
         qModelAccesses.add(new QModelAccess());
         qModelAccesses.add(new QModelAccess());
-        when(qModelAccessRepository.findAll()).thenReturn(qModelAccesses);
+        when(qModelAccessController.getAll()).thenReturn(qModelAccesses);
         List<QModelAccess> actualQModels = qModelAccessRestController.findAllQModelAccesses();
         assertEquals(qModelAccesses, actualQModels);
     }

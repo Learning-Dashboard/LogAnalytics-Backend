@@ -34,6 +34,17 @@ class TeamControllerTest {
     }
 
     @Test
+    void getAll() {
+        Subject s = new Subject("s");
+        List<Team> teamList = new ArrayList<>();
+        teamList.add(new Team("teamId", "22-23-Q1", s));
+        teamList.add(new Team("teamId", "22-23-Q1", s));
+        Mockito.when(teamRepository.findAll()).thenReturn(teamList);
+        List<Team> actualTeams = teamController.getAll();
+        assertEquals(teamList, actualTeams);
+    }
+
+    @Test
     void getSemester() {
         String semester = teamController.getSemester();
         assertEquals(semester, "22-23-Q1");

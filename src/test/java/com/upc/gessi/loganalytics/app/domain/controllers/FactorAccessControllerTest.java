@@ -27,6 +27,25 @@ class FactorAccessControllerTest {
     FactorAccessController factorAccessController;
 
     @Test
+    void getAll() throws ParseException {
+        Subject subj = new Subject("PES");
+        Team t = new Team("pes11a", "s", subj);
+        Session s = new Session("s", t, 1);
+        Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:15.000");
+        Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-03-30 10:30:50.000");
+        List<Factor> factors = new ArrayList<>();
+        List<FactorAccess> expectedLogs = List.of(
+                new FactorAccess(d1.getTime(), "pes11a", "2022-03-30 10:30:15.000, " +
+                        "GET /QualityFactors/CurrentChart", "StrategicIndicators", s, true, "Chart", factors),
+                new FactorAccess(d2.getTime(), "pes11a", "2022-03-30 10:30:50.000, " +
+                        "GET /QualityFactors/CurrentChart", "StrategicIndicators", s, true, "Chart", factors)
+        );
+        Mockito.when(factorAccessRepository.findAll()).thenReturn(expectedLogs);
+        List<FactorAccess> actualLogs = factorAccessController.getAll();
+        assertEquals(expectedLogs, actualLogs);
+    }
+
+    @Test
     void getAllByTeamAndFactor() throws ParseException {
         Subject subj = new Subject("PES");
         Team t = new Team("pes11a", "s", subj);

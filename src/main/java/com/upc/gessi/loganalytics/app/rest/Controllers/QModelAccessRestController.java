@@ -1,7 +1,7 @@
 package com.upc.gessi.loganalytics.app.rest.Controllers;
 
+import com.upc.gessi.loganalytics.app.domain.controllers.QModelAccessController;
 import com.upc.gessi.loganalytics.app.domain.models.QModelAccess;
-import com.upc.gessi.loganalytics.app.domain.repositories.QModelAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,14 +17,11 @@ import java.util.List;
 public class QModelAccessRestController {
 
     @Autowired
-    private QModelAccessRepository qModelAccessRepository;
+    private QModelAccessController qModelAccessController;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<QModelAccess> findAllQModelAccesses() {
-        Iterable<QModelAccess> qModelAccessIterable = qModelAccessRepository.findAll();
-        List<QModelAccess> qModelAccessList = new ArrayList<>();
-        qModelAccessIterable.forEach(qModelAccessList::add);
-        return qModelAccessList;
+        return qModelAccessController.getAll();
     }
 }
