@@ -1,5 +1,7 @@
 package com.upc.gessi.loganalytics.app.client;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,8 +19,10 @@ public class APIClient {
 
     private OkHttpClient client;
 
-    private static final Logger logger =
-            LoggerFactory.getLogger("ActionLogger");
+    private static final Logger logger = LoggerFactory.getLogger("ActionLogger");
+
+    @Value("${spring.datasource.username}")
+    private String username;
 
     public APIClient() {
         this.client = new OkHttpClient().newBuilder().build();
@@ -41,6 +45,7 @@ public class APIClient {
                 urlBuilder.addPathSegments(segment);
             Request request = new Request.Builder()
                     .url(urlBuilder.build().toString())
+                    .addHeader("X-API-KEY", "apiKey_admin")
                     .method("GET", null)
                     .build();
             return client.newCall(request).execute();
